@@ -1,0 +1,455 @@
+{
+  "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+  "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+  "update_id": "c9e70e47-f29b-4044-8b78-69fc9227cb11",
+  "state": "COMPLETED",
+  "cause": "API_CALL",
+  "mode": "SELECTIVE_REFRESH",
+  "full_refresh": false,
+  "development": false,
+  "refresh_selection": [
+    "txn_features_gold",
+    "customer_risk_profile_gold"
+  ],
+  "start_time": "2026-10-16T03:00:18.080Z",
+  "end_time": "2026-10-16T03:00:52.762Z",
+  "cluster_id": "1016-025543-t19sqsve-v2n",
+  "config": {
+    "catalog": "workshop_guy_catalog",
+    "schema": "fe_bar_a0",
+    "edition": "ADVANCED",
+    "channel": "CURRENT",
+    "serverless": true,
+    "photon": true,
+    "continuous": false,
+    "pipeline_type": "WORKSPACE"
+  },
+  "datasets": [
+    {
+      "name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "type": "MATERIALIZED_VIEW",
+      "status": "COMPLETED",
+      "rows_written": 464679,
+      "rows_dropped": 0
+    },
+    {
+      "name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "type": "MATERIALIZED_VIEW",
+      "status": "COMPLETED",
+      "rows_written": 9289,
+      "rows_dropped": 0
+    }
+  ],
+  "excluded_datasets": [
+    "dim_customer_bronze",
+    "dim_merchant_bronze",
+    "fact_transactions_bronze",
+    "fact_prior_fraud_cases_bronze",
+    "dim_customer_silver",
+    "dim_merchant_silver",
+    "fact_transactions_silver",
+    "fact_prior_fraud_cases_silver"
+  ],
+  "events": [
+    {
+      "id": "b7c73680-c90d-11f1-80df-00000a184618",
+      "type": "user_action",
+      "level": "INFO",
+      "message": "Principal 'alex.owen@databricks.com' started an update.",
+      "event_time": "2026-10-16T03:00:18.024Z",
+      "flow_name": null
+    },
+    {
+      "id": "b7dc6c30-c90d-11f1-80df-00000a184618",
+      "type": "create_update",
+      "level": "INFO",
+      "message": "Update c9e70e started by API_CALL.",
+      "event_time": "2026-10-16T03:00:18.080Z",
+      "flow_name": null
+    },
+    {
+      "id": "bdeab730-c90d-11f1-a9b5-00000a12e56a",
+      "type": "runtime_details",
+      "level": "INFO",
+      "message": "Resolved runtime environment details for update c9e70e.",
+      "event_time": "2026-10-16T03:00:28.323Z",
+      "flow_name": null
+    },
+    {
+      "id": "be3ea390-c90d-11f1-8428-5e54eeb6a846",
+      "type": "update_progress",
+      "level": "INFO",
+      "message": "Update c9e70e is INITIALIZING.",
+      "event_time": "2026-10-16T03:00:28.873Z",
+      "flow_name": null
+    },
+    {
+      "id": "c1b57ad0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "update_progress",
+      "level": "INFO",
+      "message": "Update c9e70e is SETTING_UP_TABLES.",
+      "event_time": "2026-10-16T03:00:34.685Z",
+      "flow_name": null
+    },
+    {
+      "id": "c49a4b40-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`dim_merchant_bronze` defined as APPEND.",
+      "event_time": "2026-10-16T03:00:39.540Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_bronze"
+    },
+    {
+      "id": "c49da6a0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`fact_prior_fraud_cases_bronze` defined as APPEND.",
+      "event_time": "2026-10-16T03:00:39.562Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_bronze"
+    },
+    {
+      "id": "c49df4c0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`dim_customer_bronze` defined as APPEND.",
+      "event_time": "2026-10-16T03:00:39.564Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_bronze"
+    },
+    {
+      "id": "c49e69f0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`dim_customer_silver` defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.567Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_silver"
+    },
+    {
+      "id": "c4a03eb0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`dim_merchant_silver` defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.579Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_silver"
+    },
+    {
+      "id": "c4a08cd0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`fact_transactions_bronze` defined as APPEND.",
+      "event_time": "2026-10-16T03:00:39.581Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_bronze"
+    },
+    {
+      "id": "c4a10200-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`fact_transactions_silver` defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.584Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_silver"
+    },
+    {
+      "id": "c4a520b0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`txn_features_gold` defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.611Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold"
+    },
+    {
+      "id": "c4a791b0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`fact_prior_fraud_cases_silver` defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.627Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_silver"
+    },
+    {
+      "id": "c4a82df0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_definition",
+      "level": "INFO",
+      "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`customer_risk_profile_gold` defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.631Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold"
+    },
+    {
+      "id": "c4ab3b30-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset `workshop_guy_catalog`.`fe_bar_a0`.`txn_features_gold` defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.651Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4af59e0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset `workshop_guy_catalog`.`fe_bar_a0`.`customer_risk_profile_gold` defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.678Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4b0e080-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset dim_customer_silver defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.688Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4b155b0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset fact_prior_fraud_cases_bronze defined as STREAMING_TABLE.",
+      "event_time": "2026-10-16T03:00:39.691Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4b21900-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset dim_merchant_bronze defined as STREAMING_TABLE.",
+      "event_time": "2026-10-16T03:00:39.696Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4b28e30-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset fact_transactions_bronze defined as STREAMING_TABLE.",
+      "event_time": "2026-10-16T03:00:39.699Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4b30360-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset dim_merchant_silver defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.702Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4b37890-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset dim_customer_bronze defined as STREAMING_TABLE.",
+      "event_time": "2026-10-16T03:00:39.705Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4b3c6b0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset fact_prior_fraud_cases_silver defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.707Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4b43be0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_definition",
+      "level": "INFO",
+      "message": "Dataset fact_transactions_silver defined as MATERIALIZED_VIEW.",
+      "event_time": "2026-10-16T03:00:39.710Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4bec330-c90d-11f1-8428-5e54eeb6a846",
+      "type": "graph_created",
+      "level": "INFO",
+      "message": "Dataflow graph successfully loaded.",
+      "event_time": "2026-10-16T03:00:39.779Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4bf8680-c90d-11f1-8428-5e54eeb6a846",
+      "type": "update_progress",
+      "level": "INFO",
+      "message": "Update c9e70e is RUNNING.",
+      "event_time": "2026-10-16T03:00:39.784Z",
+      "flow_name": null
+    },
+    {
+      "id": "c4c0e610-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' is QUEUED.",
+      "event_time": "2026-10-16T03:00:39.793Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold"
+    },
+    {
+      "id": "c4c15b40-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' is QUEUED.",
+      "event_time": "2026-10-16T03:00:39.796Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold"
+    },
+    {
+      "id": "c4c293c0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.dim_merchant_silver' is EXCLUDED.",
+      "event_time": "2026-10-16T03:00:39.804Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_silver"
+    },
+    {
+      "id": "c4c308f0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.fact_transactions_silver' is EXCLUDED.",
+      "event_time": "2026-10-16T03:00:39.807Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_silver"
+    },
+    {
+      "id": "c4c33000-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.dim_customer_silver' is EXCLUDED.",
+      "event_time": "2026-10-16T03:00:39.808Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_silver"
+    },
+    {
+      "id": "c4c35710-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.dim_customer_bronze' is EXCLUDED.",
+      "event_time": "2026-10-16T03:00:39.809Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_bronze"
+    },
+    {
+      "id": "c4c37e20-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_silver' is EXCLUDED.",
+      "event_time": "2026-10-16T03:00:39.810Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_silver"
+    },
+    {
+      "id": "c4c3a531-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.fact_transactions_bronze' is EXCLUDED.",
+      "event_time": "2026-10-16T03:00:39.811Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_bronze"
+    },
+    {
+      "id": "c4c3a530-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_bronze' is EXCLUDED.",
+      "event_time": "2026-10-16T03:00:39.811Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_bronze"
+    },
+    {
+      "id": "c4c3cc40-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.dim_merchant_bronze' is EXCLUDED.",
+      "event_time": "2026-10-16T03:00:39.812Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_bronze"
+    },
+    {
+      "id": "c4c5ef20-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' is PLANNING.",
+      "event_time": "2026-10-16T03:00:39.826Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold"
+    },
+    {
+      "id": "c5c27790-c90d-11f1-8428-5e54eeb6a846",
+      "type": "planning_information",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' has been planned to be executed as COMPLETE_RECOMPUTE.",
+      "event_time": "2026-10-16T03:00:41.481Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold"
+    },
+    {
+      "id": "c5c49a70-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' is STARTING.",
+      "event_time": "2026-10-16T03:00:41.495Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold"
+    },
+    {
+      "id": "c5d451e0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' is RUNNING.",
+      "event_time": "2026-10-16T03:00:41.598Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold"
+    },
+    {
+      "id": "c9d2cfb0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_life_cycle",
+      "level": "INFO",
+      "message": "Materialized View `workshop_guy_catalog`.`fe_bar_a0`.`txn_features_gold` has been created.",
+      "event_time": "2026-10-16T03:00:48.299Z",
+      "flow_name": null
+    },
+    {
+      "id": "c9dd2ff0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' has COMPLETED.",
+      "event_time": "2026-10-16T03:00:48.367Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold"
+    },
+    {
+      "id": "c9e0d970-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' is PLANNING.",
+      "event_time": "2026-10-16T03:00:48.391Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold"
+    },
+    {
+      "id": "ca5434b0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "planning_information",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' has been planned to be executed as COMPLETE_RECOMPUTE.",
+      "event_time": "2026-10-16T03:00:49.147Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold"
+    },
+    {
+      "id": "ca563080-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' is STARTING.",
+      "event_time": "2026-10-16T03:00:49.160Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold"
+    },
+    {
+      "id": "ca67bcb0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' is RUNNING.",
+      "event_time": "2026-10-16T03:00:49.275Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold"
+    },
+    {
+      "id": "cc70d320-c90d-11f1-8428-5e54eeb6a846",
+      "type": "dataset_life_cycle",
+      "level": "INFO",
+      "message": "Materialized View `workshop_guy_catalog`.`fe_bar_a0`.`customer_risk_profile_gold` has been created.",
+      "event_time": "2026-10-16T03:00:52.690Z",
+      "flow_name": null
+    },
+    {
+      "id": "cc77ff10-c90d-11f1-8428-5e54eeb6a846",
+      "type": "flow_progress",
+      "level": "INFO",
+      "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' has COMPLETED.",
+      "event_time": "2026-10-16T03:00:52.737Z",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold"
+    },
+    {
+      "id": "cc7bcfa0-c90d-11f1-8428-5e54eeb6a846",
+      "type": "update_progress",
+      "level": "INFO",
+      "message": "Update c9e70e is COMPLETED.",
+      "event_time": "2026-10-16T03:00:52.762Z",
+      "flow_name": null
+    }
+  ]
+}
