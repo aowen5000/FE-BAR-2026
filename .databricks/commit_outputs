@@ -1,0 +1,6 @@
+# Databricks commit outputs configuration
+# Patterns below specify which notebooks should have their outputs committed to Git.
+# Uses gitignore-like syntax (inclusion semantics).
+
+# Include outputs for ALL .ipynb notebooks
+*.ipynb
