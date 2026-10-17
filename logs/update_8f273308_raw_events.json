@@ -1,0 +1,1353 @@
+[
+  {
+    "event_type": "update_progress",
+    "id": "36ed0060-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Update 8f2733 is COMPLETED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199718441001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883070
+      }
+    },
+    "timestamp": "2026-10-17T01:15:17.734Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "36e51120-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' has COMPLETED.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_id": "9501b4dc-4945-4a14-b0bb-08bccf402875",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199718433001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883060
+      }
+    },
+    "timestamp": "2026-10-17T01:15:17.682Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "3493f530-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' is RUNNING.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_id": "9501b4dc-4945-4a14-b0bb-08bccf402875",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_customer_risk_profile_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199715274001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883058
+      }
+    },
+    "timestamp": "2026-10-17T01:15:13.795Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "347f0da0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' is STARTING.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_id": "9501b4dc-4945-4a14-b0bb-08bccf402875",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_customer_risk_profile_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199715272001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883057
+      }
+    },
+    "timestamp": "2026-10-17T01:15:13.658Z"
+  },
+  {
+    "event_type": "planning_information",
+    "id": "347e7160-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "EVOLVING",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' has been planned to be executed as COMPLETE_RECOMPUTE.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_id": "9501b4dc-4945-4a14-b0bb-08bccf402875",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_customer_risk_profile_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199715270001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883056
+      }
+    },
+    "timestamp": "2026-10-17T01:15:13.654Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "34174b20-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' is PLANNING.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_customer_risk_profile_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199715269001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883055
+      }
+    },
+    "timestamp": "2026-10-17T01:15:12.978Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "341464f0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' has COMPLETED.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_id": "39937062-c75d-4bf5-9b03-de9a067306a2",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199715267001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883054
+      }
+    },
+    "timestamp": "2026-10-17T01:15:12.959Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2f6582e0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' is RUNNING.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_id": "39937062-c75d-4bf5-9b03-de9a067306a2",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_txn_features_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705565001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883051
+      }
+    },
+    "timestamp": "2026-10-17T01:15:05.102Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2f50e970-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' is STARTING.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_id": "39937062-c75d-4bf5-9b03-de9a067306a2",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_txn_features_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705563001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883050
+      }
+    },
+    "timestamp": "2026-10-17T01:15:04.967Z"
+  },
+  {
+    "event_type": "planning_information",
+    "id": "2f4db520-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "EVOLVING",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' has been planned to be executed as COMPLETE_RECOMPUTE.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_id": "39937062-c75d-4bf5-9b03-de9a067306a2",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_txn_features_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705561001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883049
+      }
+    },
+    "timestamp": "2026-10-17T01:15:04.946Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e14e700-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' is PLANNING.",
+    "origin": {
+      "batch_id": 0,
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_txn_features_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705557001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883048
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.896Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e1200d0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.dim_merchant_bronze' is EXCLUDED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705554001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883047
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.877Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e11d9c0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.fact_transactions_bronze' is EXCLUDED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705552001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883046
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.876Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e118ba0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_bronze' is EXCLUDED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705550001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883045
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.874Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e116490-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_silver' is EXCLUDED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705548001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883044
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.873Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e111670-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.dim_customer_bronze' is EXCLUDED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705547001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883043
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.871Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e10c850-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.dim_customer_silver' is EXCLUDED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705545001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883042
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.869Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e107a30-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.fact_transactions_silver' is EXCLUDED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705543001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883041
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.867Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e0fddf0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.dim_merchant_silver' is EXCLUDED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705541001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883040
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.863Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e0e5750-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold' is QUEUED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_customer_risk_profile_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705539001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883039
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.853Z"
+  },
+  {
+    "event_type": "flow_progress",
+    "id": "2e0d1ed0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow 'workshop_guy_catalog.fe_bar_a0.txn_features_gold' is QUEUED.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "materialization_name": "workshop_guy_catalog.fe_bar_a0.__materialization_mat_c0db28b8_dbd2_432d_99cf_4ea2aea60274_txn_features_gold_1",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705536001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883038
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.845Z"
+  },
+  {
+    "event_type": "update_progress",
+    "id": "2e0b7120-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Update 8f2733 is RUNNING.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705535001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883037
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.834Z"
+  },
+  {
+    "event_type": "graph_created",
+    "id": "2e0a38a0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataflow graph successfully loaded.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705533001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883036
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.826Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2dff8a40-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset fact_transactions_silver defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705530001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883035
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.756Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2dfeee00-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset fact_prior_fraud_cases_silver defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705528001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883034
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.752Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2dfe51c0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset dim_customer_bronze defined as STREAMING_TABLE.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705526001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883033
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.748Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2dfd6760-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset dim_merchant_silver defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705524001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883032
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.742Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2dfccb20-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset fact_transactions_bronze defined as STREAMING_TABLE.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705520001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883031
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.738Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2dfc07d0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset dim_merchant_bronze defined as STREAMING_TABLE.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705517001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883030
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.733Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2dfaf660-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset fact_prior_fraud_cases_bronze defined as STREAMING_TABLE.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705513001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883029
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.726Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2dfa5a20-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset dim_customer_silver defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705508001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883028
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.722Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2df81030-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset `workshop_guy_catalog`.`fe_bar_a0`.`customer_risk_profile_gold` defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705506001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883027
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.707Z"
+  },
+  {
+    "event_type": "dataset_definition",
+    "id": "2df2e010-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Dataset `workshop_guy_catalog`.`fe_bar_a0`.`txn_features_gold` defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705504001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883026
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.673Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2deec160-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`customer_risk_profile_gold` defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705502001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883025
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.646Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2ded88e0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`fact_prior_fraud_cases_silver` defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705501001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883024
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.638Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2de94320-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`txn_features_gold` defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705499001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883023
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.610Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2de328a0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`fact_transactions_silver` defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705497001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883022
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.570Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2de28c60-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`fact_transactions_bronze` defined as APPEND.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_transactions_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705495001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883021
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.566Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2de21730-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`dim_merchant_silver` defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705494001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883020
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.563Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2de1a200-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`dim_customer_silver` defined as MATERIALIZED_VIEW.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_silver",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705492001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883019
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.560Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2de105c0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`dim_customer_bronze` defined as APPEND.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_customer_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705490001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883018
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.556Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2de06980-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`fact_prior_fraud_cases_bronze` defined as APPEND.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.fact_prior_fraud_cases_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705488001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883017
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.552Z"
+  },
+  {
+    "event_type": "flow_definition",
+    "id": "2ddbae90-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Flow `workshop_guy_catalog`.`fe_bar_a0`.`dim_merchant_bronze` defined as APPEND.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "flow_name": "workshop_guy_catalog.fe_bar_a0.dim_merchant_bronze",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199705486001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883016
+      }
+    },
+    "timestamp": "2026-10-17T01:15:02.521Z"
+  },
+  {
+    "event_type": "update_progress",
+    "id": "2b50e500-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Update 8f2733 is SETTING_UP_TABLES.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199699110001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883013
+      }
+    },
+    "timestamp": "2026-10-17T01:14:58.256Z"
+  },
+  {
+    "event_type": "dataset_life_cycle",
+    "id": "2b2911b0-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "EVOLVING",
+    "message": "MATERIALIZED_VIEW workshop_guy_catalog.fe_bar_a0.txn_features_gold has been successfully reset.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.txn_features_gold",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199699108001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883012
+      }
+    },
+    "timestamp": "2026-10-17T01:14:57.995Z"
+  },
+  {
+    "event_type": "dataset_life_cycle",
+    "id": "2b22f730-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "EVOLVING",
+    "message": "MATERIALIZED_VIEW workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold has been successfully reset.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "dataset_name": "workshop_guy_catalog.fe_bar_a0.customer_risk_profile_gold",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199699106001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883011
+      }
+    },
+    "timestamp": "2026-10-17T01:14:57.955Z"
+  },
+  {
+    "event_type": "update_progress",
+    "id": "2a95d260-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Update 8f2733 is RESETTING.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199699104001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883010
+      }
+    },
+    "timestamp": "2026-10-17T01:14:57.030Z"
+  },
+  {
+    "event_type": "update_progress",
+    "id": "25e45840-c9c8-11f1-af35-42c380c65b6d",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Update 8f2733 is INITIALIZING.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199689649001,
+      "data_plane_id": {
+        "instance": "execution",
+        "seq_no": 1792199685883001
+      }
+    },
+    "timestamp": "2026-10-17T01:14:49.156Z"
+  },
+  {
+    "event_type": "runtime_details",
+    "id": "2201c6e0-c9c8-11f1-aede-00000a13456f",
+    "level": "INFO",
+    "maturity_level": "EVOLVING",
+    "message": "Resolved runtime environment details for update 8f2733.",
+    "origin": {
+      "cloud": "AWS",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199682641001
+    },
+    "timestamp": "2026-10-17T01:14:42.638Z"
+  },
+  {
+    "event_type": "update_progress",
+    "id": "1efc7620-c9c8-11f1-aede-00000a13456f",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Update 8f2733 is WAITING_FOR_RESOURCES.",
+    "origin": {
+      "cloud": "AWS",
+      "cluster_id": "1017-011437-sz8v572a-v2n",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199677571001
+    },
+    "timestamp": "2026-10-17T01:14:37.570Z"
+  },
+  {
+    "event_type": "create_update",
+    "id": "1da300a0-c9c8-11f1-b7a4-00000a13695a",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Update 8f2733 started by API_CALL.",
+    "origin": {
+      "cloud": "AWS",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199675309001
+    },
+    "timestamp": "2026-10-17T01:14:35.285Z"
+  },
+  {
+    "event_type": "user_action",
+    "id": "1d9c9800-c9c8-11f1-b7a4-00000a13695a",
+    "level": "INFO",
+    "maturity_level": "STABLE",
+    "message": "Principal 'alex.owen@databricks.com' started an update.",
+    "origin": {
+      "cloud": "AWS",
+      "org_id": 7474659392412718,
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "pipeline_name": "FE BAR Bronze Silver AutoLoader Pipeline",
+      "region": "us-east-1",
+      "request_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d",
+      "update_id": "8f273308-3190-4bb9-a3d5-1bbf1da91b1d"
+    },
+    "sequence": {
+      "control_plane_seq_no": 1792199675265001
+    },
+    "timestamp": "2026-10-17T01:14:35.264Z"
+  }
+]

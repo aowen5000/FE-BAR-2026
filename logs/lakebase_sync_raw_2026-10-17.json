@@ -1,0 +1,1094 @@
+{
+  "project": {
+    "create_time": "2026-10-17T00:38:24Z",
+    "name": "projects/fe-bar-fraud-analytics",
+    "project_id": "fe-bar-fraud-analytics",
+    "status": {
+      "branch_logical_size_limit_bytes": 35184372088832,
+      "compute_last_active_time": "2026-10-17T02:29:17Z",
+      "default_branch": "projects/fe-bar-fraud-analytics/branches/production",
+      "default_endpoint_settings": {
+        "autoscaling_limit_max_cu": 1.0,
+        "autoscaling_limit_min_cu": 1.0,
+        "suspend_timeout_duration": "86400s"
+      },
+      "display_name": "FE BAR Fraud Analytics",
+      "enable_pg_native_login": false,
+      "history_retention_duration": "604800s",
+      "owner": "alex.owen@databricks.com",
+      "pg_version": 17,
+      "project_id": "fe-bar-fraud-analytics",
+      "synthetic_storage_size_bytes": 0
+    },
+    "uid": "64f9ff4f-0726-4ff4-bfa2-3357f7f87957",
+    "update_time": "2026-10-17T02:29:17Z"
+  },
+  "endpoint": {
+    "create_time": "2026-10-17T00:38:24Z",
+    "endpoint_id": "primary",
+    "name": "projects/fe-bar-fraud-analytics/branches/production/endpoints/primary",
+    "parent": "projects/fe-bar-fraud-analytics/branches/production",
+    "status": {
+      "autoscaling_limit_max_cu": 1.0,
+      "autoscaling_limit_min_cu": 1.0,
+      "current_state": "ACTIVE",
+      "disabled": false,
+      "endpoint_id": "primary",
+      "endpoint_type": "ENDPOINT_TYPE_READ_WRITE",
+      "group": {
+        "enable_readable_secondaries": false,
+        "max": 1,
+        "min": 1
+      },
+      "hosts": {
+        "host": "ep-aged-sky-d2afekn0.database.us-east-1.cloud.databricks.com",
+        "read_write_pooled_host": "ep-aged-sky-d2afekn0-pooler.database.us-east-1.cloud.databricks.com"
+      },
+      "last_active_time": "2026-10-17T02:29:17Z",
+      "settings": {},
+      "suspend_timeout_duration": "300s"
+    },
+    "uid": "ep-aged-sky-d2afekn0",
+    "update_time": "2026-10-17T02:29:17Z"
+  },
+  "catalog": {
+    "browse_only": false,
+    "catalog_type": "MANAGED_ONLINE_CATALOG",
+    "connection_name": "managed-database-catalog-7fe4eb85-fe05-4212-9a0d-9882bea6ba17",
+    "created_at": 1792202544647,
+    "created_by": "alex.owen@databricks.com",
+    "full_name": "fe_bar_lakebase",
+    "isolation_mode": "OPEN",
+    "metastore_id": "c0da88f1-c020-4992-b8c9-c828e556889d",
+    "name": "fe_bar_lakebase",
+    "options": {
+      "database": "fe_bar_db"
+    },
+    "owner": "alex.owen@databricks.com",
+    "properties": {
+      "database_branch_id": "br-tiny-salad-d2dsasxa",
+      "database_project_id": "64f9ff4f-0726-4ff4-bfa2-3357f7f87957",
+      "workspace_id": "7474659392412718"
+    },
+    "provisioning_info": {
+      "state": "ACTIVE"
+    },
+    "securable_type": "CATALOG",
+    "updated_at": 1792202545374,
+    "updated_by": "alex.owen@databricks.com"
+  },
+  "synced_tables": {
+    "txn_features": {
+      "name": "synced_tables/fe_bar_lakebase.fraud.txn_features",
+      "status": {
+        "detailed_state": "SYNCED_TABLE_ONLINE_NO_PENDING_UPDATE",
+        "last_sync": {
+          "delta_table_sync_info": {
+            "delta_commit_time": "1970-01-01T00:00:00Z",
+            "delta_commit_version": 11
+          },
+          "sync_end_time": "2026-10-17T02:28:17.381679Z",
+          "sync_start_time": "2026-10-17T02:27:54.339429Z"
+        },
+        "message": "Synced table creation succeeded using Delta Live Tables: https://fevm-workshop-guy.cloud.databricks.com#joblist/pipelines/f8690359-4bb1-45b9-8fdb-5bd892239db2/updates/f95c31c4-979a-4d79-baab-50eb8594ec2b.",
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "project": "projects/fe-bar-fraud-analytics",
+        "unity_catalog_provisioning_state": "ACTIVE"
+      },
+      "synced_table_id": "fe_bar_lakebase.fraud.txn_features",
+      "uid": "3a97259b-7967-45ef-81a9-181f01614c0b"
+    },
+    "customer_risk_profile": {
+      "name": "synced_tables/fe_bar_lakebase.fraud.customer_risk_profile",
+      "status": {
+        "detailed_state": "SYNCED_TABLE_ONLINE_NO_PENDING_UPDATE",
+        "last_sync": {
+          "delta_table_sync_info": {
+            "delta_commit_time": "1970-01-01T00:00:00Z",
+            "delta_commit_version": 11
+          },
+          "sync_end_time": "2026-10-17T02:28:23.179331Z",
+          "sync_start_time": "2026-10-17T02:28:18.129485Z"
+        },
+        "message": "Synced table creation succeeded using Delta Live Tables: https://fevm-workshop-guy.cloud.databricks.com#joblist/pipelines/f8690359-4bb1-45b9-8fdb-5bd892239db2/updates/f95c31c4-979a-4d79-baab-50eb8594ec2b.",
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "project": "projects/fe-bar-fraud-analytics",
+        "unity_catalog_provisioning_state": "ACTIVE"
+      },
+      "synced_table_id": "fe_bar_lakebase.fraud.customer_risk_profile",
+      "uid": "0e13540b-7baa-41d6-879e-79429854e6d8"
+    }
+  },
+  "sync_pipeline": {
+    "id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+    "name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+    "latest_update": {
+      "cause": "JOB_TASK",
+      "creation_time": 1792204058900,
+      "full_refresh": false,
+      "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+      "state": "COMPLETED",
+      "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+      "validate_only": false
+    }
+  },
+  "sync_events": [
+    {
+      "event_type": "update_progress",
+      "id": "6d3f0dc0-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f95c31 is COMPLETED.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204105077001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334021
+        }
+      },
+      "timestamp": "2026-10-17T02:28:23.836Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "6d343850-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f95c31 is RUNNING.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204105073002,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334015
+        }
+      },
+      "timestamp": "2026-10-17T02:28:23.765Z"
+    },
+    {
+      "event_type": "graph_created",
+      "id": "6d32d8c0-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Dataflow graph successfully loaded.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204105073001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334014
+        }
+      },
+      "timestamp": "2026-10-17T02:28:23.756Z"
+    },
+    {
+      "event_type": "dataset_definition",
+      "id": "6d2989f0-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Dataset `fe_bar_db_fraud_customer_risk_profile_0e13540b_7baa_41d6_879e_79429854e6d8` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "dataset_name": "fe_bar_db_fraud_customer_risk_profile_0e13540b_7baa_41d6_879e_79429854e6d8",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204105071001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334013
+        }
+      },
+      "timestamp": "2026-10-17T02:28:23.695Z"
+    },
+    {
+      "event_type": "dataset_definition",
+      "id": "6d26f1e0-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Dataset `fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "dataset_name": "fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204105070001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334012
+        }
+      },
+      "timestamp": "2026-10-17T02:28:23.678Z"
+    },
+    {
+      "event_type": "flow_definition",
+      "id": "6d2459d0-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Flow `fe_bar_db_fraud_customer_risk_profile_0e13540b_7baa_41d6_879e_79429854e6d8` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "flow_name": "fe_bar_db_fraud_customer_risk_profile_0e13540b_7baa_41d6_879e_79429854e6d8",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204105069001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334011
+        }
+      },
+      "timestamp": "2026-10-17T02:28:23.661Z"
+    },
+    {
+      "event_type": "flow_definition",
+      "id": "6d20d760-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Flow `fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "flow_name": "fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204105068001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334010
+        }
+      },
+      "timestamp": "2026-10-17T02:28:23.638Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "6cf840c0-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f95c31 is SETTING_UP_TABLES.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204105067001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334009
+        }
+      },
+      "timestamp": "2026-10-17T02:28:23.372Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "59e65b20-c9d2-11f1-8b59-723341555148",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f95c31 is INITIALIZING.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204074673001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792204068334001
+        }
+      },
+      "timestamp": "2026-10-17T02:27:51.378Z"
+    },
+    {
+      "event_type": "runtime_details",
+      "id": "56c87950-c9d2-11f1-9764-00000a135d48",
+      "level": "INFO",
+      "maturity_level": "EVOLVING",
+      "message": "Resolved runtime environment details for update f95c31.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204066152001
+      },
+      "timestamp": "2026-10-17T02:27:46.149Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "53a874a0-c9d2-11f1-9764-00000a135d48",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f95c31 is WAITING_FOR_RESOURCES.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-022740-jknalee6-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204060906001
+      },
+      "timestamp": "2026-10-17T02:27:40.906Z"
+    },
+    {
+      "event_type": "create_update",
+      "id": "5277e3e0-c9d2-11f1-853d-00000a13386a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f95c31 started by JOB_TASK.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204058912001
+      },
+      "timestamp": "2026-10-17T02:27:38.900Z"
+    },
+    {
+      "event_type": "user_action",
+      "id": "527524c0-c9d2-11f1-853d-00000a13386a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Principal 'alex.owen@databricks.com' started an update.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b",
+        "update_id": "f95c31c4-979a-4d79-baab-50eb8594ec2b"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792204058893001
+      },
+      "timestamp": "2026-10-17T02:27:38.892Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "a2859500-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update ab9f6c is COMPLETED.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203337271001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130022
+        }
+      },
+      "timestamp": "2026-10-17T02:15:34.224Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "a27c6d40-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update ab9f6c is RUNNING.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203337267001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130016
+        }
+      },
+      "timestamp": "2026-10-17T02:15:34.164Z"
+    },
+    {
+      "event_type": "graph_created",
+      "id": "a27b5bd0-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Dataflow graph successfully loaded.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203337266001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130015
+        }
+      },
+      "timestamp": "2026-10-17T02:15:34.157Z"
+    },
+    {
+      "event_type": "dataset_definition",
+      "id": "a270fb90-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Dataset `fe_bar_db_fraud_customer_risk_profile_0e13540b_7baa_41d6_879e_79429854e6d8` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "dataset_name": "fe_bar_db_fraud_customer_risk_profile_0e13540b_7baa_41d6_879e_79429854e6d8",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203337265001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130014
+        }
+      },
+      "timestamp": "2026-10-17T02:15:34.089Z"
+    },
+    {
+      "event_type": "dataset_definition",
+      "id": "a26e6380-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Dataset `fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "dataset_name": "fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203337263001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130013
+        }
+      },
+      "timestamp": "2026-10-17T02:15:34.072Z"
+    },
+    {
+      "event_type": "flow_definition",
+      "id": "a26bf280-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Flow `fe_bar_db_fraud_customer_risk_profile_0e13540b_7baa_41d6_879e_79429854e6d8` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "flow_name": "fe_bar_db_fraud_customer_risk_profile_0e13540b_7baa_41d6_879e_79429854e6d8",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203337262001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130012
+        }
+      },
+      "timestamp": "2026-10-17T02:15:34.056Z"
+    },
+    {
+      "event_type": "flow_definition",
+      "id": "a268e540-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Flow `fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "flow_name": "fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203337261001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130011
+        }
+      },
+      "timestamp": "2026-10-17T02:15:34.036Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "a2427180-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update ab9f6c is SETTING_UP_TABLES.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203333996001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130010
+        }
+      },
+      "timestamp": "2026-10-17T02:15:33.784Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "98e96850-c9d0-11f1-a7a3-7affb751fb6a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update ab9f6c is INITIALIZING.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203318638001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792203315130001
+        }
+      },
+      "timestamp": "2026-10-17T02:15:18.101Z"
+    },
+    {
+      "event_type": "runtime_details",
+      "id": "959904d0-c9d0-11f1-9764-00000a135d48",
+      "level": "INFO",
+      "maturity_level": "EVOLVING",
+      "message": "Resolved runtime environment details for update ab9f6c.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203312544001
+      },
+      "timestamp": "2026-10-17T02:15:12.541Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "9280c850-c9d0-11f1-9764-00000a135d48",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update ab9f6c is WAITING_FOR_RESOURCES.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-021507-tvawcryh-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203307350001
+      },
+      "timestamp": "2026-10-17T02:15:07.349Z"
+    },
+    {
+      "event_type": "create_update",
+      "id": "9074a4a0-c9d0-11f1-b174-00000a12e540",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update ab9f6c started by API_CALL.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203303917001
+      },
+      "timestamp": "2026-10-17T02:15:03.895Z"
+    },
+    {
+      "event_type": "user_action",
+      "id": "906eff50-c9d0-11f1-b174-00000a12e540",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Principal 'alex.owen@databricks.com' started an update.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8",
+        "update_id": "ab9f6c96-4fb3-424b-b72c-5df22610fac8"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792203303878001
+      },
+      "timestamp": "2026-10-17T02:15:03.877Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "fa446bb0-c9ce-11f1-a94e-e6f5846d2c6f",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f82d64 is COMPLETED.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202622947001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792202596083023
+        }
+      },
+      "timestamp": "2026-10-17T02:03:42.443Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "fa3a80a0-c9ce-11f1-a94e-e6f5846d2c6f",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f82d64 is RUNNING.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202622942001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792202596083017
+        }
+      },
+      "timestamp": "2026-10-17T02:03:42.378Z"
+    },
+    {
+      "event_type": "graph_created",
+      "id": "fa392110-c9ce-11f1-a94e-e6f5846d2c6f",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Dataflow graph successfully loaded.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202622941001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792202596083016
+        }
+      },
+      "timestamp": "2026-10-17T02:03:42.369Z"
+    },
+    {
+      "event_type": "dataset_definition",
+      "id": "fa2e4ba0-c9ce-11f1-a94e-e6f5846d2c6f",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Dataset `fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "dataset_name": "fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202622940001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792202596083015
+        }
+      },
+      "timestamp": "2026-10-17T02:03:42.298Z"
+    },
+    {
+      "event_type": "flow_definition",
+      "id": "fa291b80-c9ce-11f1-a94e-e6f5846d2c6f",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Flow `fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b` defined as VIEW.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "flow_name": "fe_bar_db_fraud_txn_features_3a97259b_7967_45ef_81a9_181f01614c0b",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202622939001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792202596083014
+        }
+      },
+      "timestamp": "2026-10-17T02:03:42.264Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "f9fefe40-c9ce-11f1-a94e-e6f5846d2c6f",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f82d64 is SETTING_UP_TABLES.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202622938001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792202596083013
+        }
+      },
+      "timestamp": "2026-10-17T02:03:41.988Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "f9f9a710-c9ce-11f1-a94e-e6f5846d2c6f",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f82d64 is RESETTING.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202622937001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792202596083012
+        }
+      },
+      "timestamp": "2026-10-17T02:03:41.953Z"
+    },
+    {
+      "event_type": "user_action",
+      "id": "f0ed1030-c9ce-11f1-853d-00000a13386a",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "User alex.owen@databricks.com edited pipeline settings.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202606782001
+      },
+      "timestamp": "2026-10-17T02:03:26.771Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "eaed9240-c9ce-11f1-a94e-e6f5846d2c6f",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f82d64 is INITIALIZING.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202597149001,
+        "data_plane_id": {
+          "instance": "execution",
+          "seq_no": 1792202596083001
+        }
+      },
+      "timestamp": "2026-10-17T02:03:16.708Z"
+    },
+    {
+      "event_type": "runtime_details",
+      "id": "e7151300-c9ce-11f1-9764-00000a135d48",
+      "level": "INFO",
+      "maturity_level": "EVOLVING",
+      "message": "Resolved runtime environment details for update f82d64.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202590259001
+      },
+      "timestamp": "2026-10-17T02:03:10.256Z"
+    },
+    {
+      "event_type": "update_progress",
+      "id": "e4d00500-c9ce-11f1-9764-00000a135d48",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f82d64 is WAITING_FOR_RESOURCES.",
+      "origin": {
+        "cloud": "AWS",
+        "cluster_id": "1017-020306-mkimdkty-v2n",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202586449001
+      },
+      "timestamp": "2026-10-17T02:03:06.448Z"
+    },
+    {
+      "event_type": "create_update",
+      "id": "e3c76ea0-c9ce-11f1-b672-00000a13f4f5",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Update f82d64 started by USER_ACTION.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202584717001
+      },
+      "timestamp": "2026-10-17T02:03:04.694Z"
+    },
+    {
+      "event_type": "user_action",
+      "id": "e3c1c950-c9ce-11f1-b672-00000a13f4f5",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "Principal 'alex.owen@databricks.com' started an update.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1",
+        "request_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47",
+        "update_id": "f82d646d-4d98-421f-a69f-753f1fe5bf47"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202584679001
+      },
+      "timestamp": "2026-10-17T02:03:04.677Z"
+    },
+    {
+      "event_type": "user_action",
+      "id": "e32e62f0-c9ce-11f1-83d9-00000a1293ef",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "User alex.owen@databricks.com edited pipeline settings.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202583724001
+      },
+      "timestamp": "2026-10-17T02:03:03.711Z"
+    },
+    {
+      "event_type": "user_action",
+      "id": "e1782770-c9ce-11f1-93aa-00000a13b14c",
+      "level": "INFO",
+      "maturity_level": "STABLE",
+      "message": "User alex.owen@databricks.com created pipeline.",
+      "origin": {
+        "cloud": "AWS",
+        "org_id": 7474659392412718,
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "pipeline_name": "Synced table: fe_bar_lakebase.fraud.txn_features hTjRFD",
+        "region": "us-east-1"
+      },
+      "sequence": {
+        "control_plane_seq_no": 1792202580860001
+      },
+      "timestamp": "2026-10-17T02:03:00.839Z"
+    }
+  ]
+}
