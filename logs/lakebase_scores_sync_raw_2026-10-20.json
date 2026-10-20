@@ -1,0 +1,100 @@
+{
+  "synced_table_create_request": {
+    "synced_table_id": "fe_bar_lakebase.fraud.txn_risk_current",
+    "spec": {
+      "source_table_full_name": "workshop_guy_catalog.fe_bar_a0.scored_transactions",
+      "branch": "projects/fe-bar-fraud-analytics/branches/production",
+      "postgres_database": "fe_bar_db",
+      "primary_key_columns": ["txn_id"],
+      "scheduling_policy": "SNAPSHOT",
+      "existing_pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+      "create_database_objects_if_missing": true
+    }
+  },
+  "endpoint": {
+    "name": "projects/fe-bar-fraud-analytics/branches/production/endpoints/primary",
+    "current_state": "ACTIVE",
+    "autoscaling_limit_min_cu": 1.0,
+    "autoscaling_limit_max_cu": 1.0,
+    "suspend_timeout_duration": "300s"
+  },
+  "sync_pipeline_updates": {
+    "31370778-aca4-4b74-8a0c-062e953c4a3e": {
+      "update_id": "31370778-aca4-4b74-8a0c-062e953c4a3e",
+      "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+      "cause": "API_CALL",
+      "state": "COMPLETED",
+      "creation_time": 1792470615308,
+      "full_refresh": false,
+      "validate_only": false,
+      "cluster_id": "1020-043017-8n8a3yn2-v2n",
+      "note": "Initial snapshot for txn_risk_current; table was SYNCED_TABLE_OFFLINE after create until this update ran"
+    },
+    "a335e132-3102-4eac-adb4-be7e66fb82bc": {
+      "update_id": "a335e132-3102-4eac-adb4-be7e66fb82bc",
+      "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+      "cause": "JOB_TASK",
+      "state": "COMPLETED",
+      "creation_time": 1792471139628,
+      "full_refresh": false,
+      "validate_only": false,
+      "cluster_id": "1020-043901-b1yor6bd-v2n",
+      "note": "lakebase_sync_refresh task of job run 379167641926204"
+    }
+  },
+  "sync_update_a335e132_events": [
+    {"timestamp": "2026-10-20T04:39:41.600Z", "event_type": "update_progress", "level": "INFO", "message": "Update a335e1 is COMPLETED."},
+    {"timestamp": "2026-10-20T04:39:41.545Z", "event_type": "update_progress", "level": "INFO", "message": "Update a335e1 is RUNNING."},
+    {"timestamp": "2026-10-20T04:39:41.175Z", "event_type": "update_progress", "level": "INFO", "message": "Update a335e1 is SETTING_UP_TABLES."},
+    {"timestamp": "2026-10-20T04:39:12.645Z", "event_type": "update_progress", "level": "INFO", "message": "Update a335e1 is INITIALIZING."},
+    {"timestamp": "2026-10-20T04:39:01.774Z", "event_type": "update_progress", "level": "INFO", "message": "Update a335e1 is WAITING_FOR_RESOURCES."},
+    {"timestamp": "2026-10-20T04:38:59.628Z", "event_type": "create_update", "level": "INFO", "message": "Update a335e1 started by JOB_TASK."}
+  ],
+  "synced_tables": {
+    "txn_risk_current": {
+      "name": "synced_tables/fe_bar_lakebase.fraud.txn_risk_current",
+      "status": {
+        "detailed_state": "SYNCED_TABLE_ONLINE_NO_PENDING_UPDATE",
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "last_sync": {
+          "delta_table_sync_info": {"delta_commit_time": "2026-10-20T04:38:50Z", "delta_commit_version": 4},
+          "sync_end_time": "2026-10-20T04:39:40.955417Z",
+          "sync_start_time": "2026-10-20T04:39:20.603620Z"
+        },
+        "unity_catalog_provisioning_state": "ACTIVE",
+        "message": "Synced table creation succeeded using Delta Live Tables: https://fevm-workshop-guy.cloud.databricks.com#joblist/pipelines/f8690359-4bb1-45b9-8fdb-5bd892239db2/updates/a335e132-3102-4eac-adb4-be7e66fb82bc."
+      }
+    },
+    "txn_features": {
+      "name": "synced_tables/fe_bar_lakebase.fraud.txn_features",
+      "status": {
+        "detailed_state": "SYNCED_TABLE_ONLINE_NO_PENDING_UPDATE",
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "last_sync": {
+          "delta_table_sync_info": {"delta_commit_time": "1970-01-01T00:00:00Z", "delta_commit_version": 11},
+          "sync_end_time": "2026-10-17T02:28:17.381679Z",
+          "sync_start_time": "2026-10-17T02:27:54.339429Z"
+        },
+        "unity_catalog_provisioning_state": "ACTIVE"
+      }
+    },
+    "customer_risk_profile": {
+      "name": "synced_tables/fe_bar_lakebase.fraud.customer_risk_profile",
+      "status": {
+        "detailed_state": "SYNCED_TABLE_ONLINE_NO_PENDING_UPDATE",
+        "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+        "last_sync": {
+          "delta_table_sync_info": {"delta_commit_time": "1970-01-01T00:00:00Z", "delta_commit_version": 11},
+          "sync_end_time": "2026-10-17T02:28:23.179331Z",
+          "sync_start_time": "2026-10-17T02:28:18.129485Z"
+        },
+        "unity_catalog_provisioning_state": "ACTIVE"
+      }
+    }
+  },
+  "validation": {
+    "row_counts": {"uc_scored_transactions": 464632, "postgres_txn_risk_current": 464632, "match": true},
+    "traced_txn": {"txn_id": "TXN-0234209", "risk_score": 0.9844108757126732, "recommended_action": "block", "model_version": "1", "uc_postgres_match": true},
+    "latency_ms_200_pk_lookups_reused_connection": {"p50": 2.10, "p95": 3.18, "p99": 4.38, "mean": 2.29, "max": 11.92, "hits": 200}
+  }
+}
