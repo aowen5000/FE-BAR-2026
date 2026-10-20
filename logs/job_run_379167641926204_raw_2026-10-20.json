@@ -1,0 +1,107 @@
+{
+  "job_run": {
+    "job_id": 1115396029932218,
+    "run_id": 379167641926204,
+    "run_name": "fe_bar_gold_to_lakebase",
+    "run_type": "JOB_RUN",
+    "trigger": "ONE_TIME",
+    "creator_user_name": "alex.owen@databricks.com",
+    "start_time": 1792470901439,
+    "end_time": 1792471190603,
+    "run_duration": 289164,
+    "state": {
+      "life_cycle_state": "TERMINATED",
+      "result_state": "SUCCESS",
+      "state_message": "",
+      "user_cancelled_or_timedout": false
+    },
+    "status": {
+      "state": "TERMINATED",
+      "termination_details": {
+        "code": "SUCCESS",
+        "message": "",
+        "type": "SUCCESS"
+      }
+    },
+    "run_page_url": "https://fevm-workshop-guy.cloud.databricks.com/?o=7474659392412718#job/1115396029932218/run/379167641926204",
+    "tasks": [
+      {
+        "task_key": "lakebase_sync_refresh",
+        "run_id": 982139009316385,
+        "depends_on": [{"task_key": "batch_scoring"}],
+        "pipeline_task": {"full_refresh": false, "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2"},
+        "start_time": 1792471137806,
+        "end_time": 1792471190342,
+        "setup_duration": 0,
+        "execution_duration": 52000,
+        "state": {"life_cycle_state": "TERMINATED", "result_state": "SUCCESS", "state_message": "", "user_cancelled_or_timedout": false},
+        "run_page_url": "https://fevm-workshop-guy.cloud.databricks.com/?o=7474659392412718#job/1115396029932218/run/982139009316385"
+      },
+      {
+        "task_key": "batch_scoring",
+        "run_id": 1077645683924475,
+        "depends_on": [{"task_key": "gold_pipeline_refresh"}],
+        "notebook_task": {"notebook_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/fraud_batch_scoring", "source": "WORKSPACE"},
+        "environment_key": "scoring_env",
+        "start_time": 1792470964504,
+        "end_time": 1792471137421,
+        "setup_duration": 4000,
+        "execution_duration": 168000,
+        "state": {"life_cycle_state": "TERMINATED", "result_state": "SUCCESS", "state_message": "", "user_cancelled_or_timedout": false},
+        "run_page_url": "https://fevm-workshop-guy.cloud.databricks.com/?o=7474659392412718#job/1115396029932218/run/1077645683924475"
+      },
+      {
+        "task_key": "gold_pipeline_refresh",
+        "run_id": 326817573218830,
+        "pipeline_task": {"full_refresh": false, "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274"},
+        "start_time": 1792470901477,
+        "end_time": 1792470964270,
+        "setup_duration": 0,
+        "execution_duration": 62000,
+        "state": {"life_cycle_state": "TERMINATED", "result_state": "SUCCESS", "state_message": "", "user_cancelled_or_timedout": false},
+        "run_page_url": "https://fevm-workshop-guy.cloud.databricks.com/?o=7474659392412718#job/1115396029932218/run/326817573218830"
+      }
+    ]
+  },
+  "pipeline_updates": {
+    "gold_pipeline_refresh": {
+      "update_id": "34a5a929-6cd1-4a88-b883-0e8a30f6ef4e",
+      "pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274",
+      "cause": "JOB_TASK",
+      "state": "COMPLETED",
+      "creation_time": 1792470903471,
+      "full_refresh": false,
+      "validate_only": false
+    },
+    "lakebase_sync_refresh": {
+      "update_id": "a335e132-3102-4eac-adb4-be7e66fb82bc",
+      "pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2",
+      "cause": "JOB_TASK",
+      "state": "COMPLETED",
+      "creation_time": 1792471139628,
+      "full_refresh": false,
+      "validate_only": false,
+      "cluster_id": "1020-043901-b1yor6bd-v2n"
+    }
+  },
+  "post_run_checks": {
+    "scored_transactions": {"rows": 464632, "max_scored_at": "2026-10-20T04:38:02.628Z", "model_version": "1"},
+    "txn_features_gold": {"rows": 464632, "max_txn_ts": "2026-10-16T23:55:43.000Z"},
+    "lakebase_txn_risk_current": {"rows": 464632},
+    "lakebase_txn_features": {"rows": 464632},
+    "customer_risk_profile_gold": {"rows": 9289},
+    "lakebase_customer_risk_profile": {"rows": 9289},
+    "traced_txn": {
+      "txn_id": "TXN-0234209",
+      "uc": {"risk_score": 0.9844108757126732, "recommended_action": "block", "model_version": "1", "scored_at": "2026-10-20 04:38:02.628263"},
+      "lakebase": {"risk_score": 0.9844108757126732, "recommended_action": "block", "model_version": "1", "scored_at": "2026-10-20 04:38:02.628263"}
+    }
+  },
+  "pre_run_baseline": {
+    "scored_transactions_max_scored_at": "2026-10-20T02:40:39.012Z",
+    "scored_transactions_rows": 464632,
+    "txn_features_gold_rows": 464632,
+    "lakebase_txn_risk_current_rows": 464632,
+    "gold_max_txn_ts": "2026-10-16T23:55:43.000Z"
+  }
+}
