@@ -2,6 +2,13 @@
 -- Lakebase FGAC: Fine-Grained Access Control for fe_bar_db
 -- Database: fe_bar_db (Lakebase project fe-bar-fraud-analytics)
 -- Idempotent: all statements use IF NOT EXISTS / OR REPLACE / DO NOTHING
+-- Updated 2026-10-21 (FGAC hardening): db_inserted_by = session_user in the agent
+-- INSERT policies (Item 7), plus the fraud_gov.risk_score_calibration view (Item 8).
+-- Prerequisites: lakebase_cases_ddl.sql (cases.* incl. db_inserted_by) and the
+-- synced table fraud.risk_score_calibration.
+-- Admin note (Item 1): the admin login (alex.owen@databricks.com) has BYPASSRLS,
+-- so FORCE RLS does not lock it out and no admin policy is needed. For an admin
+-- without BYPASSRLS, add: CREATE POLICY admin_all_* ... FOR ALL TO <admin> USING (true) WITH CHECK (true).
 -- =============================================================================
 
 -- ============================================================
@@ -148,6 +155,17 @@ GRANT SELECT ON fraud_gov.txn_risk_current      TO fraud_analyst, fraud_lead, fr
 GRANT SELECT ON fraud_gov.txn_features           TO fraud_analyst, fraud_lead, fraud_triage_agent;
 GRANT SELECT ON fraud_gov.customer_risk_profile  TO fraud_analyst, fraud_lead, fraud_triage_agent;
 
+-- ---- fraud_gov.risk_score_calibration (Item 8) ----
+-- Calibration buckets (no PII), synced SNAPSHOT from
+-- workshop_guy_catalog.fe_bar_a0.risk_score_calibration via pipeline f8690359.
+CREATE OR REPLACE VIEW fraud_gov.risk_score_calibration
+  WITH (security_barrier = true)
+AS
+SELECT bucket, bucket_order, lower_bound, upper_bound, row_count, fraud_count,
+       observed_precision, confidence, model_run_id, split_cutoff_ts, computed_at
+FROM fraud.risk_score_calibration;
+GRANT SELECT ON fraud_gov.risk_score_calibration TO fraud_analyst, fraud_lead, fraud_triage_agent;
+
 -- ============================================================
 -- B.3  RLS ON NATIVE CASE TABLES
 -- ============================================================
@@ -246,12 +264,16 @@ CREATE POLICY fraud_triage_agent_select_cases
   TO fraud_triage_agent
   USING (true);
 
--- Can INSERT into fraud_cases only if created_by matches the agent prefix.
+-- Can INSERT into fraud_cases only if created_by matches the agent prefix AND
+-- db_inserted_by is the real connecting login (tamper-resistant attribution).
 CREATE POLICY fraud_triage_agent_insert_cases
   ON cases.fraud_cases
   FOR INSERT
   TO fraud_triage_agent
-  WITH CHECK (created_by LIKE 'fraud_triage_copilot%');
+  WITH CHECK (
+    created_by LIKE 'fraud_triage_copilot%'
+    AND db_inserted_by = session_user
+  );
 
 -- Can SELECT all case_actions.
 CREATE POLICY fraud_triage_agent_select_actions
@@ -267,6 +289,7 @@ CREATE POLICY fraud_triage_agent_insert_actions
   TO fraud_triage_agent
   WITH CHECK (
     actor LIKE 'fraud_triage_copilot%'
+    AND db_inserted_by = session_user
     AND EXISTS (
       SELECT 1 FROM cases.fraud_cases fc
       WHERE fc.case_id = case_actions.case_id

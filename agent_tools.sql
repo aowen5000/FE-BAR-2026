@@ -1,4 +1,19 @@
 -- =============================================================================
+-- DEPRECATED 2026-10-21 (FGAC hardening Item 5). These UC functions are kept
+-- for reference only and are NOT registered with the agent.
+-- Rule: every agent tool must be governed by UC or by Postgres, never neither.
+-- These functions read the synced tables fe_bar_lakebase.fraud.* directly, so no
+-- FGAC applies (UC row filters and masks do not propagate to synced tables, and
+-- the synced tables have no Postgres RLS). Through UC, the fraud_gov views filter
+-- every caller the same way (pii users included), so they are not identity-aware.
+-- Also, cases.fraud_cases returns 0 rows through UC because of RLS, so
+-- get_customer_history.existing_cases was always empty.
+-- Replacement: agent-side Python tools with the same names, signatures and
+-- docstrings in fraud_triage_agent.py. They read fraud_gov.* through
+-- LakebaseCases(pg_role='fraud_triage_agent').
+-- The confidence rule below (+/-0.03 from threshold) is also superseded. The
+-- live tool uses observed precision from fraud_gov.risk_score_calibration.
+-- =============================================================================
 -- Agent Tools: UC SQL Functions for Fraud Triage Copilot
 -- Schema: workshop_guy_catalog.fe_bar_a0
 -- Reads from: fe_bar_lakebase.fraud.* (synced tables, direct — NOT fraud_gov)
@@ -29,7 +44,7 @@ RETURNS TABLE (
   risk_score DOUBLE, recommended_action STRING, model_version STRING,
   scored_at TIMESTAMP, confidence STRING, routed_queue STRING
 )
-COMMENT 'Returns the risk assessment for a single transaction including risk score, recommended action, confidence (high/medium), and routed queue (auto_block/analyst_review/auto_approve).'
+COMMENT 'DEPRECATED 2026-10-21 (FGAC hardening Item 5): reads ungoverned fe_bar_lakebase.fraud.* synced tables and uses the superseded +/-0.03 confidence placeholder; not registered with the agent. Use the agent-side Postgres-governed get_transaction_risk in fraud_triage_agent.py.'
 RETURN
   SELECT sr.txn_id, sr.customer_id, tf.txn_ts, tf.amount, sr.risk_score,
          sr.recommended_action, sr.model_version, sr.scored_at,
@@ -58,7 +73,7 @@ RETURNS TABLE (
   txn_id STRING, signal_name STRING, shap_value DOUBLE,
   feature_value STRING, customer_normal STRING, explanation STRING
 )
-COMMENT 'Returns the top SHAP signals for a scored transaction as plain-language explanations with SHAP values and customer context.'
+COMMENT 'DEPRECATED 2026-10-21 (FGAC hardening Item 5): reads ungoverned fe_bar_lakebase.fraud.* synced tables; not registered with the agent. Use the agent-side Postgres-governed explain_top_signals in fraud_triage_agent.py.'
 RETURN
   WITH parsed AS (
     SELECT sr.txn_id, sr.customer_id,
@@ -100,7 +115,7 @@ CREATE OR REPLACE FUNCTION workshop_guy_catalog.fe_bar_a0.get_customer_history(
   customer_id STRING COMMENT 'The customer ID to look up, e.g. CUST-08669'
 )
 RETURNS TABLE (section STRING, detail STRING)
-COMMENT 'Returns customer risk profile, last 20 transactions with risk scores, prior fraud outcome counts, and existing fraud cases.'
+COMMENT 'DEPRECATED 2026-10-21 (FGAC hardening Item 5): reads ungoverned fe_bar_lakebase.fraud.* synced tables, and cases.fraud_cases returns 0 rows through UC because of RLS; not registered with the agent. Use the agent-side Postgres-governed get_customer_history in fraud_triage_agent.py.'
 RETURN
   WITH profile AS (
     SELECT 'profile' AS section, 'customer_id='||crp.customer_id||' | tenure='||CAST(crp.tenure AS STRING)||' | home_region='||crp.home_region||' | risk_segment='||crp.risk_segment||' | txn_count_30d='||CAST(crp.txn_count_30d AS STRING)||' | avg_amount_30d=$'||CAST(ROUND(crp.avg_amount_30d,2) AS STRING)||' | distinct_devices_30d='||CAST(crp.distinct_devices_30d AS STRING)||' | prior_case_count='||CAST(crp.prior_case_count AS STRING)||' | confirmed_fraud_count='||CAST(crp.confirmed_fraud_count AS STRING) AS detail
