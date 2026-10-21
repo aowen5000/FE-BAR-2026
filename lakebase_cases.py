@@ -9,6 +9,7 @@ Re-usable by the fraud triage agent and validation notebooks.
 
 import time
 import psycopg
+import psycopg.sql
 from databricks.sdk import WorkspaceClient
 
 _BRANCH = "projects/fe-bar-fraud-analytics/branches/production"
@@ -189,7 +190,8 @@ class LakebaseCases:
             cur.execute(
                 """
                 SELECT case_id, txn_id, status, assigned_queue,
-                       recommended_action, notes, created_by, created_at, updated_at
+                       recommended_action, notes, created_by, created_at, updated_at,
+                       db_inserted_by
                 FROM cases.fraud_cases WHERE case_id = %s
                 """,
                 (case_id,),
@@ -207,10 +209,14 @@ class LakebaseCases:
                 "created_by": row[6],
                 "created_at": str(row[7]),
                 "updated_at": str(row[8]),
+                # db_inserted_by: the Postgres login that inserted the row (DEFAULT
+                # session_user, enforced by RLS for the agent). created_by is only the
+                # analyst label supplied by the caller.
+                "db_inserted_by": row[9],
             }
             cur.execute(
                 """
-                SELECT action_id, action_type, outcome, actor, created_at
+                SELECT action_id, action_type, outcome, actor, created_at, db_inserted_by
                 FROM cases.case_actions
                 WHERE case_id = %s ORDER BY created_at
                 """,
@@ -223,10 +229,25 @@ class LakebaseCases:
                     "outcome": r[2],
                     "actor": r[3],
                     "created_at": str(r[4]),
+                    "db_inserted_by": r[5],
                 }
                 for r in cur.fetchall()
             ]
             return case
+
+    def query(self, sql: str, params: tuple = ()) -> list[dict]:
+        """Run a read-only query under this connection's role and return rows as dicts.
+
+        Used by the agent-side read tools. With pg_role='fraud_triage_agent' every
+        query is subject to that role's grants (fraud_gov views only) and RLS.
+        """
+        conn = self._get_conn()
+        with conn.cursor() as cur:
+            cur.execute(sql, params)
+            cols = [d.name for d in cur.description]
+            rows = [dict(zip(cols, r)) for r in cur.fetchall()]
+        conn.rollback()  # read-only: end the transaction without side effects
+        return rows
 
     def get_cases_for_txn(self, txn_id: str) -> list[dict]:
         """Return all cases (with actions) for a transaction."""

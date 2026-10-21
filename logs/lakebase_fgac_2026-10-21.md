@@ -32,16 +32,18 @@ All views use security_barrier = true.
 |-------|------|--------|--------|--------|--------|
 | fraud_cases | fraud_lead | All rows | — | — | — |
 | fraud_cases | fraud_analyst | analyst_review + amount <= 10000 | — | status, updated_at only | — |
-| fraud_cases | fraud_triage_agent | All rows | created_by LIKE 'fraud_triage_copilot%' | — | — |
+| fraud_cases | fraud_triage_agent | All rows | created_by LIKE 'fraud_triage_copilot%' AND db_inserted_by = session_user (added 2026-10-21 hardening) | — | — |
 | case_actions | fraud_lead | All rows | — | — | — |
 | case_actions | fraud_analyst | Parent case visible | — | — | — |
-| case_actions | fraud_triage_agent | All rows | actor LIKE 'fraud_triage_copilot%' | — | — |
+| case_actions | fraud_triage_agent | All rows | actor LIKE 'fraud_triage_copilot%' AND db_inserted_by = session_user (added 2026-10-21 hardening) | — | — |
 
 FORCE ROW LEVEL SECURITY enabled on both tables.
 
-## Before/After Picture (Part A.5)
+## Part A.5: Before picture: UC FGAC is not propagated to synced tables (documented behavior)
 
-### Before (no FGAC)
+A synced table is a managed copy of the UC source in Lakebase Postgres. It is owned by the internal `databricks_writer_<dbid>` role, and access to it in Postgres is managed with Postgres grants. See [Serve lakehouse data with synced tables](https://docs.databricks.com/aws/en/oltp/projects/sync-tables/) (sections "How it works", "Ownership and permissions", "Manage synced table access") and [Create Postgres roles](https://docs.databricks.com/aws/en/oltp/projects/postgres-roles/). UC row filters and column masks on the silver sources are therefore not enforced on `fraud.*` in Postgres. The numbers below show this. I did not find a docs sentence that says "UC row filters are not propagated" verbatim; the conclusion follows from the copy and ownership model above. `fraud_gov` changes this by adding security_barrier views that apply the same row rule (amount > 10,000) and column rule (amt_to_monthly_spend) in Postgres, based on `fraud_pii` membership. Governed roles can read only the views.
+
+### Before (no Postgres FGAC)
 | Path | Total Rows | High Amount | Non-null amt_to_monthly_spend |
 |------|-----------|-------------|-------------------------------|
 | UC fe_bar_lakebase.fraud.txn_features | 464,632 | 751 | 431,471 |
@@ -82,3 +84,7 @@ FORCE ROW LEVEL SECURITY enabled on both tables.
 | max | 8.05 ms |
 
 Conclusion: security_barrier views do not break the single-digit ms latency goal.
+
+## Correction (2026-10-21 hardening pass)
+
+The cell outputs in the first committed `lakebase_fgac_validation.ipynb` (commit c3d825c) were not produced by running that notebook. A script inserted them into the .ipynb using numbers from separate interactive runs. The numbers in this log came from those real interactive runs, but the notebook itself had not been executed. The notebook has since been re-run end to end in the notebook UI on branch `feature/fgac-hardening`, and the committed outputs now come from that execution. See `logs/fgac_hardening_2026-10-21.md`.

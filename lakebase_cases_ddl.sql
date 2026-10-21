@@ -19,9 +19,10 @@ CREATE TABLE IF NOT EXISTS cases.fraud_cases (
     recommended_action  TEXT            NOT NULL
                                         CHECK (recommended_action IN ('approve', 'review', 'block')),
     notes               TEXT,
-    created_by          TEXT            NOT NULL,
+    created_by          TEXT            NOT NULL,   -- analyst label supplied by the caller/agent
     created_at          TIMESTAMPTZ     NOT NULL DEFAULT now(),
-    updated_at          TIMESTAMPTZ     NOT NULL DEFAULT now()
+    updated_at          TIMESTAMPTZ     NOT NULL DEFAULT now(),
+    db_inserted_by      TEXT            NOT NULL DEFAULT session_user  -- Postgres login that inserted the row
 );
 
 -- ---------------------------------------------------------------------------
@@ -35,9 +36,17 @@ CREATE TABLE IF NOT EXISTS cases.case_actions (
                                         CHECK (action_type IN ('case_opened', 'recommendation', 'routed',
                                                                'analyst_decision', 'note', 'case_closed')),
     outcome             TEXT,
-    actor               TEXT            NOT NULL,
-    created_at          TIMESTAMPTZ     NOT NULL DEFAULT now()
+    actor               TEXT            NOT NULL,   -- analyst label supplied by the caller/agent
+    created_at          TIMESTAMPTZ     NOT NULL DEFAULT now(),
+    db_inserted_by      TEXT            NOT NULL DEFAULT session_user  -- Postgres login that inserted the row
 );
+
+-- Existing installs created before 2026-10-21: add db_inserted_by in place.
+-- Backfill logic for pre-existing rows lives in lakebase_fgac_hardening.sql.
+ALTER TABLE cases.fraud_cases  ADD COLUMN IF NOT EXISTS db_inserted_by TEXT;
+ALTER TABLE cases.case_actions ADD COLUMN IF NOT EXISTS db_inserted_by TEXT;
+ALTER TABLE cases.fraud_cases  ALTER COLUMN db_inserted_by SET DEFAULT session_user;
+ALTER TABLE cases.case_actions ALTER COLUMN db_inserted_by SET DEFAULT session_user;
 
 -- ---------------------------------------------------------------------------
 -- Indexes

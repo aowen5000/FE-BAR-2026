@@ -1,0 +1,37 @@
+{
+ "job_run": {
+  "job_id": 1115396029932218,
+  "run_id": 1101647585612679,
+  "run_name": "fe_bar_gold_to_lakebase",
+  "trigger": "ONE_TIME",
+  "creator_user_name": "alex.owen@databricks.com",
+  "start_time": 1792550019058,
+  "end_time": 1792550313966,
+  "run_duration": 294908,
+  "run_page_url": "https://fevm-workshop-guy.cloud.databricks.com/?o=7474659392412718#job/1115396029932218/run/1101647585612679",
+  "state": {"life_cycle_state": "TERMINATED", "result_state": "SUCCESS", "state_message": "", "user_cancelled_or_timedout": false},
+  "tasks": [
+   {"task_key": "gold_pipeline_refresh", "run_id": 490435646942231, "pipeline_task": {"pipeline_id": "c0db28b8-dbd2-432d-99cf-4ea2aea60274", "full_refresh": false}, "start_time": 1792550019096, "end_time": 1792550082074, "execution_duration": 62000, "state": {"life_cycle_state": "TERMINATED", "result_state": "SUCCESS"}},
+   {"task_key": "batch_scoring", "run_id": 348378236508614, "depends_on": [{"task_key": "gold_pipeline_refresh"}], "environment_key": "scoring_env", "notebook_task": {"notebook_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/fraud_batch_scoring", "source": "WORKSPACE"}, "start_time": 1792550082333, "end_time": 1792550260476, "setup_duration": 4000, "execution_duration": 174000, "state": {"life_cycle_state": "TERMINATED", "result_state": "SUCCESS"}},
+   {"task_key": "lakebase_sync_refresh", "run_id": 742998301546873, "depends_on": [{"task_key": "batch_scoring"}], "pipeline_task": {"pipeline_id": "f8690359-4bb1-45b9-8fdb-5bd892239db2", "full_refresh": false}, "start_time": 1792550260850, "end_time": 1792550313690, "execution_duration": 52000, "state": {"life_cycle_state": "TERMINATED", "result_state": "SUCCESS"}}
+  ]
+ },
+ "postgres_before": {
+  "views": {
+   "customer_risk_profile": {"owner": "alex.owen@databricks.com", "def_md5": "3034e6f23e25e8d1796fdbae69eea51e", "def_len": 289},
+   "txn_features": {"owner": "alex.owen@databricks.com", "def_md5": "9f4c89e32a3d1fa4e6070ef484e64f95", "def_len": 752},
+   "txn_risk_current": {"owner": "alex.owen@databricks.com", "def_md5": "e95b38e75af957ac8ee2e07fa83964ed", "def_len": 393}
+  },
+  "synced_parent_oids": {"customer_risk_profile": 24743, "txn_features": 24712, "txn_risk_current": 73749},
+  "counts": {"fraud_analyst.customer_risk_profile": 9289, "fraud_analyst.txn_features": 463881, "fraud_analyst.txn_risk_current": 463881, "fraud_lead.customer_risk_profile": 9289, "fraud_lead.txn_features": 464632, "fraud_lead.txn_risk_current": 464632, "pg.fraud.txn_features": 464632, "pg.fraud.txn_risk_current": 464632, "pg.fraud.customer_risk_profile": 9289}
+ },
+ "postgres_after": {
+  "views": "identical: same 3 views, same owner, same definition md5",
+  "synced_parent_oids": {"customer_risk_profile": 24743, "txn_features": 24712, "txn_risk_current": 73749},
+  "child_partitions_after": {"customer_risk_profile": {"partition_24743": 24824}, "txn_features": {"partition_24712": 24804}, "txn_risk_current": {"partition_73749": 122901}},
+  "counts": {"fraud_analyst.customer_risk_profile": 9289, "fraud_analyst.txn_features": 463881, "fraud_analyst.txn_risk_current": 463881, "fraud_lead.customer_risk_profile": 9289, "fraud_lead.txn_features": 464632, "fraud_lead.txn_risk_current": 464632, "pg.fraud.txn_features": 464632, "pg.fraud.txn_risk_current": 464632, "pg.fraud.customer_risk_profile": 9289},
+  "pg_max_scored_at": "2026-10-21T02:36:46.583767Z",
+  "txn_0234209": {"risk_score": 0.9844108757126732, "recommended_action": "block"}
+ },
+ "uc_counts_after": {"txn_features_gold": 464632, "customer_risk_profile_gold": 9289, "scored_transactions": 464632, "scored_transactions_max_scored_at": "2026-10-21T02:36:46.583767"}
+}

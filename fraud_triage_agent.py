@@ -1,9 +1,17 @@
 """
-fraud_triage_agent.py — Fraud Triage Copilot (ResponsesAgent)
+fraud_triage_agent.py: Fraud Triage Copilot (ResponsesAgent)
 
 Tool-calling agent on Mosaic AI Agent Framework + Foundation Model API.
-Uses UCFunctionToolkit for read tools and an agent-side Python tool for
-create_fraud_case (because UC functions cannot connect to Lakebase).
+
+Governance rule (FGAC hardening, 2026-10-21): every tool is governed by UC or
+by Postgres, never neither. The UC SQL functions in agent_tools.sql read the
+ungoverned synced tables (fe_bar_lakebase.fraud.*). Through UC, the fraud_gov
+views filter every caller the same way because pg_has_role() is evaluated for
+the UC service role, not the end user, so they are not identity-aware there.
+All four tools are therefore agent-side Python tools. They connect directly to
+Lakebase as LakebaseCases(pg_role='fraud_triage_agent') and read only fraud_gov.*
+plus the RLS-protected cases.* tables. The UC functions are deprecated and NOT
+registered with the agent.
 """
 
 import json
@@ -14,7 +22,7 @@ from mlflow.types.responses import (
     ResponsesAgentResponse,
     ResponsesAgentStreamEvent,
 )
-from databricks_langchain import ChatDatabricks, UCFunctionToolkit
+from databricks_langchain import ChatDatabricks
 from langchain_core.messages import AIMessage, SystemMessage, HumanMessage, ToolMessage
 from langchain_core.tools import tool
 from langchain_core.runnables import RunnableLambda
@@ -28,11 +36,37 @@ sys.path.insert(0, "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo")
 
 # ---- Configuration --------------------------------------------------------
 LLM_ENDPOINT = "databricks-claude-sonnet-5-5"
-UC_FUNCTIONS = [
-    "workshop_guy_catalog.fe_bar_a0.get_transaction_risk",
-    "workshop_guy_catalog.fe_bar_a0.explain_top_signals",
-    "workshop_guy_catalog.fe_bar_a0.get_customer_history",
-]
+AGENT_PG_ROLE = "fraud_triage_agent"
+TOOL_IMPL = "agent_python:postgres:fraud_triage_agent"
+
+# Shared, lazily created governed connection for the read tools.
+_READER = None
+
+
+def _reader():
+    global _READER
+    if _READER is None:
+        from lakebase_cases import LakebaseCases
+        _READER = LakebaseCases(pg_role=AGENT_PG_ROLE)
+    return _READER
+
+
+def _jsonable(rows):
+    out = []
+    for r in rows:
+        out.append({k: (v.isoformat() if hasattr(v, "isoformat") else (float(v) if hasattr(v, "as_tuple") else v)) for k, v in r.items()})
+    return out
+
+
+def _envelope(tool_name, objects_read, rows):
+    """Wrap tool output with provenance so traces show which implementation ran
+    and which objects it read."""
+    return json.dumps({
+        "_tool": tool_name,
+        "_implementation": TOOL_IMPL,
+        "_objects_read": objects_read,
+        "rows": _jsonable(rows),
+    }, default=str)
 
 SYSTEM_PROMPT = """You are the Fraud Triage Copilot, an AI assistant that helps fraud analysts understand and act on flagged transactions.
 
@@ -43,12 +77,116 @@ RULES:
 4. For each transaction, output:
    - Why flagged (plain language, top signals)
    - Recommended action
-   - Confidence level
+   - Confidence level, with the observed precision number from get_transaction_risk (confidence_display)
    - Routed queue
    - Customer context (call get_customer_history)
    - Suggested next step
 5. If a transaction ID is not found, say so clearly. Do not invent data.
 6. An approve-band transaction should not be pushed into block. Respect the model's scoring bands."""
+
+# ---- Agent-side read tools (Postgres-governed) ------------------------------
+# Names, signatures and docstrings match the deprecated UC functions.
+
+@tool
+def get_transaction_risk(txn_id: str) -> str:
+    """Returns the risk assessment for a single transaction including risk score, recommended action, confidence (high/medium/low) with the observed precision of its calibration bucket, and routed queue (auto_block/analyst_review/auto_approve)."""
+    objs = ["fraud_gov.txn_risk_current", "fraud_gov.txn_features", "fraud_gov.risk_score_calibration"]
+    rows = _reader().query(
+        """
+        SELECT r.txn_id, r.customer_id, f.txn_ts, f.amount, r.risk_score,
+               r.recommended_action, r.model_version, r.scored_at,
+               c.confidence, c.observed_precision, c.bucket AS calibration_bucket,
+               c.row_count AS calibration_bucket_rows,
+               CASE r.recommended_action WHEN 'block' THEN 'auto_block'
+                    WHEN 'review' THEN 'analyst_review'
+                    WHEN 'approve' THEN 'auto_approve' END AS routed_queue
+        FROM fraud_gov.txn_risk_current r
+        JOIN fraud_gov.txn_features f ON f.txn_id = r.txn_id
+        LEFT JOIN fraud_gov.risk_score_calibration c
+          ON r.risk_score >= c.lower_bound
+         AND (r.risk_score < c.upper_bound OR (c.bucket = 'block_band' AND r.risk_score <= c.upper_bound))
+        WHERE r.txn_id = %s
+        """,
+        (txn_id,),
+    )
+    for r in rows:
+        if r.get("observed_precision") is not None:
+            r["confidence_display"] = f"{r['confidence']} (observed precision {float(r['observed_precision']):.2f} in {r['calibration_bucket']}, n={r['calibration_bucket_rows']})"
+    return _envelope("get_transaction_risk", objs, rows)
+
+
+@tool
+def explain_top_signals(txn_id: str) -> str:
+    """Returns the top SHAP signals for a scored transaction as plain-language explanations with SHAP values and customer context."""
+    objs = ["fraud_gov.txn_risk_current", "fraud_gov.txn_features", "fraud_gov.customer_risk_profile"]
+    base = _reader().query(
+        """
+        SELECT r.txn_id, r.top_shap_signals, c.distinct_devices_30d, c.home_region,
+               c.txn_count_30d, c.avg_amount_30d
+        FROM fraud_gov.txn_risk_current r
+        JOIN fraud_gov.txn_features f ON f.txn_id = r.txn_id
+        LEFT JOIN fraud_gov.customer_risk_profile c ON c.customer_id = f.customer_id
+        WHERE r.txn_id = %s
+        """,
+        (txn_id,),
+    )
+    rows = []
+    for b in base:
+        sigs = json.loads(b["top_shap_signals"] or "[]")
+        for s in sorted(sigs, key=lambda x: -x["shap"]):
+            feat, val, shap = s["feature"], s["value"], s["shap"]
+            if feat == "is_new_device":
+                fv, normal = str(int(val)), f"Customer uses {b['distinct_devices_30d']} devices in 30d"
+                expl = (f"New device (SHAP +{shap:.2f}). Normally uses {b['distinct_devices_30d']} devices." if val == 1 else "Known device.")
+            elif feat == "geo_distance_from_home":
+                fv, normal = f"{val:.1f} km", f"Home region: {b['home_region']}"
+                expl = f"{val:.1f} km from home ({b['home_region']}), SHAP +{shap:.2f}."
+            elif feat == "is_online":
+                fv, normal = str(int(val)), f"Customer avg 30d txns: {b['txn_count_30d']}"
+                expl = (f"Online txn (SHAP +{shap:.2f}). Higher risk." if val == 1 else "In-person.")
+            elif feat == "amount":
+                avg = float(b["avg_amount_30d"] or 0)
+                fv, normal = f"${val:.2f}", f"Avg 30d: ${avg:.2f}"
+                expl = f"${val:.2f} vs avg ${avg:.2f} (SHAP +{shap:.2f})."
+            else:
+                fv, normal = f"{val:.4f}", "See customer profile"
+                expl = f"{feat} = {val:.4f} (SHAP +{shap:.2f})"
+            rows.append({"txn_id": b["txn_id"], "signal_name": feat, "shap_value": shap,
+                         "feature_value": fv, "customer_normal": normal, "explanation": expl})
+    return _envelope("explain_top_signals", objs, rows)
+
+
+@tool
+def get_customer_history(customer_id: str) -> str:
+    """Returns customer risk profile, last 20 transactions with risk scores, prior fraud outcome counts, and existing fraud cases."""
+    objs = ["fraud_gov.customer_risk_profile", "fraud_gov.txn_risk_current", "fraud_gov.txn_features", "cases.fraud_cases"]
+    rd = _reader()
+    rows = []
+    for p in rd.query("SELECT * FROM fraud_gov.customer_risk_profile WHERE customer_id = %s", (customer_id,)):
+        rows.append({"section": "profile", "detail": " | ".join(f"{k}={v}" for k, v in p.items())})
+        # Prior outcomes come from the gold profile (prior_case_count / confirmed_fraud_count),
+        # which is derived from fact_prior_fraud_cases_silver in the gold pipeline.
+        rows.append({"section": "prior_outcomes", "detail": f"confirmed_fraud={p['confirmed_fraud_count']} | total={p['prior_case_count']}"})
+    for t in rd.query(
+        """
+        SELECT f.txn_id, f.amount, r.risk_score, r.recommended_action, f.txn_ts
+        FROM fraud_gov.txn_features f JOIN fraud_gov.txn_risk_current r ON r.txn_id = f.txn_id
+        WHERE f.customer_id = %s ORDER BY f.txn_ts DESC LIMIT 20
+        """,
+        (customer_id,),
+    ):
+        rows.append({"section": "recent_txns", "detail": f"txn_id={t['txn_id']} | amount=${float(t['amount']):.2f} | risk_score={float(t['risk_score']):.4f} | action={t['recommended_action']} | txn_ts={t['txn_ts']}"})
+    for cse in rd.query(
+        """
+        SELECT fc.case_id, fc.txn_id, fc.status, fc.assigned_queue
+        FROM cases.fraud_cases fc JOIN fraud_gov.txn_features f ON f.txn_id = fc.txn_id
+        WHERE f.customer_id = %s ORDER BY fc.created_at
+        """,
+        (customer_id,),
+    ):
+        rows.append({"section": "existing_cases", "detail": f"case_id={cse['case_id']} | txn_id={cse['txn_id']} | status={cse['status']} | queue={cse['assigned_queue']}"})
+    return _envelope("get_customer_history", objs, rows)
+
 
 # ---- Agent-side tool: create_fraud_case -----------------------------------
 @tool
@@ -93,10 +231,9 @@ class State(TypedDict):
 class FraudTriageAgent(ResponsesAgent):
     def __init__(self):
         self.llm = ChatDatabricks(endpoint=LLM_ENDPOINT)
-        # UC function tools
-        uc_tools = list(UCFunctionToolkit(function_names=UC_FUNCTIONS).tools)
-        # Agent-side tool
-        self.all_tools = uc_tools + [create_fraud_case]
+        # All tools are agent-side and Postgres-governed (role fraud_triage_agent).
+        # The deprecated UC functions in agent_tools.sql are intentionally NOT registered.
+        self.all_tools = [get_transaction_risk, explain_top_signals, get_customer_history, create_fraud_case]
         self.llm_with_tools = self.llm.bind_tools(self.all_tools)
 
     def _build_graph(self):
