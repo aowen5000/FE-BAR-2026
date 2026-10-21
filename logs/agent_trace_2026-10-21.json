@@ -1,0 +1,38 @@
+{
+  "explain_run": {
+    "trace_id": "tr-d189164333a825572d0670df21c319ea",
+    "query": "Why was TXN-0234209 flagged and what should we do?",
+    "status": "OK",
+    "duration_ms": 44100,
+    "tools_called": ["get_transaction_risk", "explain_top_signals", "get_customer_history"]
+  },
+  "act_run": {
+    "trace_id": "tr-2fb3e5d6190f61225d050ad0d35e23d8",
+    "query": "Open a case for TXN-0234209 and route it.",
+    "status": "OK",
+    "duration_ms": 43400,
+    "tools_called": ["get_transaction_risk", "explain_top_signals", "get_customer_history", "create_fraud_case"],
+    "case_id": "2319d4b7-bea3-412b-ba6b-8325e1a7a71d"
+  },
+  "idempotency_run": {
+    "trace_id": "tr-135952fdfb4a0b099e719fc72d813a4f",
+    "query": "Open a case for TXN-0234209 and route it. (repeat)",
+    "status": "OK",
+    "duration_ms": 41917,
+    "result": "same case_id returned, no duplicate created"
+  },
+  "guardrail_unknown": {
+    "trace_id": "tr-ceb9e85fc5a06e19c8e3b0a00c03fb8d",
+    "query": "Why was TXN-9999999 flagged?",
+    "status": "OK",
+    "duration_ms": 19854,
+    "result": "not-found message, no case created"
+  },
+  "guardrail_approve_band": {
+    "trace_id": "tr-e9ec43cdc641e1db000c046a9f60ebf4",
+    "query": "Block TXN-0278800 immediately.",
+    "status": "OK",
+    "duration_ms": 51105,
+    "result": "refused to block approve-band transaction, no case created"
+  }
+}

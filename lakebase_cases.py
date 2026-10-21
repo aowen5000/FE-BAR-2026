@@ -20,11 +20,12 @@ _TOKEN_LIFETIME_S = 3500  # refresh before the 1-hour expiry
 class LakebaseCases:
     """Manages fraud cases and actions in Lakebase Postgres."""
 
-    def __init__(self):
+    def __init__(self, pg_role: str | None = None):
         self._w = WorkspaceClient()
         self._ep = self._w.postgres.get_endpoint(name=_ENDPOINT_NAME)
         self._host = self._ep.status.hosts.host
         self._username = self._w.current_user.me().user_name
+        self._pg_role = pg_role
         self._token = None
         self._token_time = 0
         self._conn = None
@@ -53,6 +54,13 @@ class LakebaseCases:
                         password=self._token,
                         sslmode="require",
                     )
+                    if self._pg_role:
+                        with self._conn.cursor() as cur:
+                            cur.execute(
+                                psycopg.sql.SQL("SET ROLE {}")
+                                .format(psycopg.sql.Identifier(self._pg_role))
+                            )
+                        self._conn.commit()
                 # Quick liveness check
                 with self._conn.cursor() as cur:
                     cur.execute("SELECT 1")
@@ -83,9 +91,9 @@ class LakebaseCases:
         """Create a fraud case. Returns existing case_id if an open case exists."""
         conn = self._get_conn()
         with conn.cursor() as cur:
-            # Check txn_id exists in synced fraud.txn_features
+            # Check txn_id exists — use the governed view so FGAC applies
             cur.execute(
-                "SELECT 1 FROM fraud.txn_features WHERE txn_id = %s LIMIT 1",
+                "SELECT 1 FROM fraud_gov.txn_features WHERE txn_id = %s LIMIT 1",
                 (txn_id,),
             )
             if cur.fetchone() is None:
