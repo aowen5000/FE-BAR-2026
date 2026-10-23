@@ -17,7 +17,9 @@ All times below are UTC. Workspace fevm-workshop-guy has workspace ID 7474659392
 | Commit time | 2026-10-17T02:32:42Z (merge 2026-10-17T02:33:07Z) |
 | Workspace | fevm-workshop-guy (already in the commit message) |
 | Date | 2026-10-17 (already in the commit message) |
-| Genie conversation ID | Not recorded. The message says "(current session — not programmatically accessible)". That was incorrect: the ID was available as the page URL's `threadId`, but the session didn't look it up. The correct ID is not known yet. |
+| Genie conversation ID | **3367633421784666** ("Sync Gold Feature Tables to Lakebase ...", active 2026-10-17 00:32 to 02:52 UTC). The original message says "(current session — not programmatically accessible)", which was incorrect. |
+
+How the ID was matched: the conversation's transcript in `~/.conversations` contains the exact command that created merge f26c2d6 (`git merge feat/lakebase-sync-write-path-2026-10-17 --no-ff -m 'Merge feat/lakebase-sync-write-path-2026-10-17: Lakebase read+write path'`). It also contains `repos update ... --branch feat/lakebase-sync-write-path-2026-10-17`, and the commit time falls inside the conversation's active window.
 
 Other defect: the message was passed with literal `\n` sequences, so the whole body is on the subject line and ends with a stray `"`.
 
@@ -30,11 +32,11 @@ Other defect: the message was passed with literal `\n` sequences, so the whole b
 | Commit time | 2026-10-21T00:38:33Z (merge 2026-10-21T00:38:57Z) |
 | Workspace | fevm-workshop-guy (missing from the message) |
 | Date | 2026-10-21 UTC (2026-10-20 local); missing from the message |
-| Genie conversation ID | Missing from the message. Not known yet. |
+| Genie conversation ID | **1507503687185838** ("Fraud Triage Agent Build and Access Setup", active 2026-10-20 23:39 to 2026-10-21 17:57 UTC). Missing from the original message. |
 
 Other defect: same literal `\n` / trailing `"` problem as commit 1.
 
-Unverified lead: `logs/fgac_hardening_2026-10-21.md` names conversation 1507503687185838 for the FGAC hardening work on 2026-10-21. Nothing confirms that the same conversation produced c3d825c, so it is not recorded as this commit's ID.
+How the ID was matched: the conversation's transcript in `~/.conversations` contains the exact command that created merge 03402cb (`git merge feature/fraud-triage-agent --no-ff -m 'Merge feature/fraud-triage-agent: Step 5 Fraud Triage Copilot + Lakebase FGAC'`), and the commit time falls inside the conversation's active window. The same conversation also did the FGAC hardening work in `logs/fgac_hardening_2026-10-21.md`.
 
 ## 3. feature/fraud-ops-dashboard (Step 6)
 
@@ -51,6 +53,12 @@ Unverified lead: `logs/fgac_hardening_2026-10-21.md` names conversation 15075036
 
 Other defect: the subject says "validation notebook with outputs", but the committed `.ipynb` has no outputs. This was already corrected by 3ee80a9 / merge 968b794 on branch step6/2026-10-22_fevm-workshop-guy_conv-1835980093459154. That commit carries the full metadata and the run evidence (`logs/dashboard_validation_run_659281894932228.md`).
 
-## Still open
+## Summary
 
-* Conversation IDs for commits 1 and 2. Once the user supplies them (the `threadId` of each Genie Code thread), add them to the tables above in a new commit.
+| Commit | Branch | Conversation ID | Workspace | Date (UTC) |
+| --- | --- | --- | --- | --- |
+| dae23d6 / f26c2d6 | feat/lakebase-sync-write-path-2026-10-17 | 3367633421784666 | fevm-workshop-guy | 2026-10-17 |
+| c3d825c / 03402cb | feature/fraud-triage-agent | 1507503687185838 | fevm-workshop-guy | 2026-10-21 |
+| 7349425 / ee35a48 | feature/fraud-ops-dashboard | 1835980093459154 | fevm-workshop-guy | 2026-10-23 (2026-10-22 local) |
+
+Conversation transcripts live in `/Users/alex.owen@databricks.com/.conversations`. The notebook object ID of each transcript is its conversation ID.
