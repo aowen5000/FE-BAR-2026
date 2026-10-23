@@ -1,0 +1,1655 @@
+{
+  "datasets": [
+    {
+      "name": "ds_kpi_cases",
+      "displayName": "Case KPIs (fraud_dash.case_summary)",
+      "queryLines": [
+        "SELECT count_if(to_date(created_at) = current_date()) AS cases_created_today, count_if(status = 'open') AS open_cases, count_if(assigned_queue = 'analyst_review' AND status IN ('open', 'in_review')) AS analyst_review_backlog, count(*) AS visible_cases, current_date() AS as_of_date_utc FROM fe_bar_lakebase.fraud_dash.case_summary "
+      ]
+    },
+    {
+      "name": "ds_model_vs_baseline",
+      "displayName": "Model vs baseline rule (fraud_dash.baseline_comparison)",
+      "queryLines": [
+        "SELECT max(CASE WHEN strategy = 'model' THEN fraud_amount_caught END) AS model_fraud_amount_caught, max(CASE WHEN strategy = 'baseline_rule' THEN fraud_amount_caught END) AS baseline_fraud_amount_caught, max(CASE WHEN strategy = 'model' THEN false_positive_count END) AS model_false_positives, max(CASE WHEN strategy = 'baseline_rule' THEN false_positive_count END) AS baseline_false_positives, max(CASE WHEN strategy = 'model' THEN flagged_count END) AS model_flagged, max(CASE WHEN strategy = 'baseline_rule' THEN flagged_count END) AS baseline_flagged, max(CASE WHEN strategy = 'baseline_rule' THEN rule_text END) AS baseline_rule_text, max(total_fraud_amount) AS total_fraud_amount FROM fe_bar_lakebase.fraud_dash.baseline_comparison "
+      ]
+    },
+    {
+      "name": "ds_score_dist",
+      "displayName": "Risk score distribution (fraud_dash.score_distribution)",
+      "queryLines": [
+        "SELECT bucket_lower, bucket_upper, bucket_label, band, recommended_action, txn_count, review_threshold, block_threshold, model_run_id FROM fe_bar_lakebase.fraud_dash.score_distribution ORDER BY bucket_lower, recommended_action "
+      ]
+    },
+    {
+      "name": "ds_cases_daily",
+      "displayName": "Cases created per day by queue (fraud_dash.case_summary)",
+      "queryLines": [
+        "SELECT to_date(created_at) AS created_date, assigned_queue, count(*) AS cases_created FROM fe_bar_lakebase.fraud_dash.case_summary GROUP BY ALL ORDER BY created_date, assigned_queue "
+      ]
+    },
+    {
+      "name": "ds_actions_daily",
+      "displayName": "Case actions per day (fraud_dash.case_actions_daily)",
+      "queryLines": [
+        "SELECT action_date, action_type, action_count, case_count FROM fe_bar_lakebase.fraud_dash.case_actions_daily ORDER BY action_date, action_type "
+      ]
+    },
+    {
+      "name": "ds_triage",
+      "displayName": "Triage queue top 50 (fraud_dash.triage_queue)",
+      "queryLines": [
+        "SELECT txn_id, customer_id, amount, risk_score, recommended_action, top_shap_signals, case_status, assigned_queue, case_id, risk_rank, filtered_rank FROM (SELECT *, row_number() OVER (ORDER BY risk_score DESC, txn_id) AS filtered_rank FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE (size(:action_f) = 0 OR array_contains(:action_f, recommended_action)) AND (size(:queue_f) = 0 OR array_contains(:queue_f, assigned_queue)) AND (size(:status_f) = 0 OR array_contains(:status_f, case_status)) AND (upper(trim(:txn_id_f)) IN ('', 'ALL') OR txn_id = trim(:txn_id_f))) WHERE filtered_rank <= 50 ORDER BY risk_score DESC, txn_id "
+      ],
+      "parameters": [
+        {
+          "displayName": "action_f",
+          "keyword": "action_f",
+          "dataType": "STRING",
+          "complexType": "MULTI",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING"
+            }
+          }
+        },
+        {
+          "displayName": "queue_f",
+          "keyword": "queue_f",
+          "dataType": "STRING",
+          "complexType": "MULTI",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING"
+            }
+          }
+        },
+        {
+          "displayName": "status_f",
+          "keyword": "status_f",
+          "dataType": "STRING",
+          "complexType": "MULTI",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING"
+            }
+          }
+        },
+        {
+          "displayName": "txn_id_f",
+          "keyword": "txn_id_f",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "ALL"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ds_triage_options",
+      "displayName": "Triage filter options (fraud_dash.triage_queue)",
+      "queryLines": [
+        "SELECT recommended_action, assigned_queue, case_status, count(*) AS txn_count FROM fe_bar_lakebase.fraud_dash.triage_queue GROUP BY ALL ORDER BY recommended_action, assigned_queue, case_status "
+      ]
+    },
+    {
+      "name": "ds_recent_cases",
+      "displayName": "Recent cases (fraud_dash.case_summary)",
+      "queryLines": [
+        "SELECT case_id, txn_id, customer_id, status, assigned_queue, recommended_action, risk_score, amount, action_count, created_at, updated_at, last_action_at FROM fe_bar_lakebase.fraud_dash.case_summary ORDER BY created_at DESC LIMIT 50 "
+      ]
+    },
+    {
+      "name": "ds_calibration",
+      "displayName": "Calibration (fraud_gov.risk_score_calibration)",
+      "queryLines": [
+        "SELECT bucket, bucket_order, lower_bound, upper_bound, row_count, fraud_count, observed_precision, confidence FROM fe_bar_lakebase.fraud_gov.risk_score_calibration ORDER BY bucket_order "
+      ]
+    },
+    {
+      "name": "ds_exposure",
+      "displayName": "Exposure (fraud_dash.exposure)",
+      "queryLines": [
+        "SELECT recommended_action, CASE WHEN is_fraud THEN 'fraud' ELSE 'not fraud' END AS fraud_label, txn_count, total_amount, fraud_amount_caught, fraud_amount_missed FROM fe_bar_lakebase.fraud_dash.exposure ORDER BY recommended_action, fraud_label "
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "overview",
+      "displayName": "Overview",
+      "layout": [
+        {
+          "widget": {
+            "name": "ov_header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## FE Bar Fraud Ops: Triage & Action\n",
+                "\n",
+                "Live from Lakebase (fe_bar_lakebase.fraud_dash / fraud_gov). Non-pii governed view: transactions with amount > 10,000 are excluded. Dates are UTC."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_cases_today",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_kpi_cases",
+                  "fields": [
+                    {
+                      "name": "cases_created_today",
+                      "expression": "`cases_created_today`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "cases_created_today",
+                  "displayName": "Cases created today"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Cases created today",
+                "description": "created_at date = current_date (UTC)",
+                "showDescription": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_open_cases",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_kpi_cases",
+                  "fields": [
+                    {
+                      "name": "open_cases",
+                      "expression": "`open_cases`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "open_cases",
+                  "displayName": "Open cases"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Open cases"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_ar_backlog",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_kpi_cases",
+                  "fields": [
+                    {
+                      "name": "analyst_review_backlog",
+                      "expression": "`analyst_review_backlog`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "analyst_review_backlog",
+                  "displayName": "analyst_review backlog"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "analyst_review backlog",
+                "description": "queue analyst_review, status open or in_review",
+                "showDescription": true
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_model_caught",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_model_vs_baseline",
+                  "fields": [
+                    {
+                      "name": "model_fraud_amount_caught",
+                      "expression": "`model_fraud_amount_caught`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "model_fraud_amount_caught",
+                  "displayName": "Fraud $ caught: model",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud $ caught: model",
+                "description": "is_fraud and action in (block, review)",
+                "showDescription": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_base_caught",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_model_vs_baseline",
+                  "fields": [
+                    {
+                      "name": "baseline_fraud_amount_caught",
+                      "expression": "`baseline_fraud_amount_caught`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "baseline_fraud_amount_caught",
+                  "displayName": "Fraud $ caught: baseline rule",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud $ caught: baseline rule",
+                "description": "is_cross_border = 1 AND is_new_device = 1",
+                "showDescription": true
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 5,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_review_thr",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_score_dist",
+                  "fields": [
+                    {
+                      "name": "review_threshold",
+                      "expression": "`review_threshold`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "review_threshold",
+                  "displayName": "Review threshold (MLflow)",
+                  "format": {
+                    "type": "number",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 4
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Review threshold (MLflow)"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 5,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_model_fp",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_model_vs_baseline",
+                  "fields": [
+                    {
+                      "name": "model_false_positives",
+                      "expression": "`model_false_positives`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "model_false_positives",
+                  "displayName": "False positives: model",
+                  "format": {
+                    "type": "number",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 1
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "False positives: model"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_base_fp",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_model_vs_baseline",
+                  "fields": [
+                    {
+                      "name": "baseline_false_positives",
+                      "expression": "`baseline_false_positives`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "baseline_false_positives",
+                  "displayName": "False positives: baseline rule",
+                  "format": {
+                    "type": "number",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 1
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "False positives: baseline rule"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 8,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_block_thr",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_score_dist",
+                  "fields": [
+                    {
+                      "name": "block_threshold",
+                      "expression": "`block_threshold`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "block_threshold",
+                  "displayName": "Block threshold (MLflow)",
+                  "format": {
+                    "type": "number",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 4
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Block threshold (MLflow)"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 8,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "chart_score_dist",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_score_dist",
+                  "fields": [
+                    {
+                      "name": "bucket_label",
+                      "expression": "`bucket_label`"
+                    },
+                    {
+                      "name": "sum(txn_count)",
+                      "expression": "SUM(`txn_count`)"
+                    },
+                    {
+                      "name": "recommended_action",
+                      "expression": "`recommended_action`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "bucket_label",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "alphabetical"
+                    }
+                  },
+                  "displayName": "Risk score bucket (lower bound)"
+                },
+                "y": {
+                  "fieldName": "sum(txn_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Transactions"
+                },
+                "color": {
+                  "fieldName": "recommended_action",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "approve",
+                        "color": "#009E73"
+                      },
+                      {
+                        "value": "review",
+                        "color": "#E69F00"
+                      },
+                      {
+                        "value": "block",
+                        "color": "#D55E00"
+                      }
+                    ]
+                  },
+                  "displayName": "Recommended action"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Risk score distribution by recommended action",
+                "description": "0.05 buckets below the review threshold, 0.01 buckets above. Bucket labels mark the review and block thresholds.",
+                "showDescription": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "chart_score_flagged",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_score_dist",
+                  "fields": [
+                    {
+                      "name": "bucket_label",
+                      "expression": "`bucket_label`"
+                    },
+                    {
+                      "name": "sum(txn_count)",
+                      "expression": "SUM(`txn_count`)"
+                    },
+                    {
+                      "name": "recommended_action",
+                      "expression": "`recommended_action`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`band` <> 'coarse'"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "bucket_label",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "alphabetical"
+                    }
+                  },
+                  "displayName": "Risk score bucket (lower bound)"
+                },
+                "y": {
+                  "fieldName": "sum(txn_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Transactions"
+                },
+                "color": {
+                  "fieldName": "recommended_action",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "approve",
+                        "color": "#009E73"
+                      },
+                      {
+                        "value": "review",
+                        "color": "#E69F00"
+                      },
+                      {
+                        "value": "block",
+                        "color": "#D55E00"
+                      }
+                    ]
+                  },
+                  "displayName": "Recommended action"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Flagged band: at or above review threshold"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 18,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "chart_cases_daily",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_cases_daily",
+                  "fields": [
+                    {
+                      "name": "created_date",
+                      "expression": "`created_date`"
+                    },
+                    {
+                      "name": "sum(cases_created)",
+                      "expression": "SUM(`cases_created`)"
+                    },
+                    {
+                      "name": "assigned_queue",
+                      "expression": "`assigned_queue`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "created_date",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "Created date (UTC)"
+                },
+                "y": {
+                  "fieldName": "sum(cases_created)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Cases"
+                },
+                "color": {
+                  "fieldName": "assigned_queue",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "auto_approve",
+                        "color": "#009E73"
+                      },
+                      {
+                        "value": "analyst_review",
+                        "color": "#E69F00"
+                      },
+                      {
+                        "value": "auto_block",
+                        "color": "#D55E00"
+                      }
+                    ]
+                  },
+                  "displayName": "Assigned queue"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Cases created per day by assigned_queue"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 18,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "chart_actions_daily",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_actions_daily",
+                  "fields": [
+                    {
+                      "name": "action_date",
+                      "expression": "`action_date`"
+                    },
+                    {
+                      "name": "sum(action_count)",
+                      "expression": "SUM(`action_count`)"
+                    },
+                    {
+                      "name": "action_type",
+                      "expression": "`action_type`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "action_date",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "Action date (UTC)"
+                },
+                "y": {
+                  "fieldName": "sum(action_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Actions"
+                },
+                "color": {
+                  "fieldName": "action_type",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Action type"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Case actions per day by action_type"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 24,
+            "width": 6,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "triage_queue",
+      "displayName": "Triage queue",
+      "layout": [
+        {
+          "widget": {
+            "name": "tq_header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Triage queue\n",
+                "\n",
+                "Top 50 flagged (block, review) transactions by risk_score after filters. Type a txn_id to look one up; ALL shows the top 50."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_action",
+            "queries": [
+              {
+                "name": "filter_action_opts",
+                "query": {
+                  "datasetName": "ds_triage_options",
+                  "fields": [
+                    {
+                      "name": "recommended_action",
+                      "expression": "`recommended_action`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "filter_action_param",
+                "query": {
+                  "datasetName": "ds_triage",
+                  "parameters": [
+                    {
+                      "name": "action_f",
+                      "keyword": "action_f"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "recommended_action",
+                    "displayName": "recommended_action",
+                    "queryName": "filter_action_opts"
+                  },
+                  {
+                    "parameterName": "action_f",
+                    "queryName": "filter_action_param"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "recommended_action"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_queue",
+            "queries": [
+              {
+                "name": "filter_queue_opts",
+                "query": {
+                  "datasetName": "ds_triage_options",
+                  "fields": [
+                    {
+                      "name": "assigned_queue",
+                      "expression": "`assigned_queue`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "filter_queue_param",
+                "query": {
+                  "datasetName": "ds_triage",
+                  "parameters": [
+                    {
+                      "name": "queue_f",
+                      "keyword": "queue_f"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "assigned_queue",
+                    "displayName": "assigned_queue",
+                    "queryName": "filter_queue_opts"
+                  },
+                  {
+                    "parameterName": "queue_f",
+                    "queryName": "filter_queue_param"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "assigned_queue"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_status",
+            "queries": [
+              {
+                "name": "filter_status_opts",
+                "query": {
+                  "datasetName": "ds_triage_options",
+                  "fields": [
+                    {
+                      "name": "case_status",
+                      "expression": "`case_status`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "filter_status_param",
+                "query": {
+                  "datasetName": "ds_triage",
+                  "parameters": [
+                    {
+                      "name": "status_f",
+                      "keyword": "status_f"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "case_status",
+                    "displayName": "case status",
+                    "queryName": "filter_status_opts"
+                  },
+                  {
+                    "parameterName": "status_f",
+                    "queryName": "filter_status_param"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "case status"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 1,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_txn_id",
+            "queries": [
+              {
+                "name": "filter_txn_id_param",
+                "query": {
+                  "datasetName": "ds_triage",
+                  "parameters": [
+                    {
+                      "name": "txn_id_f",
+                      "keyword": "txn_id_f"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-text-entry",
+              "encodings": {
+                "fields": [
+                  {
+                    "parameterName": "txn_id_f",
+                    "queryName": "filter_txn_id_param"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "txn_id (ALL = top 50)"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "tbl_triage",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_triage",
+                  "fields": [
+                    {
+                      "name": "filtered_rank",
+                      "expression": "`filtered_rank`"
+                    },
+                    {
+                      "name": "txn_id",
+                      "expression": "`txn_id`"
+                    },
+                    {
+                      "name": "customer_id",
+                      "expression": "`customer_id`"
+                    },
+                    {
+                      "name": "amount",
+                      "expression": "`amount`"
+                    },
+                    {
+                      "name": "risk_score",
+                      "expression": "`risk_score`"
+                    },
+                    {
+                      "name": "recommended_action",
+                      "expression": "`recommended_action`"
+                    },
+                    {
+                      "name": "top_shap_signals",
+                      "expression": "`top_shap_signals`"
+                    },
+                    {
+                      "name": "case_status",
+                      "expression": "`case_status`"
+                    },
+                    {
+                      "name": "assigned_queue",
+                      "expression": "`assigned_queue`"
+                    },
+                    {
+                      "name": "case_id",
+                      "expression": "`case_id`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "filtered_rank",
+                    "displayName": "#"
+                  },
+                  {
+                    "fieldName": "txn_id",
+                    "displayName": "txn_id"
+                  },
+                  {
+                    "fieldName": "customer_id",
+                    "displayName": "customer_id"
+                  },
+                  {
+                    "fieldName": "amount",
+                    "displayName": "amount",
+                    "format": {
+                      "type": "number-currency",
+                      "currencyCode": "USD",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 2
+                      }
+                    }
+                  },
+                  {
+                    "fieldName": "risk_score",
+                    "displayName": "risk_score",
+                    "format": {
+                      "type": "number",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 4
+                      }
+                    }
+                  },
+                  {
+                    "fieldName": "recommended_action",
+                    "displayName": "recommended_action"
+                  },
+                  {
+                    "fieldName": "top_shap_signals",
+                    "displayName": "top_shap_signals"
+                  },
+                  {
+                    "fieldName": "case_status",
+                    "displayName": "case status"
+                  },
+                  {
+                    "fieldName": "assigned_queue",
+                    "displayName": "assigned_queue"
+                  },
+                  {
+                    "fieldName": "case_id",
+                    "displayName": "case_id"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Top 50 flagged transactions"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 6,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "tbl_recent_cases",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_recent_cases",
+                  "fields": [
+                    {
+                      "name": "created_at",
+                      "expression": "`created_at`"
+                    },
+                    {
+                      "name": "case_id",
+                      "expression": "`case_id`"
+                    },
+                    {
+                      "name": "txn_id",
+                      "expression": "`txn_id`"
+                    },
+                    {
+                      "name": "customer_id",
+                      "expression": "`customer_id`"
+                    },
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    },
+                    {
+                      "name": "assigned_queue",
+                      "expression": "`assigned_queue`"
+                    },
+                    {
+                      "name": "recommended_action",
+                      "expression": "`recommended_action`"
+                    },
+                    {
+                      "name": "risk_score",
+                      "expression": "`risk_score`"
+                    },
+                    {
+                      "name": "amount",
+                      "expression": "`amount`"
+                    },
+                    {
+                      "name": "action_count",
+                      "expression": "`action_count`"
+                    },
+                    {
+                      "name": "last_action_at",
+                      "expression": "`last_action_at`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "created_at",
+                    "displayName": "created_at (UTC)"
+                  },
+                  {
+                    "fieldName": "case_id",
+                    "displayName": "case_id"
+                  },
+                  {
+                    "fieldName": "txn_id",
+                    "displayName": "txn_id"
+                  },
+                  {
+                    "fieldName": "customer_id",
+                    "displayName": "customer_id"
+                  },
+                  {
+                    "fieldName": "status",
+                    "displayName": "status"
+                  },
+                  {
+                    "fieldName": "assigned_queue",
+                    "displayName": "assigned_queue"
+                  },
+                  {
+                    "fieldName": "recommended_action",
+                    "displayName": "recommended_action"
+                  },
+                  {
+                    "fieldName": "risk_score",
+                    "displayName": "risk_score",
+                    "format": {
+                      "type": "number",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 4
+                      }
+                    }
+                  },
+                  {
+                    "fieldName": "amount",
+                    "displayName": "amount",
+                    "format": {
+                      "type": "number-currency",
+                      "currencyCode": "USD",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 2
+                      }
+                    }
+                  },
+                  {
+                    "fieldName": "action_count",
+                    "displayName": "case_actions"
+                  },
+                  {
+                    "fieldName": "last_action_at",
+                    "displayName": "last action (UTC)"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Recent cases with case_actions counts"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 8
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "model_governance",
+      "displayName": "Model & governance",
+      "layout": [
+        {
+          "widget": {
+            "name": "gov_assumptions",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Assumptions\n",
+                "\n",
+                "* **Synthetic data**: all customers, transactions and fraud labels are synthetic (FE BAR workshop build).\n",
+                "* **Baseline rule**: flag when `is_cross_border = 1 AND is_new_device = 1`. The model flags when recommended_action is block or review (thresholds are the MLflow run params of run d89beaca8f81447780da60ed2ea7c811, shown on the Overview page). Both are evaluated on the same rows.\n",
+                "* **$ figures exclude high-amount transactions (amount > 10,000)**: this dashboard shows the non-pii governed view, because Unity Catalog reads Lakebase as one shared role and cannot tell viewers apart.\n",
+                "* **Live from Lakebase**: every dataset reads fe_bar_lakebase.fraud_dash or fe_bar_lakebase.fraud_gov views in Postgres at query time. New cases appear on refresh with no sync or job run."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "tbl_calibration",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_calibration",
+                  "fields": [
+                    {
+                      "name": "bucket",
+                      "expression": "`bucket`"
+                    },
+                    {
+                      "name": "lower_bound",
+                      "expression": "`lower_bound`"
+                    },
+                    {
+                      "name": "upper_bound",
+                      "expression": "`upper_bound`"
+                    },
+                    {
+                      "name": "row_count",
+                      "expression": "`row_count`"
+                    },
+                    {
+                      "name": "fraud_count",
+                      "expression": "`fraud_count`"
+                    },
+                    {
+                      "name": "observed_precision",
+                      "expression": "`observed_precision`"
+                    },
+                    {
+                      "name": "confidence",
+                      "expression": "`confidence`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "bucket",
+                    "displayName": "bucket"
+                  },
+                  {
+                    "fieldName": "lower_bound",
+                    "displayName": "lower bound",
+                    "format": {
+                      "type": "number",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 4
+                      }
+                    }
+                  },
+                  {
+                    "fieldName": "upper_bound",
+                    "displayName": "upper bound",
+                    "format": {
+                      "type": "number",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 4
+                      }
+                    }
+                  },
+                  {
+                    "fieldName": "row_count",
+                    "displayName": "rows"
+                  },
+                  {
+                    "fieldName": "fraud_count",
+                    "displayName": "fraud rows"
+                  },
+                  {
+                    "fieldName": "observed_precision",
+                    "displayName": "observed precision",
+                    "format": {
+                      "type": "number-percent",
+                      "decimalPlaces": {
+                        "type": "max",
+                        "places": 1
+                      }
+                    }
+                  },
+                  {
+                    "fieldName": "confidence",
+                    "displayName": "confidence"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Risk score calibration (fraud_gov.risk_score_calibration)"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "chart_exposure",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "recommended_action",
+                      "expression": "`recommended_action`"
+                    },
+                    {
+                      "name": "sum(total_amount)",
+                      "expression": "SUM(`total_amount`)"
+                    },
+                    {
+                      "name": "fraud_label",
+                      "expression": "`fraud_label`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "recommended_action",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Recommended action"
+                },
+                "y": {
+                  "fieldName": "sum(total_amount)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Total amount",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "fraud_label",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "fraud",
+                        "color": "#D55E00"
+                      },
+                      {
+                        "value": "not fraud",
+                        "color": "#56B4E9"
+                      }
+                    ]
+                  },
+                  "displayName": "Label"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Exposure: total amount by recommended_action and fraud label"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#FCFCFC",
+        "dark": "#1F272D"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#11171C"
+      },
+      "widgetBorderColor": {
+        "light": "#FFFFFF",
+        "dark": "#11171C"
+      },
+      "fontColor": {
+        "light": "#11171C",
+        "dark": "#E8ECF0"
+      },
+      "selectionColor": {
+        "light": "#2272B4",
+        "dark": "#8ACAFF"
+      },
+      "visualizationColors": [
+        "#0072B2",
+        "#E69F00",
+        "#009E73",
+        "#CC79A7",
+        "#D55E00",
+        "#56B4E9",
+        "#F0E442"
+      ],
+      "widgetHeaderAlignment": "LEFT"
+    }
+  }
+}
