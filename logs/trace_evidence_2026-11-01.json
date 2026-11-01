@@ -1,0 +1,59 @@
+{
+  "exported_at_utc": "2026-11-01T19:38:52+00:00",
+  "source": "mlflow.get_trace(trace_id), experiment /Users/alex.owen@databricks.com/fe_bar_fraud_triage_agent (1507503687185844)",
+  "note": "Traces cited in README.md / logs/ whose notebook output is not committed. Exported here as committed text evidence. Span status is the MLflow span status; ERROR spans on explain_top_signals are the Part E format bug fixed 2026-11-01.",
+  "traces": [
+    {
+      "trace_id": "tr-a378f1a1b9d34fc7e7e7bf911599b31b",
+      "context": "Step 6 dashboard_validation D.2 live-read proof, interactive run 2026-10-23 (notebook object 1835980093459164, outputs lost); opened case 030dc7fb-3284-4cc2-9264-06b7de57c2cb for TXN-0350980",
+      "state": "OK",
+      "request_time_utc": "2026-10-23T01:45:22+00:00",
+      "execution_duration_ms": 16214,
+      "tool_spans": [
+        {"tool": "get_transaction_risk", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 438.6},
+        {"tool": "explain_top_signals", "status": "ERROR", "implementation": null, "duration_ms": 454.3, "error": "Unknown format code 'f' for object of type 'str'"},
+        {"tool": "explain_top_signals", "status": "ERROR", "implementation": null, "duration_ms": 26.0, "error": "Unknown format code 'f' for object of type 'str'"},
+        {"tool": "get_customer_history", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 1874.0},
+        {"tool": "create_fraud_case", "status": "OK", "implementation": null, "duration_ms": 403.0}
+      ]
+    },
+    {
+      "trace_id": "tr-6659ce2b852915f489c9add9eef92cbd",
+      "context": "Step 6 dashboard_validation D.2 re-run, job run 659281894932228; opened case c2b2ec3a-a1a7-444f-a1c8-969af362c0ee for TXN-0197951 (also printed in logs/dashboard_validation_run_659281894932228.md)",
+      "state": "OK",
+      "request_time_utc": "2026-10-23T02:42:26+00:00",
+      "execution_duration_ms": 16582,
+      "tool_spans": [
+        {"tool": "get_transaction_risk", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 537.4},
+        {"tool": "explain_top_signals", "status": "ERROR", "implementation": null, "duration_ms": 497.9, "error": "Unknown format code 'f' for object of type 'str'"},
+        {"tool": "explain_top_signals", "status": "ERROR", "implementation": null, "duration_ms": 26.5, "error": "Unknown format code 'f' for object of type 'str'"},
+        {"tool": "get_customer_history", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 1777.1},
+        {"tool": "create_fraud_case", "status": "OK", "implementation": null, "duration_ms": 390.4}
+      ]
+    },
+    {
+      "trace_id": "tr-69e222b86590f5a587f13d5dc3a6cb69",
+      "context": "Step 5 FGAC hardening VERIFY, session dry run explaining TXN-0234209 (2026-10-21)",
+      "state": "OK",
+      "request_time_utc": "2026-10-21T03:03:29+00:00",
+      "execution_duration_ms": 17420,
+      "tool_spans": [
+        {"tool": "get_transaction_risk", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 2944.0},
+        {"tool": "explain_top_signals", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 2943.1},
+        {"tool": "get_customer_history", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 3968.6}
+      ]
+    },
+    {
+      "trace_id": "tr-f7e09df1c76848b6ffa8e5ca07e3fe95",
+      "context": "Step 5 FGAC hardening VERIFY, fraud_triage_agent.ipynb E.1 run 2026-10-21 (that output was later replaced by re-runs)",
+      "state": "OK",
+      "request_time_utc": "2026-10-21T15:54:39+00:00",
+      "execution_duration_ms": 16033,
+      "tool_spans": [
+        {"tool": "get_transaction_risk", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 605.9},
+        {"tool": "explain_top_signals", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 608.0},
+        {"tool": "get_customer_history", "status": "OK", "implementation": "agent_python:postgres:fraud_triage_agent", "duration_ms": 3010.8}
+      ]
+    }
+  ]
+}
