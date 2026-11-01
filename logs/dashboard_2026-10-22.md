@@ -73,7 +73,7 @@ Run through UC as the reader (`databricks_reader_17063`). The 9 tests covered th
 | ds_calibration | 2113 | 4181 |
 | ds_exposure | 5139 | 6359 |
 
-All p95 values are under 7 seconds. ds_score_dist and ds_exposure are the slowest.
+In the interactive run (2026-10-23 01:4x UTC, 2026-10-22 local; notebook object 1835980093459164), all p95 values in this table are under 7 seconds. ds_score_dist and ds_exposure are the slowest. The re-run below (job run 659281894932228) measured higher values.
 
 ## Live-Read Proof (D.2)
 
@@ -91,6 +91,7 @@ Agent invoked exactly once for TXN-0350980. No sync/job between the before and a
 * Deny tests 9/9 PASS: count on cases.fraud_cases; notes/db_inserted_by on cases.fraud_cases and cases.case_actions; notes, created_by and db_inserted_by on fraud_dash.case_summary; INSERT into fraud_dash.model_thresholds; UPDATE on cases.fraud_cases; DELETE on fraud_dash.case_summary.
 * Live read: TXN-0197951 -> case c2b2ec3a. BEFORE (02:42:24.965 UTC): cases_created_today=1, open_cases=7, visible_cases=165. AFTER (02:42:45.311 UTC): 2 / 8 / 166. No job 1115396029932218 run and no sync pipeline update in the window.
 * Latency p50/p95 ms (20 runs): ds_kpi_cases 2126/5075, ds_model_vs_baseline 4801/8726, ds_score_dist 6869/8153, ds_cases_daily 4195/6324, ds_actions_daily 3074/5077, ds_triage 4851/5815, ds_triage_options 6058/8156, ds_recent_cases 2984/4161, ds_calibration 3101/4244, ds_exposure 6483/7845. Several p95 values are above 7 s in this run.
+* The highest p95 in this re-run is 8726 ms (ds_model_vs_baseline). Both runs measured serverless SQL through UC on compute that was not fully warm. They do not measure Lakebase point-read latency, which is reported in `logs/lakebase_fgac_2026-10-21.md` and `validation_notebooks/lakebase_scores_validation.ipynb`.
 
 ## End-to-End Trace (D.3)
 
