@@ -130,27 +130,41 @@ def explain_top_signals(txn_id: str) -> str:
         """,
         (txn_id,),
     )
+    def _num(v):
+        # Coerce to float; None for None/empty/non-numeric (e.g. categorical risk_segment='high').
+        if v is None or v == "":
+            return None
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
+
+    def _fmt(v, spec):
+        # Numeric values use the format spec; anything else is shown as text.
+        n = _num(v)
+        return format(n, spec) if n is not None else ("n/a" if v is None or v == "" else str(v))
+
     rows = []
     for b in base:
         sigs = json.loads(b["top_shap_signals"] or "[]")
-        for s in sorted(sigs, key=lambda x: -x["shap"]):
-            feat, val, shap = s["feature"], s["value"], s["shap"]
+        for s in sorted(sigs, key=lambda x: -(_num(x.get("shap")) or 0.0)):
+            feat, val, shap = s["feature"], s.get("value"), (_num(s.get("shap")) or 0.0)
             if feat == "is_new_device":
-                fv, normal = str(int(val)), f"Customer uses {b['distinct_devices_30d']} devices in 30d"
-                expl = (f"New device (SHAP +{shap:.2f}). Normally uses {b['distinct_devices_30d']} devices." if val == 1 else "Known device.")
+                fv, normal = _fmt(val, ".0f"), f"Customer uses {b['distinct_devices_30d']} devices in 30d"
+                expl = (f"New device (SHAP +{shap:.2f}). Normally uses {b['distinct_devices_30d']} devices." if _num(val) == 1 else "Known device.")
             elif feat == "geo_distance_from_home":
-                fv, normal = f"{val:.1f} km", f"Home region: {b['home_region']}"
-                expl = f"{val:.1f} km from home ({b['home_region']}), SHAP +{shap:.2f}."
+                fv, normal = f"{_fmt(val, '.1f')} km", f"Home region: {b['home_region']}"
+                expl = f"{_fmt(val, '.1f')} km from home ({b['home_region']}), SHAP +{shap:.2f}."
             elif feat == "is_online":
-                fv, normal = str(int(val)), f"Customer avg 30d txns: {b['txn_count_30d']}"
-                expl = (f"Online txn (SHAP +{shap:.2f}). Higher risk." if val == 1 else "In-person.")
+                fv, normal = _fmt(val, ".0f"), f"Customer avg 30d txns: {b['txn_count_30d']}"
+                expl = (f"Online txn (SHAP +{shap:.2f}). Higher risk." if _num(val) == 1 else "In-person.")
             elif feat == "amount":
-                avg = float(b["avg_amount_30d"] or 0)
-                fv, normal = f"${val:.2f}", f"Avg 30d: ${avg:.2f}"
-                expl = f"${val:.2f} vs avg ${avg:.2f} (SHAP +{shap:.2f})."
+                avg = _num(b["avg_amount_30d"]) or 0.0
+                fv, normal = f"${_fmt(val, '.2f')}", f"Avg 30d: ${avg:.2f}"
+                expl = f"${_fmt(val, '.2f')} vs avg ${avg:.2f} (SHAP +{shap:.2f})."
             else:
-                fv, normal = f"{val:.4f}", "See customer profile"
-                expl = f"{feat} = {val:.4f} (SHAP +{shap:.2f})"
+                fv, normal = _fmt(val, ".4f"), "See customer profile"
+                expl = f"{feat} = {_fmt(val, '.4f')} (SHAP +{shap:.2f})"
             rows.append({"txn_id": b["txn_id"], "signal_name": feat, "shap_value": shap,
                          "feature_value": fv, "customer_normal": normal, "explanation": expl})
     return _envelope("explain_top_signals", objs, rows)
