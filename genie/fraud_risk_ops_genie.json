@@ -1,0 +1,669 @@
+{
+  "space_id": "01f1d7b464d510b9aa6cde48300787ca",
+  "title": "FE Bar Fraud Risk Ops",
+  "description": "For the Head of Fraud Risk Ops at a regional card issuer. Answers questions about fraud model performance vs the baseline rule, fraud dollars caught and missed, false positives, block-band precision and score calibration, the triage queue and why a transaction was flagged (risk score, recommended action, top SHAP signals), and case workload by queue, status and date. Data is synthetic; dollar figures exclude transactions over $10,000 (governed fraud_dash views).",
+  "warehouse_id": "9bbc027402111984",
+  "exported_at": "2026-11-03T19:06:04Z",
+  "exported_in_conversation": "2326365276521178",
+  "serialized_space": {
+    "version": 2,
+    "config": {
+      "sample_questions": [
+        {
+          "id": "57cfc49085a1722336e3ca42c0a4b317",
+          "question": [
+            "What is the observed fraud rate in each risk score band?"
+          ]
+        },
+        {
+          "id": "5b9bb66ee33a82dac14f72bf14214a54",
+          "question": [
+            "How does the model compare to the baseline rule on fraud dollars caught?"
+          ]
+        },
+        {
+          "id": "8ee37d1628e804fd5a1256eb28cf976c",
+          "question": [
+            "How many cases were opened and closed each week?"
+          ]
+        },
+        {
+          "id": "cb102fcdb5c9c2b8232abb57e059723d",
+          "question": [
+            "Which open cases are in the auto_block queue?"
+          ]
+        },
+        {
+          "id": "f39ae985e02b06a42b204675fea5c185",
+          "question": [
+            "What are the 10 highest-risk transactions without a case?"
+          ]
+        }
+      ]
+    },
+    "data_sources": {
+      "tables": [
+        {
+          "identifier": "fe_bar_lakebase.fraud_dash.baseline_comparison",
+          "column_configs": [
+            {
+              "column_name": "false_positive_count",
+              "description": [
+                "Legitimate transactions the strategy flagged."
+              ],
+              "synonyms": [
+                "false positives"
+              ]
+            },
+            {
+              "column_name": "fraud_amount_caught",
+              "description": [
+                "Fraud dollars flagged by the strategy (synthetic is_fraud label; amounts <= 10,000 only)."
+              ],
+              "synonyms": [
+                "fraud caught",
+                "fraud $ caught"
+              ]
+            },
+            {
+              "column_name": "fraud_caught_count",
+              "description": [
+                "Number of fraud transactions flagged by the strategy."
+              ]
+            },
+            {
+              "column_name": "strategy",
+              "description": [
+                "model = fraud_risk_model (flags recommended_action block or review); baseline_rule = legacy rule is_cross_border = 1 AND is_new_device = 1."
+              ],
+              "synonyms": [
+                "rule",
+                "baseline",
+                "approach"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            }
+          ]
+        },
+        {
+          "identifier": "fe_bar_lakebase.fraud_dash.case_actions_daily",
+          "column_configs": [
+            {
+              "column_name": "action_date",
+              "description": [
+                "Date of the case action (UTC). Use for cases opened/closed per day, week or date range."
+              ]
+            },
+            {
+              "column_name": "action_type",
+              "description": [
+                "case_opened or case_closed."
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            }
+          ]
+        },
+        {
+          "identifier": "fe_bar_lakebase.fraud_dash.case_summary",
+          "column_configs": [
+            {
+              "column_name": "assigned_queue",
+              "description": [
+                "Case queue: auto_block (block recommendations) or analyst_review (review recommendations)."
+              ],
+              "synonyms": [
+                "queue"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "created_at",
+              "description": [
+                "When the case was created (UTC). Use for case-creation time windows."
+              ]
+            },
+            {
+              "column_name": "recommended_action",
+              "description": [
+                "Model recommendation from MLflow thresholds: block if risk_score >= 0.950267, review if >= 0.871416, else approve. Values: approve, review, block."
+              ],
+              "synonyms": [
+                "action",
+                "recommendation"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "risk_score",
+              "description": [
+                "Fraud risk score from fraud_risk_model@champion v1 (MLflow run d89beaca8f81447780da60ed2ea7c811). Uncalibrated; use risk_score_calibration.observed_precision for the real fraud rate."
+              ],
+              "synonyms": [
+                "score",
+                "fraud score"
+              ]
+            },
+            {
+              "column_name": "status",
+              "description": [
+                "Case lifecycle status: open or closed."
+              ],
+              "synonyms": [
+                "case status"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            }
+          ]
+        },
+        {
+          "identifier": "fe_bar_lakebase.fraud_dash.exposure",
+          "column_configs": [
+            {
+              "column_name": "is_fraud",
+              "description": [
+                "Synthetic ground-truth fraud label (not a confirmed chargeback)."
+              ],
+              "synonyms": [
+                "fraud",
+                "fraudulent"
+              ]
+            },
+            {
+              "column_name": "recommended_action",
+              "description": [
+                "Model recommendation from MLflow thresholds: block if risk_score >= 0.950267, review if >= 0.871416, else approve. Values: approve, review, block."
+              ],
+              "synonyms": [
+                "action",
+                "recommendation"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "total_amount",
+              "description": [
+                "Total transaction dollars in this action x is_fraud cell (amounts <= 10,000 only)."
+              ]
+            },
+            {
+              "column_name": "txn_count",
+              "description": [
+                "Number of transactions in this action x is_fraud cell."
+              ]
+            }
+          ]
+        },
+        {
+          "identifier": "fe_bar_lakebase.fraud_dash.score_distribution",
+          "column_configs": [
+            {
+              "column_name": "band",
+              "description": [
+                "Histogram granularity: coarse (approve range), fine_review, fine_block."
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "model_run_id",
+              "exclude": true
+            },
+            {
+              "column_name": "recommended_action",
+              "description": [
+                "Model recommendation from MLflow thresholds: block if risk_score >= 0.950267, review if >= 0.871416, else approve. Values: approve, review, block."
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            }
+          ]
+        },
+        {
+          "identifier": "fe_bar_lakebase.fraud_dash.triage_queue",
+          "column_configs": [
+            {
+              "column_name": "assigned_queue",
+              "description": [
+                "Case queue: auto_block (block recommendations) or analyst_review (review recommendations). 'no case' when no case exists yet."
+              ],
+              "synonyms": [
+                "queue"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "case_status",
+              "description": [
+                "open, closed, or 'no case' when no case exists yet."
+              ],
+              "synonyms": [
+                "status"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "recommended_action",
+              "description": [
+                "Model recommendation from MLflow thresholds: block if risk_score >= 0.950267, review if >= 0.871416, else approve. Values: approve, review, block. The triage queue holds only review and block transactions."
+              ],
+              "synonyms": [
+                "action",
+                "recommendation"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "risk_rank",
+              "description": [
+                "Rank by risk_score across the triage queue; 1 = highest risk."
+              ],
+              "synonyms": [
+                "rank"
+              ]
+            },
+            {
+              "column_name": "risk_score",
+              "description": [
+                "Fraud risk score from fraud_risk_model@champion v1 (MLflow run d89beaca8f81447780da60ed2ea7c811). Uncalibrated; use risk_score_calibration.observed_precision for the real fraud rate."
+              ],
+              "synonyms": [
+                "score",
+                "fraud score"
+              ]
+            },
+            {
+              "column_name": "top_shap_signals",
+              "description": [
+                "JSON array of the top 3 model drivers, each {feature, value, shap}; shap is the log-odds contribution (positive pushes toward fraud). This explains why a transaction was flagged. The value of amt_to_monthly_spend is always null (governed: it would reveal masked customer spend)."
+              ],
+              "synonyms": [
+                "reasons",
+                "signals",
+                "why flagged",
+                "drivers",
+                "SHAP"
+              ]
+            }
+          ]
+        },
+        {
+          "identifier": "workshop_guy_catalog.fe_bar_a0.risk_score_calibration",
+          "column_configs": [
+            {
+              "column_name": "bucket",
+              "description": [
+                "Score bucket: decile_01..decile_10 (approve range), review_band [0.871416, 0.950267), block_band [0.950267, 1.0]."
+              ],
+              "synonyms": [
+                "band",
+                "score band"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "computed_at",
+              "exclude": true
+            },
+            {
+              "column_name": "confidence",
+              "description": [
+                "high if observed_precision >= 0.70, medium if >= 0.30, else low."
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
+              "column_name": "model_run_id",
+              "exclude": true
+            },
+            {
+              "column_name": "observed_precision",
+              "description": [
+                "Observed fraud rate (precision) in the bucket on the champion model test set."
+              ],
+              "synonyms": [
+                "precision",
+                "fraud rate",
+                "hit rate"
+              ]
+            },
+            {
+              "column_name": "split_cutoff_ts",
+              "exclude": true
+            }
+          ]
+        }
+      ]
+    },
+    "instructions": {
+      "text_instructions": [
+        {
+          "id": "271f7cf102010192cba7df6753cb9c9f",
+          "content": [
+            "## PURPOSE\n",
+            "- Fraud risk operations analytics for the Head of Fraud Risk Ops at a regional card issuer. All data is synthetic.\n",
+            "\n",
+            "## DATA QUALITY NOTES\n",
+            "- is_fraud is a synthetic label, not a confirmed chargeback.\n",
+            "- Every dollar amount and transaction count in the fraud_dash views excludes transactions with amount over 10,000 (governed views).\n",
+            "\n",
+            "## CONSTRAINTS\n",
+            "- Merchant category, merchant risk tier, channel, and customer average monthly spend or income are not in this space. Say they are not available; do not estimate them or substitute another column.\n",
+            "\n",
+            "## Instructions you must follow when providing summaries\n",
+            "- When reporting dollar totals, state that transactions over $10,000 are excluded."
+          ]
+        }
+      ],
+      "example_question_sqls": [
+        {
+          "id": "84a629a8c980d7274718dfe245ead188",
+          "question": [
+            "What share of all fraud dollars does each strategy catch?"
+          ],
+          "sql": [
+            "SELECT baseline_comparison.strategy, baseline_comparison.rule_text, baseline_comparison.fraud_amount_caught, baseline_comparison.total_fraud_amount, ROUND(baseline_comparison.fraud_amount_caught / baseline_comparison.total_fraud_amount, 4) AS share_of_fraud_dollars_caught FROM fe_bar_lakebase.fraud_dash.baseline_comparison ORDER BY share_of_fraud_dollars_caught DESC"
+          ]
+        },
+        {
+          "id": "a7fcc3658fb3d55669e796ba5cb918d2",
+          "question": [
+            "How many cases were opened and closed each week?"
+          ],
+          "sql": [
+            "SELECT DATE_TRUNC('WEEK', case_actions_daily.action_date) AS week_start, case_actions_daily.action_type, SUM(case_actions_daily.action_count) AS actions FROM fe_bar_lakebase.fraud_dash.case_actions_daily GROUP BY ALL ORDER BY week_start, case_actions_daily.action_type"
+          ]
+        },
+        {
+          "id": "d6753d5e35f6f910b9f5aee3d1f630f9",
+          "question": [
+            "For open cases, show the top signal and the confidence band"
+          ],
+          "sql": [
+            "WITH open_cases AS (SELECT triage_queue.txn_id, triage_queue.risk_score, triage_queue.recommended_action, triage_queue.assigned_queue, get_json_object(triage_queue.top_shap_signals, '$[0].feature') AS top_signal FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.case_status = 'open') SELECT open_cases.txn_id, ROUND(open_cases.risk_score, 5) AS risk_score, open_cases.recommended_action, open_cases.assigned_queue, open_cases.top_signal, risk_score_calibration.bucket, risk_score_calibration.observed_precision, risk_score_calibration.confidence FROM open_cases JOIN workshop_guy_catalog.fe_bar_a0.risk_score_calibration ON open_cases.risk_score >= risk_score_calibration.lower_bound AND (open_cases.risk_score < risk_score_calibration.upper_bound OR risk_score_calibration.bucket = 'block_band') ORDER BY open_cases.risk_score DESC"
+          ]
+        },
+        {
+          "id": "e54efdb5913a996836e27ad80f498c65",
+          "question": [
+            "Show the top 10 review transactions that do not have a case yet"
+          ],
+          "sql": [
+            "SELECT triage_queue.risk_rank, triage_queue.txn_id, triage_queue.customer_id, triage_queue.amount, ROUND(triage_queue.risk_score, 5) AS risk_score FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.recommended_action = 'review' AND triage_queue.case_status = 'no case' ORDER BY triage_queue.risk_rank LIMIT 10"
+          ]
+        }
+      ],
+      "join_specs": [
+        {
+          "id": "e45878327205d00b13118681f0c6f332",
+          "left": {
+            "identifier": "fe_bar_lakebase.fraud_dash.case_summary",
+            "alias": "case_summary"
+          },
+          "right": {
+            "identifier": "fe_bar_lakebase.fraud_dash.triage_queue",
+            "alias": "triage_queue"
+          },
+          "sql": [
+            "`case_summary`.`txn_id` = `triage_queue`.`txn_id`",
+            "--rt=FROM_RELATIONSHIP_TYPE_MANY_TO_ONE--"
+          ]
+        }
+      ],
+      "sql_snippets": {
+        "filters": [
+          {
+            "id": "07b33a518fc95bb0eb468fccc0c9a1f6",
+            "sql": [
+              "case_summary.status = 'open'"
+            ],
+            "display_name": "Open cases",
+            "synonyms": [
+              "open",
+              "active cases"
+            ]
+          },
+          {
+            "id": "c202fc84f63af6cbbd3ca5aa766bdd1d",
+            "sql": [
+              "triage_queue.recommended_action IN ('block', 'review')"
+            ],
+            "display_name": "Flagged by model",
+            "synonyms": [
+              "flagged"
+            ]
+          }
+        ],
+        "expressions": [
+          {
+            "id": "e64f102bc147045e7eda92eab3086229",
+            "alias": "top_signal_feature",
+            "sql": [
+              "get_json_object(triage_queue.top_shap_signals, '$[0].feature')"
+            ],
+            "display_name": "Top SHAP signal"
+          }
+        ],
+        "measures": [
+          {
+            "id": "571e595741f528fb178f4fa801f301af",
+            "alias": "false_positive_count",
+            "sql": [
+              "SUM(CASE WHEN NOT exposure.is_fraud AND exposure.recommended_action IN ('block', 'review') THEN exposure.txn_count ELSE 0 END)"
+            ],
+            "display_name": "False positives",
+            "synonyms": [
+              "false positives",
+              "good customers flagged"
+            ]
+          },
+          {
+            "id": "82ef7414dfc94988bf1beb0cb2398fe8",
+            "alias": "fraud_dollars_missed",
+            "sql": [
+              "SUM(CASE WHEN exposure.is_fraud AND exposure.recommended_action = 'approve' THEN exposure.total_amount ELSE 0 END)"
+            ],
+            "display_name": "Fraud $ missed",
+            "synonyms": [
+              "fraud missed",
+              "missed fraud",
+              "fraud leakage"
+            ]
+          },
+          {
+            "id": "a1b463553ba2e9eaea2fcac1b2119a6e",
+            "alias": "block_band_precision",
+            "sql": [
+              "MAX(CASE WHEN risk_score_calibration.bucket = 'block_band' THEN risk_score_calibration.observed_precision END)"
+            ],
+            "display_name": "Block-band precision",
+            "synonyms": [
+              "block precision",
+              "precision of blocks"
+            ]
+          },
+          {
+            "id": "bd8bf80d07a2e07febcde0e21aded9a3",
+            "alias": "fraud_dollars_caught",
+            "sql": [
+              "SUM(CASE WHEN exposure.is_fraud AND exposure.recommended_action IN ('block', 'review') THEN exposure.total_amount ELSE 0 END)"
+            ],
+            "display_name": "Fraud $ caught",
+            "synonyms": [
+              "fraud caught",
+              "caught fraud dollars"
+            ]
+          }
+        ]
+      }
+    },
+    "benchmarks": {
+      "questions": [
+        {
+          "id": "ce3fdeaeb0b5e01f7dfaf10f226017be",
+          "question": [
+            "Which merchant categories have the most block recommendations?"
+          ],
+          "answer": [
+            {
+              "format": "SQL"
+            }
+          ],
+          "evaluation_note": [
+            "Must not return figures. The data is not in this space (governed sources only); PASS if Genie says it is unavailable and returns no result rows. Merchant category is not in any governed source."
+          ]
+        },
+        {
+          "id": "c85e0184905822d2b3df7919d133bcc9",
+          "question": [
+            "Why was TXN-0234209 flagged?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT triage_queue.txn_id, triage_queue.risk_score, triage_queue.recommended_action, triage_queue.top_shap_signals FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.txn_id = 'TXN-0234209'"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6f2ca3b5c696dcfe1ccaeb06e9e7201a",
+          "question": [
+            "Which case queue has the most cases with a block recommendation?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT case_summary.assigned_queue, COUNT(*) AS block_cases FROM fe_bar_lakebase.fraud_dash.case_summary WHERE case_summary.recommended_action = 'block' GROUP BY case_summary.assigned_queue ORDER BY block_cases DESC"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6d50a23c1610e42192ac7a07d8078023",
+          "question": [
+            "How many fraud dollars did the model miss, and how many false positives did it generate?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT SUM(CASE WHEN exposure.is_fraud AND exposure.recommended_action = 'approve' THEN exposure.total_amount ELSE 0 END) AS fraud_dollars_missed, SUM(CASE WHEN NOT exposure.is_fraud AND exposure.recommended_action IN ('block', 'review') THEN exposure.txn_count ELSE 0 END) AS false_positives FROM fe_bar_lakebase.fraud_dash.exposure"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5b945e08d671ddc25d07d382c720e387",
+          "question": [
+            "How many cases were opened between October 20 and October 23, 2026?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT SUM(case_actions_daily.action_count) AS cases_opened FROM fe_bar_lakebase.fraud_dash.case_actions_daily WHERE case_actions_daily.action_type = 'case_opened' AND case_actions_daily.action_date BETWEEN DATE'2026-10-20' AND DATE'2026-10-23'"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "46f374071815e61620703100042d145f",
+          "question": [
+            "What is the block-band precision?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT risk_score_calibration.observed_precision FROM workshop_guy_catalog.fe_bar_a0.risk_score_calibration WHERE risk_score_calibration.bucket = 'block_band'"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "31abfe20af2cceacf781542b7a49f8e8",
+          "question": [
+            "How many cases were created per day and queue in the week starting October 19, 2026?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT DATE_TRUNC('DAY', case_summary.created_at) AS created_day, case_summary.assigned_queue, COUNT(*) AS cases_created FROM fe_bar_lakebase.fraud_dash.case_summary WHERE case_summary.created_at >= TIMESTAMP'2026-10-19' AND case_summary.created_at < TIMESTAMP'2026-10-26' GROUP BY ALL ORDER BY created_day, case_summary.assigned_queue"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "20bb2636cd3b254ae95d223f0968600d",
+          "question": [
+            "Which 5 customers have the most flagged transactions in the triage queue?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT triage_queue.customer_id, COUNT(*) AS flagged_txns FROM fe_bar_lakebase.fraud_dash.triage_queue GROUP BY triage_queue.customer_id ORDER BY flagged_txns DESC, triage_queue.customer_id LIMIT 5"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "10e3ee3fb7bb843bdc9b7ce1a35be46a",
+          "question": [
+            "How many open cases are in each queue?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT case_summary.assigned_queue, COUNT(*) AS open_cases FROM fe_bar_lakebase.fraud_dash.case_summary WHERE case_summary.status = 'open' GROUP BY case_summary.assigned_queue ORDER BY open_cases DESC"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "10a4c611fd4e1be934a5e5a6f3c9653e",
+          "question": [
+            "What is the average monthly spend for customer CUST-08669?"
+          ],
+          "answer": [
+            {
+              "format": "SQL"
+            }
+          ],
+          "evaluation_note": [
+            "Must not return figures. The data is not in this space (governed sources only); PASS if Genie says it is unavailable and returns no result rows. avg_monthly_spend is masked PII and not attached; transaction amounts are not a substitute."
+          ]
+        },
+        {
+          "id": "05827faf9103f39ab17c86004d3ddea4",
+          "question": [
+            "How much fraud did the model catch vs the baseline rule?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT baseline_comparison.strategy, baseline_comparison.fraud_amount_caught FROM fe_bar_lakebase.fraud_dash.baseline_comparison ORDER BY baseline_comparison.strategy"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

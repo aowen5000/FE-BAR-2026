@@ -64,8 +64,11 @@ Layer numbers 3 to 5 are the ones used in the step prompts. Layers 1 and 2 are g
   * `fgac_hardening`: Step 5 hardening pass, items 1 to 8
   * `dashboard_validation`: Step 6 dashboard dataset latency, FGAC deny tests, live-read proof, end-to-end trace
   * `lineage_validation`: Step 7 table, column and model lineage from `system.access.*`
+  * `genie_agent_validation`: Step 8 Genie Agent pre-flight, governance check, creation, export, 11-question benchmark (Conversation API + native eval)
 * `dashboards/`: exported Lakeview dashboard definitions
   * `fe_bar_fraud_ops.lvdash.json`: Fraud Ops triage & action dashboard
+* `genie/`: exported Genie Agent (Genie space) definitions
+  * `fraud_risk_ops_genie.json`: FE Bar Fraud Risk Ops space (serialized space: sources, column configs, joins, snippets, examples, benchmarks)
 * `logs/`: run logs and evidence
 * `prompts/`: the opening user prompt of each Genie Code conversation, copied verbatim (see BUILD.md)
 * `BUILD.md`: AI-assisted workflow, per-step table, key decisions, issues
@@ -93,6 +96,7 @@ Validation notebooks import repo modules (for example `lakebase_cases`) from the
 | Model | `workshop_guy_catalog.fe_bar_a0.fraud_risk_model` @champion = v1 | run `d89beaca8f81447780da60ed2ea7c811`, experiment `/Users/alex.owen@databricks.com/fe_bar_fraud_risk_model` |
 | Agent | `workshop_guy_catalog.fe_bar_a0.fraud_triage_agent` @champion = v3 (2026-11-01) | run `d25dfe72e129478a8e17c0d6dbc7d433`, experiment `/Users/alex.owen@databricks.com/fe_bar_fraud_triage_agent`; logged from the current `fraud_triage_agent.py` with `lakebase_cases.py` as a code path. Declared resources: serving endpoint `databricks-claude-sonnet-5-5`. Uses, not declared: Lakebase Postgres `fe_bar_db` on project `fe-bar-fraud-analytics`, branch `production`, endpoint `primary`, role `fraud_triage_agent` (see Known limitations). No UC functions. Registered, not deployed. v2 (run `97bc6c9b4e654abab627cd25ee93fa53`, pre-hardening UC-function tools) is kept without an alias |
 | Dashboard | FE Bar Fraud Ops: Triage & Action | `01f1ce7f835a1e81b05ebb664bf0994c`, warehouse `9bbc027402111984`, definition `dashboards/fe_bar_fraud_ops.lvdash.json` |
+| Genie Agent (Genie space) | FE Bar Fraud Risk Ops | `01f1d7b464d510b9aa6cde48300787ca`, warehouse `9bbc027402111984`, folder `/Users/alex.owen@databricks.com/FE Bar Genie`, definition `genie/fraud_risk_ops_genie.json`. Governed sources only: `fe_bar_lakebase.fraud_dash.{triage_queue, case_summary, case_actions_daily, exposure, baseline_comparison, score_distribution}` and `fe_bar_a0.risk_score_calibration`. Owner-only (no CAN_RUN grants). Evidence `logs/genie_agent_2026-11-03.md` |
 
 ## How to run
 
@@ -113,7 +117,7 @@ Order:
 | 5 | Refresh and sync | job `fe_bar_gold_to_lakebase`, or the sync pipeline f8690359 alone | Refreshes gold, **overwrites** scores, and re-snapshots the synced tables |
 | 6 | Lakebase DDL and FGAC | `lakebase_cases_ddl.sql`, `lakebase_fgac.sql`, `lakebase_fgac_hardening.sql`, `lakebase_dashboard.sql` | Written to be idempotent |
 | 7 | UC tools (deprecated) | `agent_tools.sql` | `CREATE OR REPLACE`. The agent no longer uses them |
-| 8 | Agent demo | `fraud_triage_agent.ipynb` (`fraud_triage_agent.py`, `lakebase_cases.py`) | Reuses the open case for TXN-0234209 (idempotent). `REGISTER_AGENT = False` |
+| 8 | Agent demo | `fraud_triage_agent.ipynb` (`fraud_triage_agent.py`, `lakebase_cases.py`) | Reuses the open case for TXN-0234209 (idempotent). `REGISTER_AGENT = False` (D.3 output shows the one-time v3 registration). D.4 loads @champion and explains TXN-0234209 and TXN-0112255 without opening cases |
 | 9 | Dashboard | import `dashboards/fe_bar_fraud_ops.lvdash.json`, set warehouse 9bbc027402111984, publish with embedded credentials | |
 
 Validation notebooks in `validation_notebooks/` are read-only, with these exceptions. `lakebase_write_path_validation`, `lakebase_fgac_validation` and `fgac_hardening` create test cases and close them. `dashboard_validation` D.2 opens one new live-proof case per run and leaves it open by design.

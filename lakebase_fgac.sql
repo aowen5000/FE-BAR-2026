@@ -547,7 +547,11 @@ SELECT
     tf.amount,
     r.risk_score,
     r.recommended_action,
-    r.top_shap_signals,
+    -- Step 8 (2026-11-03): blank the SHAP feature value for amt_to_monthly_spend.
+    -- amount / that value would reveal the masked dim_customer_silver.avg_monthly_spend.
+    regexp_replace(r.top_shap_signals,
+                   '("feature": "amt_to_monthly_spend", "value": )[^,}]+',
+                   '\1null', 'g')        AS top_shap_signals,
     COALESCE(c.status, 'no case')         AS case_status,
     COALESCE(c.assigned_queue, 'no case') AS assigned_queue,
     c.case_id::text                       AS case_id,
