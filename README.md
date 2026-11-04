@@ -65,6 +65,7 @@ Layer numbers 3 to 5 are the ones used in the step prompts. Layers 1 and 2 are g
   * `dashboard_validation`: Step 6 dashboard dataset latency, FGAC deny tests, live-read proof, end-to-end trace
   * `lineage_validation`: Step 7 table, column and model lineage from `system.access.*`
   * `genie_agent_validation`: Step 8 Genie Agent pre-flight, governance check, creation, export, 11-question benchmark (Conversation API + native eval)
+  * `gold_governance_hardening`: Step 8 follow-up, gold row filter and mask, job/sync test, `non_pii` access check
 * `dashboards/`: exported Lakeview dashboard definitions
   * `fe_bar_fraud_ops.lvdash.json`: Fraud Ops triage & action dashboard
 * `genie/`: exported Genie Agent (Genie space) definitions
@@ -83,7 +84,7 @@ Validation notebooks import repo modules (for example `lakebase_cases`) from the
 | UC volume | `workshop_guy_catalog.fe_bar_a0.staging` | raw JSON: customers/, merchants/, transactions/, prior_fraud_cases/ |
 | Bronze streaming tables | `dim_customer_bronze`, `dim_merchant_bronze`, `fact_transactions_bronze`, `fact_prior_fraud_cases_bronze` | in fe_bar_a0 |
 | Silver MVs | `dim_customer_silver`, `dim_merchant_silver`, `fact_transactions_silver`, `fact_prior_fraud_cases_silver` | in fe_bar_a0 |
-| UC row filter / column mask | `filter_high_amount_txns` on `fact_transactions_silver.amount`; `mask_avg_monthly_spend` on `dim_customer_silver.avg_monthly_spend` | full access only for UC group `pii` |
+| UC row filter / column mask | `filter_high_amount_txns` on `fact_transactions_silver.amount` and `txn_features_gold.amount`; `mask_avg_monthly_spend` on `dim_customer_silver.avg_monthly_spend`; `mask_avg_amount_30d` on `customer_risk_profile_gold.avg_amount_30d` | full access only for UC group `pii`. `scored_transactions` has no row filter: Lakebase synced tables cannot read a source with a table-level row filter (see `logs/gold_governance_2026-11-04.md`) |
 | Gold MVs | `txn_features_gold`, `customer_risk_profile_gold` | in fe_bar_a0 |
 | Scored tables | `scored_transactions` (464,632 rows, PK txn_id), `risk_score_calibration` | in fe_bar_a0 |
 | UC functions (deprecated) | `get_transaction_risk`, `explain_top_signals`, `get_customer_history` | `agent_tools.sql`; not registered with the agent since 2026-10-21 |
@@ -96,7 +97,7 @@ Validation notebooks import repo modules (for example `lakebase_cases`) from the
 | Model | `workshop_guy_catalog.fe_bar_a0.fraud_risk_model` @champion = v1 | run `d89beaca8f81447780da60ed2ea7c811`, experiment `/Users/alex.owen@databricks.com/fe_bar_fraud_risk_model` |
 | Agent | `workshop_guy_catalog.fe_bar_a0.fraud_triage_agent` @champion = v3 (2026-11-01) | run `d25dfe72e129478a8e17c0d6dbc7d433`, experiment `/Users/alex.owen@databricks.com/fe_bar_fraud_triage_agent`; logged from the current `fraud_triage_agent.py` with `lakebase_cases.py` as a code path. Declared resources: serving endpoint `databricks-claude-sonnet-5-5`. Uses, not declared: Lakebase Postgres `fe_bar_db` on project `fe-bar-fraud-analytics`, branch `production`, endpoint `primary`, role `fraud_triage_agent` (see Known limitations). No UC functions. Registered, not deployed. v2 (run `97bc6c9b4e654abab627cd25ee93fa53`, pre-hardening UC-function tools) is kept without an alias |
 | Dashboard | FE Bar Fraud Ops: Triage & Action | `01f1ce7f835a1e81b05ebb664bf0994c`, warehouse `9bbc027402111984`, definition `dashboards/fe_bar_fraud_ops.lvdash.json` |
-| Genie Agent (Genie space) | FE Bar Fraud Risk Ops | `01f1d7b464d510b9aa6cde48300787ca`, warehouse `9bbc027402111984`, folder `/Users/alex.owen@databricks.com/FE Bar Genie`, definition `genie/fraud_risk_ops_genie.json`. Governed sources only: `fe_bar_lakebase.fraud_dash.{triage_queue, case_summary, case_actions_daily, exposure, baseline_comparison, score_distribution}` and `fe_bar_a0.risk_score_calibration`. Owner-only (no CAN_RUN grants). Evidence `logs/genie_agent_2026-11-03.md` |
+| Genie Agent (Genie space) | FE Bar Fraud Risk Ops | `01f1d7b464d510b9aa6cde48300787ca`, warehouse `9bbc027402111984`, folder `/Users/alex.owen@databricks.com/FE Bar Genie`, definition `genie/fraud_risk_ops_genie.json`. Governed sources only: `fe_bar_lakebase.fraud_dash.{triage_queue, case_summary, case_actions_daily, exposure, baseline_comparison, score_distribution}` and `fe_bar_a0.risk_score_calibration`. Account group `non_pii` has USE CATALOG / USE SCHEMA / SELECT on the six `fraud_dash` views; CAN_RUN on the space not yet granted. Evidence `logs/genie_agent_2026-11-03.md` |
 
 ## How to run
 
