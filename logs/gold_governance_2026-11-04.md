@@ -53,8 +53,16 @@ Step 8 found that `scored_transactions` and `txn_features_gold` had no row filte
 * **Not yet tested as a non-owner identity:** Connor (`non_pii`) should get a permission error on `scored_transactions` and the bronze tables, while the Genie space still works.
 * **Behavior change for other teams:** schemas created after this are no longer readable by everyone automatically.
 
+## Revoke on customer_risk_profile_gold (user-run, verified read-only)
+
+* **Why:** `customer_risk_profile_gold` is built by the pipeline as the owner (a `pii` member), so its 30-day counts (`txn_count_30d`, `cross_border_txns_30d`, `distinct_devices_30d`, `distinct_countries_30d`) and `last_txn_ts` include transactions over $10,000. A reader outside `pii` could compare them with their own filtered counts from `fact_transactions_silver` and infer that hidden high-value transactions exist. This showed up for 151 of 9,289 customers (162 inferable transactions; the inferred amounts stay hidden because `avg_amount_30d` is masked). Simulated from the filter rule, not tested as a non-pii identity.
+* **Fix (least disruptive):** the user ran `REVOKE SELECT ... customer_risk_profile_gold FROM account users`. In the last 90 days only the owner and system processes read the table; the pipeline, scoring, Lakebase sync and agent run as the owner, and the Genie space and dashboard do not use it.
+* **Verified** with information_schema.table_privileges and `SHOW GRANTS`: no `account users` SELECT on the table; only READ METADATA at metastore level remains. `account users` now has SELECT on 4 `fe_bar_a0` objects: `fact_transactions_silver`, `dim_customer_silver`, `dim_merchant_silver`, `risk_score_calibration`.
+* **Not checked:** whether the Postgres `fraud_gov` views allow the same comparison over a direct `fraud_analyst` connection.
+
 ## Still open
 
+* **High-value cases cannot be triaged:** the `fraud_dash` views drop amounts over $10,000 for everyone, so 705 flagged transactions (200 fraud, $3,588,732.92) are invisible in Genie and the dashboard. Options under discussion: redact the amount instead of filtering rows, or a separate pii-only view schema.
 * **`scored_transactions`:** closed to `account users` by the catalog grant narrowing above. There is still no row filter or mask on the table itself, which only matters for principals granted access directly.
 * **`txn_features_gold.amt_to_monthly_spend`:** unmasked, but the table is now closed to `account users`.
 * **Other schemas:** `account users` keeps MANAGE on the 17 other schemas (their owners' decision).
