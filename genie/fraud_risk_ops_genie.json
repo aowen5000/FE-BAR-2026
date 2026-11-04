@@ -3,7 +3,7 @@
   "title": "FE Bar Fraud Risk Ops",
   "description": "For the Head of Fraud Risk Ops at a regional card issuer. Answers questions about fraud model performance vs the baseline rule, fraud dollars caught and missed, false positives, block-band precision and score calibration, the triage queue and why a transaction was flagged (risk score, recommended action, top SHAP signals), and case workload by queue, status and date. Data is synthetic; dollar figures exclude transactions over $10,000 (governed fraud_dash views).",
   "warehouse_id": "9bbc027402111984",
-  "exported_at": "2026-11-03T19:06:04Z",
+  "exported_at": "2026-11-04T03:03:27Z",
   "exported_in_conversation": "2326365276521178",
   "serialized_space": {
     "version": 2,
@@ -400,6 +400,18 @@
           ],
           "sql": [
             "SELECT triage_queue.risk_rank, triage_queue.txn_id, triage_queue.customer_id, triage_queue.amount, ROUND(triage_queue.risk_score, 5) AS risk_score FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.recommended_action = 'review' AND triage_queue.case_status = 'no case' ORDER BY triage_queue.risk_rank LIMIT 10"
+          ]
+        },
+        {
+          "id": "eb1b40f34ead4682b40e09b3d1cac52a",
+          "question": [
+            "Why was TXN-0147293 flagged?"
+          ],
+          "sql": [
+            "SELECT triage_queue.txn_id, triage_queue.risk_score, triage_queue.recommended_action, triage_queue.top_shap_signals FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.txn_id = 'TXN-0147293'"
+          ],
+          "usage_guidance": [
+            "For 'why was <txn_id> flagged' questions, return top_shap_signals as the JSON column; do not split it into separate columns."
           ]
         }
       ],

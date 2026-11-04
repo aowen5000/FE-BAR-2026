@@ -14,7 +14,10 @@ CREATE OR REFRESH MATERIALIZED VIEW txn_features_gold (
   CONSTRAINT valid_txn_ts    EXPECT (txn_ts IS NOT NULL)  ON VIOLATION DROP ROW,
   CONSTRAINT positive_amount EXPECT (amount > 0)          ON VIOLATION DROP ROW
 )
-COMMENT 'Gold layer: transaction-level fraud risk features with no target leakage — one row per transaction'
+-- 2026-11-04 (Step 8 follow-up, user-approved): same row filter as fact_transactions_silver;
+-- amount > 10000 is hidden unless the reader is in UC group pii.
+WITH ROW FILTER workshop_guy_catalog.fe_bar_a0.filter_high_amount_txns ON (amount)
+COMMENT 'Gold layer: transaction-level fraud risk features with no target leakage — one row per transaction; row filter hides amount > 10000 from non-PII users'
 AS
 WITH base AS (
   SELECT
@@ -127,8 +130,23 @@ FROM windowed;
 --   "Recent" = last 30 days back from MAX(txn_ts) in txn_features_gold
 --   (the data is historical / synthetic — do NOT use current_date).
 -- ---------------------------------------------------------------------------
-CREATE OR REFRESH MATERIALIZED VIEW customer_risk_profile_gold
-COMMENT 'Gold layer: per-customer risk profile for Lakebase sync and AI agent — one row per customer (not a model input)'
+-- 2026-11-04 (Step 8 follow-up, user-approved): avg_amount_30d averages unfiltered transactions,
+-- so it is masked (NULL) unless the reader is in UC group pii.
+CREATE OR REFRESH MATERIALIZED VIEW customer_risk_profile_gold (
+  customer_id STRING,
+  tenure BIGINT,
+  home_region STRING,
+  risk_segment STRING,
+  txn_count_30d BIGINT,
+  avg_amount_30d DOUBLE MASK workshop_guy_catalog.fe_bar_a0.mask_avg_amount_30d,
+  distinct_devices_30d BIGINT,
+  distinct_countries_30d BIGINT,
+  cross_border_txns_30d BIGINT,
+  last_txn_ts TIMESTAMP,
+  prior_case_count BIGINT,
+  confirmed_fraud_count BIGINT
+)
+COMMENT 'Gold layer: per-customer risk profile for Lakebase sync and AI agent — one row per customer (not a model input); avg_amount_30d masked for non-PII users'
 AS
 WITH max_ts AS (
   SELECT MAX(txn_ts) AS global_max_ts

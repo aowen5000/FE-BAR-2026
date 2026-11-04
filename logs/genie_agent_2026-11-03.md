@@ -23,7 +23,7 @@ Workspace fevm-workshop-guy. Genie Code conversation 2326365276521178. Branch `s
 
 ## Governance findings and decisions
 
-Check: would a non-pii user see transactions with amount > 10000, or unmasked `amt_to_monthly_spend` / `avg_monthly_spend`? Context: UC grants give `account users` ALL PRIVILEGES on `workshop_guy_catalog`. On `fe_bar_lakebase`, `account users` has READ METADATA only.
+Check: would a non-pii user see transactions with amount > 10000, or unmasked `amt_to_monthly_spend` / `avg_monthly_spend`? Context: UC grants give `account users` ALL PRIVILEGES and MANAGE on `workshop_guy_catalog`. On `fe_bar_lakebase`, `account users` has READ METADATA only.
 
 | Source | Rows | Row filter / mask | amount > 10000 | Unmasked amt_to_monthly_spend | Decision |
 | --- | --- | --- | --- | --- | --- |
@@ -98,7 +98,16 @@ Available in this workspace.
 * **Round 1:** benchmark repair only, following the skill's repair stack (invalid expected SQL is a benchmark fix, not a Genie tuning target). The expected SQL for #1, #2 and #7 was aligned to the question's shape and re-verified on the warehouse. No Genie descriptions, joins, snippets, examples or text changed. Result: Conversation API 11/11; native eval 6 to 8 GOOD.
 * No round 2: nothing failed under the Conversation API grading, and the remaining native items are not Genie errors (see below).
 
-## Still failing or open
+## Round 2 (2026-11-04, follow-up in the same conversation)
+
+* **Change:** one structured surface. A 5th example SQL, "Why was TXN-0147293 flagged?", returns `txn_id, risk_score, recommended_action, top_shap_signals` with the JSON column kept, plus usage guidance not to split it. It uses a different transaction from the benchmark. Nothing else changed. `genie/fraud_risk_ops_genie.json` was re-exported (token scan: 0 hits).
+* **Conversation API:** 11/11 PASS (notebook cell C.7). "Why was TXN-0234209 flagged?" returned 4 columns in 3 of 3 asks.
+* **Native eval** `01f1d7fcd35a131b82376633c1e7725b`: 9/11 GOOD, 0 BAD, 2 NEEDS_REVIEW (the two refusal questions).
+* **Before/after, native GOOD:** round 0 6/11, round 1 8/11, round 2 9/11. Conversation API: 11/11 in every round.
+* **Item 2:** the two refusal questions can only be marked correct by hand in the space's Benchmarks tab (user action).
+* **Access:** account group `non_pii` now has SELECT on the six `fraud_dash` views (see `logs/gold_governance_2026-11-04.md`). CAN_RUN on the space is not granted yet, so the non-pii benchmark re-run is still pending.
+
+## Still failing or open (as of 2026-11-03; see Round 2 above for updates)
 
 * **Native #3, "Why was TXN-0234209 flagged?":** BAD on result shape only. Genie sometimes parses `top_shap_signals` into 9 columns (feature/value/shap x 3) and sometimes returns the raw JSON column; the values are correct either way (Conversation API PASS in both rounds). One round-1 answer took 522 s, against 14 to 34 s for the others.
 * **Native #4 and #9 (refusal questions):** NEEDS_REVIEW by design. They have no canonical SQL, and Genie answered "not available" both times.
