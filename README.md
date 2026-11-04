@@ -81,7 +81,7 @@ Validation notebooks import repo modules (for example `lakebase_cases`) from the
 
 | Kind | Name | ID / detail |
 | --- | --- | --- |
-| UC catalog / schema | `workshop_guy_catalog.fe_bar_a0` | serverless everywhere. Shared catalog: `account users` has USE CATALOG / CREATE SCHEMA / BROWSE on it; on `fe_bar_a0` only USE SCHEMA plus SELECT on `fact_transactions_silver`, `dim_customer_silver`, `dim_merchant_silver`, `customer_risk_profile_gold` and `risk_score_calibration` (see `logs/gold_governance_2026-11-04.md`) |
+| UC catalog / schema | `workshop_guy_catalog.fe_bar_a0` | serverless everywhere. Shared catalog: `account users` has USE CATALOG / CREATE SCHEMA / BROWSE on it; on `fe_bar_a0` only USE SCHEMA plus SELECT on `fact_transactions_silver`, `dim_customer_silver`, `dim_merchant_silver` and `risk_score_calibration` (`customer_risk_profile_gold` revoked 2026-11-04 to close a count-inference leak) (see `logs/gold_governance_2026-11-04.md`) |
 | UC volume | `workshop_guy_catalog.fe_bar_a0.staging` | raw JSON: customers/, merchants/, transactions/, prior_fraud_cases/ |
 | Bronze streaming tables | `dim_customer_bronze`, `dim_merchant_bronze`, `fact_transactions_bronze`, `fact_prior_fraud_cases_bronze` | in fe_bar_a0 |
 | Silver MVs | `dim_customer_silver`, `dim_merchant_silver`, `fact_transactions_silver`, `fact_prior_fraud_cases_silver` | in fe_bar_a0 |
