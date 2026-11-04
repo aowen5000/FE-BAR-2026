@@ -32,9 +32,30 @@ Step 8 found that `scored_transactions` and `txn_features_gold` had no row filte
   * Non-pii view, computed from the filter's non-pii branch: 463,881 of 464,632 rows in `txn_features_gold`; avg_amount_30d NULL. This was not tested as a real non-pii identity.
 * The full job was not re-run after option B. Only the sync pipeline was.
 
+## Catalog grant narrowing (user-approved; applied by the user from `validation_notebooks/catalog_grant_narrowing.ipynb` cell 2, verified by cell 3)
+
+`workshop_guy_catalog` is shared. It has 17 other schemas, mostly bo.cheng's, and three non-owner service principals read or wrote them in the last 90 days, all through the `account users` catalog grant. Unity Catalog grants inherit and a schema cannot block them, so the catalog grant was replaced:
+
+| Level | account users before | account users after |
+| --- | --- | --- |
+| Catalog | ALL PRIVILEGES, MANAGE, EXTERNAL USE SCHEMA | USE CATALOG, CREATE SCHEMA, BROWSE |
+| 17 other schemas | Inherited from the catalog | ALL PRIVILEGES, MANAGE, EXTERNAL USE SCHEMA granted on each schema (same effective access) |
+| `fe_bar_a0` | Inherited full access (48 object-privilege rows) | USE SCHEMA, plus SELECT on `fact_transactions_silver`, `dim_customer_silver`, `dim_merchant_silver`, `customer_risk_profile_gold`, `risk_score_calibration` |
+
+* **66 statements.** `REVOKE ALL PRIVILEGES` on the catalog also removed the USE CATALOG / CREATE SCHEMA / BROWSE grants made just before it. The cell detected this and re-granted them a few seconds later, so `account users` briefly had no USE CATALOG.
+* **Checks: 29/29 PASS.**
+  * Catalog privileges are exactly as planned, and alex.owen keeps ALL PRIVILEGES and MANAGE.
+  * All 17 other schemas keep their three privileges.
+  * `fe_bar_a0` has USE SCHEMA only, with SELECT on the 5 objects.
+  * No `account users` privilege on `scored_transactions`, `txn_features_gold`, the 4 bronze tables or the `staging` volume.
+  * The owner identity still reads `scored_transactions` (464,632 rows).
+* **Rollback:** grant ALL PRIVILEGES, MANAGE and EXTERNAL USE SCHEMA on the catalog back to `account users`.
+* **Not yet tested as a non-owner identity:** Connor (`non_pii`) should get a permission error on `scored_transactions` and the bronze tables, while the Genie space still works.
+* **Behavior change for other teams:** schemas created after this are no longer readable by everyone automatically.
+
 ## Still open
 
-* **`scored_transactions` is unprotected for non-pii users:** 751 rows with amount > 10000, and `amt_to_monthly_spend` values inside `top_shap_signals`. Fix options: an ABAC policy that exempts the sync identity (time travel is supported for exempt principals), or narrower catalog grants.
-* **`txn_features_gold.amt_to_monthly_spend` is unmasked** (not approved yet).
-* **`account users` has MANAGE on `workshop_guy_catalog`,** which likely lets any user remove the filters and masks.
-* **CAN_RUN on the Genie space for `non_pii`** is not granted yet. The benchmark re-run as a non-pii identity (item 5) needs that member (Connor Hauenstein) to run it.
+* **`scored_transactions`:** closed to `account users` by the catalog grant narrowing above. There is still no row filter or mask on the table itself, which only matters for principals granted access directly.
+* **`txn_features_gold.amt_to_monthly_spend`:** unmasked, but the table is now closed to `account users`.
+* **Other schemas:** `account users` keeps MANAGE on the 17 other schemas (their owners' decision).
+* **Genie space access:** Connor Hauenstein (the only `non_pii` member) has CAN_RUN on the space directly as a user; the `non_pii` group itself has none. His benchmark re-run (item 5) is pending, and as space owner I can grade his conversations through the Genie API.

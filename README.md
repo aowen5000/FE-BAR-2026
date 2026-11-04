@@ -66,6 +66,7 @@ Layer numbers 3 to 5 are the ones used in the step prompts. Layers 1 and 2 are g
   * `lineage_validation`: Step 7 table, column and model lineage from `system.access.*`
   * `genie_agent_validation`: Step 8 Genie Agent pre-flight, governance check, creation, export, 11-question benchmark (Conversation API + native eval)
   * `gold_governance_hardening`: Step 8 follow-up, gold row filter and mask, job/sync test, `non_pii` access check
+  * `catalog_grant_narrowing`: Step 8 follow-up, `account users` narrowed to least privilege on `fe_bar_a0` (other schemas unchanged)
 * `dashboards/`: exported Lakeview dashboard definitions
   * `fe_bar_fraud_ops.lvdash.json`: Fraud Ops triage & action dashboard
 * `genie/`: exported Genie Agent (Genie space) definitions
@@ -80,7 +81,7 @@ Validation notebooks import repo modules (for example `lakebase_cases`) from the
 
 | Kind | Name | ID / detail |
 | --- | --- | --- |
-| UC catalog / schema | `workshop_guy_catalog.fe_bar_a0` | serverless everywhere |
+| UC catalog / schema | `workshop_guy_catalog.fe_bar_a0` | serverless everywhere. Shared catalog: `account users` has USE CATALOG / CREATE SCHEMA / BROWSE on it; on `fe_bar_a0` only USE SCHEMA plus SELECT on `fact_transactions_silver`, `dim_customer_silver`, `dim_merchant_silver`, `customer_risk_profile_gold` and `risk_score_calibration` (see `logs/gold_governance_2026-11-04.md`) |
 | UC volume | `workshop_guy_catalog.fe_bar_a0.staging` | raw JSON: customers/, merchants/, transactions/, prior_fraud_cases/ |
 | Bronze streaming tables | `dim_customer_bronze`, `dim_merchant_bronze`, `fact_transactions_bronze`, `fact_prior_fraud_cases_bronze` | in fe_bar_a0 |
 | Silver MVs | `dim_customer_silver`, `dim_merchant_silver`, `fact_transactions_silver`, `fact_prior_fraud_cases_silver` | in fe_bar_a0 |
