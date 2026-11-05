@@ -1,0 +1,49 @@
+{
+  "captured_utc": "2026-11-05T21:16Z",
+  "workspace": "fevm-workshop-guy",
+  "source": "Apps API GET /api/2.0/apps/fe-bar-fraud-triage + list deployments",
+  "app": {
+    "name": "fe-bar-fraud-triage",
+    "id": "8f239f44-078a-4f8f-90f1-4c1b0bcdc26c",
+    "url": "https://fe-bar-fraud-triage-7474659392412718.aws.databricksapps.com",
+    "description": "FE Bar Fraud Triage: triage queue, Fraud Triage Copilot, Lakebase cases, Ask Genie (Step 9)",
+    "creator": "alex.owen@databricks.com",
+    "create_time": "2026-11-05T02:03:14Z",
+    "update_time": "2026-11-05T21:13:33Z",
+    "compute_size": "MEDIUM",
+    "compute_status": {"message": "App compute is running.", "state": "ACTIVE"},
+    "app_status": {"message": "App has status: App is running", "state": "RUNNING"},
+    "service_principal_name": "app-1xzuu6 fe-bar-fraud-triage",
+    "service_principal_id": 72319122930742,
+    "service_principal_client_id": "8f239f44-078a-4f8f-90f1-4c1b0bcdc26c",
+    "oauth2_app_client_id": "ef875206-4d65-467e-b3d4-491e8be54f48",
+    "default_source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app",
+    "active_deployment": {
+      "create_time": "2026-11-05T21:13:33Z",
+      "creator": "alex.owen@databricks.com",
+      "deployment_artifacts": {"source_code_path": "/Workspace/Users/8f239f44-078a-4f8f-90f1-4c1b0bcdc26c/src/01f1d95dc1bd164780340e69688aaa80"},
+      "deployment_id": "01f1d95dc1bd164780340e69688aaa80",
+      "mode": "SNAPSHOT",
+      "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app",
+      "status": {"message": "App started successfully", "state": "SUCCEEDED"},
+      "update_time": "2026-11-05T21:14:48Z"
+    },
+    "resources": [
+      {"description": "FE Bar Fraud Analytics fe_bar_db, production branch", "name": "lakebase-db",
+       "postgres": {"branch": "projects/fe-bar-fraud-analytics/branches/production", "database": "projects/fe-bar-fraud-analytics/branches/production/databases/fe-bar-db", "permission": "CAN_CONNECT_AND_CREATE"}},
+      {"description": "FM endpoint for fraud triage agent", "name": "claude-endpoint",
+       "serving_endpoint": {"name": "databricks-claude-sonnet-5-5", "permission": "CAN_QUERY"}},
+      {"description": "FE Bar Fraud Risk Ops Genie space", "name": "fraud-genie",
+       "genie_space": {"name": "", "permission": "CAN_RUN", "space_id": "01f1d7b464d510b9aa6cde48300787ca"}},
+      {"description": "SQL warehouse for Genie", "name": "fraud-warehouse",
+       "sql_warehouse": {"id": "9bbc027402111984", "permission": "CAN_USE"}}
+    ],
+    "effective_user_api_scopes": ["iam.access-control:read", "iam.current-user:read"]
+  },
+  "deployments": [
+    {"deployment_id": "01f1d95dc1bd164780340e69688aaa80", "create_time": "2026-11-05T21:13:33Z", "update_time": "2026-11-05T21:14:48Z", "status": {"message": "App started successfully", "state": "SUCCEEDED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
+    {"deployment_id": "01f1d95d42061f0f908eb7979c465161", "create_time": "2026-11-05T21:09:58Z", "update_time": "2026-11-05T21:10:55Z", "status": {"message": "App compute is no longer in ACTIVE state. Compute state: STOPPING. Deployment canceled.", "state": "CANCELLED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
+    {"deployment_id": "01f1d95bd2961317a2b65949a328bcc5", "create_time": "2026-11-05T20:59:42Z", "update_time": "2026-11-05T21:09:48Z", "status": {"message": "App process did not start within 10 minutes.", "state": "FAILED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
+    {"deployment_id": "01f1d955c28a1aacb9283df07a2eaab0", "create_time": "2026-11-05T20:16:18Z", "update_time": "2026-11-05T20:26:25Z", "status": {"message": "App process did not start within 10 minutes.", "state": "FAILED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"}
+  ]
+}
