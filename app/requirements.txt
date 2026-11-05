@@ -2,16 +2,28 @@
 # psycopg[binary] and LangChain packages are NOT pre-installed in the Databricks
 # Apps runtime and must be listed here or the app crashes on start.
 
+#
+# Exact pins. Deployment 01f1d955c28a1aacb9283df07a2eaab0 failed ("App process did
+# not start within 10 minutes") because loose >= bounds made pip backtrack through
+# mlflow versions during [BUILD]. Pins are resolved for Python 3.11 from the
+# constraints in the registered agent workshop_guy_catalog.fe_bar_a0.fraud_triage_agent
+# v3 requirements.txt (mlflow>=3.1, langgraph<0.4,>=0.3, databricks-langchain,
+# pydantic>=2, psycopg[binary]>=3.1.0) via pip install --dry-run --report.
+
 # Lakebase / Postgres connectivity (lakebase_cases.py)
-psycopg[binary]>=3.1.0
+psycopg[binary]==3.3.8
 
-# LangGraph agent (fraud_triage_agent.py)
-databricks-langchain>=0.4.0
-langchain-core>=0.3.0
-langgraph>=0.2.0
+# LangGraph agent (fraud_triage_agent.py); langgraph<0.4 per registered agent v3
+databricks-langchain==0.8.2
+databricks-ai-bridge==0.22.0
+langchain-core==0.3.86
+langgraph==0.3.34
+langgraph-prebuilt==0.1.8
+langgraph-checkpoint==2.1.2
+pydantic==2.14.3
 
-# MLflow with Databricks extras (ResponsesAgent, autolog)
-mlflow>=2.18.0
+# MLflow (ResponsesAgent, autolog)
+mlflow==3.18.0
 
-# Databricks SDK (w.postgres, w.statement_execution, w.genie)
-databricks-sdk>=0.118.0
+# Databricks SDK (w.postgres, w.statement_execution)
+databricks-sdk==0.162.0
