@@ -1,0 +1,17 @@
+# FE Bar Fraud Triage App — Python dependencies
+# psycopg[binary] and LangChain packages are NOT pre-installed in the Databricks
+# Apps runtime and must be listed here or the app crashes on start.
+
+# Lakebase / Postgres connectivity (lakebase_cases.py)
+psycopg[binary]>=3.1.0
+
+# LangGraph agent (fraud_triage_agent.py)
+databricks-langchain>=0.4.0
+langchain-core>=0.3.0
+langgraph>=0.2.0
+
+# MLflow with Databricks extras (ResponsesAgent, autolog)
+mlflow>=2.18.0
+
+# Databricks SDK (w.postgres, w.statement_execution, w.genie)
+databricks-sdk>=0.118.0

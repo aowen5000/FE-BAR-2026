@@ -1,0 +1,54 @@
+# app.yaml – FE Bar Fraud Triage (Streamlit)
+# Resource IDs are declared via valueFrom — no IDs hardcoded in app source code.
+# Thresholds are read from MLflow run d89beaca8f81447780da60ed2ea7c811 at deploy
+# time and embedded as static env vars so the app needs no MLflow access at runtime.
+
+command:
+  - "streamlit"
+  - "run"
+  - "app.py"
+
+env:
+  # Lakebase endpoint path for w.postgres.generate_database_credential
+  - name: LAKEBASE_ENDPOINT
+    valueFrom: lakebase-db
+  # Serving endpoint name (agent uses hardcoded constant; resource grants CAN_QUERY)
+  - name: SERVING_ENDPOINT_NAME
+    valueFrom: claude-endpoint
+  # Genie space ID injected from resource declaration
+  - name: GENIE_SPACE_ID
+    valueFrom: fraud-genie
+  # SQL warehouse ID for Genie result table execution
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: fraud-warehouse
+  # Thresholds from MLflow run d89beaca8f81447780da60ed2ea7c811
+  - name: BLOCK_THRESHOLD
+    value: "0.9502674433961342"
+  - name: REVIEW_THRESHOLD
+    value: "0.8714158290727556"
+
+resources:
+  - name: lakebase-db
+    description: "FE Bar Fraud Analytics — fe_bar_db, production branch"
+    postgres:
+      branch: "projects/fe-bar-fraud-analytics/branches/production"
+      database: "projects/fe-bar-fraud-analytics/branches/production/databases/fe_bar_db"
+      permission: "CAN_CONNECT_AND_CREATE"
+
+  - name: claude-endpoint
+    description: "Claude Sonnet 5.5 Foundation Model endpoint for fraud triage agent"
+    serving_endpoint:
+      name: "databricks-claude-sonnet-5-5"
+      permission: "CAN_QUERY"
+
+  - name: fraud-genie
+    description: "FE Bar Fraud Risk Ops Genie space"
+    genie_space:
+      space_id: "01f1d7b464d510b9aa6cde48300787ca"
+      permission: "CAN_RUN"
+
+  - name: fraud-warehouse
+    description: "SQL warehouse for Genie Conversation API result execution"
+    sql_warehouse:
+      id: "9bbc027402111984"
+      permission: "CAN_USE"
