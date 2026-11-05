@@ -221,6 +221,14 @@ def create_fraud_case(
 
     lc = LakebaseCases(pg_role="fraud_triage_agent")
     try:
+        # Code-level guardrail (system prompt rule 6): never push an approve-band
+        # transaction into block, regardless of what the caller or LLM asks for.
+        band = lc.query(
+            "SELECT recommended_action FROM fraud_gov.txn_risk_current WHERE txn_id = %s",
+            (txn_id,),
+        )
+        if band and band[0]["recommended_action"] == "approve" and action == "block":
+            return json.dumps({"error": f"Refused: model recommended 'approve' for {txn_id}; an approve-band transaction cannot be opened as 'block'."})
         case_id = lc.create_fraud_case(
             txn_id=txn_id,
             recommended_action=action,
