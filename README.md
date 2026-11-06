@@ -2,6 +2,10 @@
 
 This is a fraud risk build for a regional card issuer, built in Databricks workspace `fevm-workshop-guy`. It uses 100% synthetic data. Everything in this repo is plain text: notebooks are committed with their cell outputs, and logs are Markdown or JSON. How the repo was built (AI-assisted workflow, prompts, key decisions, issues) is in [BUILD.md](BUILD.md).
 
+## Commit identities
+
+All commits in this repo are by me, Alex Owen. Commits authored `aowen5000@gmail.com` were made through the Databricks Git folder integration with my personal GitHub credential `aowen5000`, plus the initial commit and the PR #1 merge in the GitHub web UI. Commits authored `alex.owen@databricks.com` were made with the git CLI in the same Git folder, which uses my workspace identity. That email is verified on my Databricks EMU GitHub account, so GitHub cannot also link it to `aowen5000`, and those commits show as unlinked. History was not rewritten.
+
 ## Overview
 
 The build serves two personas: the **Head of Fraud Risk Ops**, who watches exposure, model performance and case volume, and the **Fraud Analyst**, who works a triage queue and opens cases. It has five layers that feed each other:
