@@ -94,7 +94,8 @@ def _call_genie(question: str) -> dict:
     from databricks.sdk.core import Config
 
     cfg = Config()
-    base = f"https://{cfg.host}/api/2.0/genie/spaces/{GENIE_SPACE_ID}"
+    # cfg.host already includes the scheme (https://...)
+    base = f"{cfg.host.rstrip('/')}/api/2.0/genie/spaces/{GENIE_SPACE_ID}"
 
     def _h():
         return {**cfg.authenticate(), "Content-Type": "application/json"}
@@ -137,6 +138,7 @@ def _call_genie(question: str) -> dict:
     result_rows = []
     if generated_sql and WAREHOUSE_ID:
         try:
+            from databricks.sdk.service.sql import Disposition, Format
             w = _w()
             stmt = w.statement_execution.execute_statement(
                 warehouse_id=WAREHOUSE_ID,
@@ -144,8 +146,8 @@ def _call_genie(question: str) -> dict:
                 schema="fraud_dash",
                 statement=generated_sql,
                 wait_timeout="30s",
-                disposition="INLINE",
-                format="JSON_ARRAY",
+                disposition=Disposition.INLINE,
+                format=Format.JSON_ARRAY,
             )
             if (stmt.status and stmt.status.state
                     and str(stmt.status.state).endswith("SUCCEEDED")
