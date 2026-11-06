@@ -288,6 +288,16 @@ def _page_transaction_detail() -> None:
 
     col1, col2 = st.columns(2)
 
+    # ResponsesAgentResponse.output items carry text in content[i]["text"] (no .text attribute)
+    def _resp_text(resp) -> str:
+        parts = []
+        for item in resp.output or []:
+            for c in (getattr(item, "content", None) or []):
+                t = c.get("text") if isinstance(c, dict) else getattr(c, "text", None)
+                if t:
+                    parts.append(t)
+        return "\n\n".join(parts)
+
     # ---- Explain -----------------------------------------------------------
     if col1.button("\U0001f50d Explain", key="btn_explain"):
         from mlflow.types.responses import ResponsesAgentRequest
@@ -305,7 +315,7 @@ def _page_transaction_detail() -> None:
                     ),
                 }])
                 resp = agent.predict(req)
-                text = resp.output[0].text if resp.output else "No response."
+                text = _resp_text(resp) or "No response."
             st.session_state[f"explain_{txn_id}"] = text
         except Exception as exc:
             st.error(f"Agent error: {exc}")
@@ -334,7 +344,7 @@ def _page_transaction_detail() -> None:
                     ),
                 }])
                 resp  = agent.predict(req)
-                atext = resp.output[0].text if resp.output else ""
+                atext = _resp_text(resp)
                 # Authoritative case_id: query directly after agent write
                 cases  = lc.get_cases_for_txn(txn_id)
                 case_id = cases[0]["case_id"] if cases else None
