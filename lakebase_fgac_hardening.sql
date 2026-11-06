@@ -88,6 +88,26 @@ FROM fraud.risk_score_calibration;
 
 GRANT SELECT ON fraud_gov.risk_score_calibration TO fraud_analyst, fraud_lead, fraud_triage_agent;
 
+-- -----------------------------------------------------------------------------
+-- Item 9 (Step 9, 2026-11-04): Databricks App fe-bar-fraud-triage identity
+-- The app's service principal (app-1xzuu6 fe-bar-fraud-triage, application ID
+-- 8f239f44-078a-4f8f-90f1-4c1b0bcdc26c) logs in with a Postgres role of the same
+-- name, created by the app's Lakebase resource (CAN_CONNECT_AND_CREATE).
+-- Its ONLY privilege is membership in fraud_triage_agent, so it runs the agent's
+-- code path via SET ROLE fraud_triage_agent. db_inserted_by (DEFAULT session_user)
+-- records the app role, distinguishing app writes from human writes.
+-- Not granted: BYPASSRLS, SUPERUSER, fraud_pii, fraud_lead, any direct grant on
+-- fraud.* or cases.*. The app runs no DDL and creates no schemas.
+-- Idempotent: skips if the role does not exist yet or membership already exists.
+-- -----------------------------------------------------------------------------
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = '8f239f44-078a-4f8f-90f1-4c1b0bcdc26c')
+     AND NOT pg_has_role('8f239f44-078a-4f8f-90f1-4c1b0bcdc26c', 'fraud_triage_agent', 'MEMBER') THEN
+    GRANT fraud_triage_agent TO "8f239f44-078a-4f8f-90f1-4c1b0bcdc26c";
+  END IF;
+END $$;
+
 -- =============================================================================
 -- END
 -- =============================================================================
