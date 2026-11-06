@@ -1,5 +1,6 @@
 {
-  "captured_utc": "2026-11-05T21:16Z",
+  "captured_utc": "2026-11-06T03:52Z",
+  "previous_capture_utc": "2026-11-05T21:16Z",
   "workspace": "fevm-workshop-guy",
   "source": "Apps API GET /api/2.0/apps/fe-bar-fraud-triage + list deployments",
   "app": {
@@ -9,7 +10,8 @@
     "description": "FE Bar Fraud Triage: triage queue, Fraud Triage Copilot, Lakebase cases, Ask Genie (Step 9)",
     "creator": "alex.owen@databricks.com",
     "create_time": "2026-11-05T02:03:14Z",
-    "update_time": "2026-11-05T21:13:33Z",
+    "update_time": "2026-11-06T03:04:11Z",
+    "updater": "alex.owen@databricks.com",
     "compute_size": "MEDIUM",
     "compute_status": {"message": "App compute is running.", "state": "ACTIVE"},
     "app_status": {"message": "App has status: App is running", "state": "RUNNING"},
@@ -18,15 +20,16 @@
     "service_principal_client_id": "8f239f44-078a-4f8f-90f1-4c1b0bcdc26c",
     "oauth2_app_client_id": "ef875206-4d65-467e-b3d4-491e8be54f48",
     "default_source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app",
+    "last_deployment_id": "01f1d98ebd6c1954bd2d4b7f9d7c6ae5",
     "active_deployment": {
-      "create_time": "2026-11-05T21:13:33Z",
+      "create_time": "2026-11-06T03:04:11Z",
       "creator": "alex.owen@databricks.com",
-      "deployment_artifacts": {"source_code_path": "/Workspace/Users/8f239f44-078a-4f8f-90f1-4c1b0bcdc26c/src/01f1d95dc1bd164780340e69688aaa80"},
-      "deployment_id": "01f1d95dc1bd164780340e69688aaa80",
+      "deployment_artifacts": {"source_code_path": "/Workspace/Users/8f239f44-078a-4f8f-90f1-4c1b0bcdc26c/src/01f1d98ebd6c1954bd2d4b7f9d7c6ae5"},
+      "deployment_id": "01f1d98ebd6c1954bd2d4b7f9d7c6ae5",
       "mode": "SNAPSHOT",
       "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app",
       "status": {"message": "App started successfully", "state": "SUCCEEDED"},
-      "update_time": "2026-11-05T21:14:48Z"
+      "update_time": "2026-11-06T03:04:19Z"
     },
     "resources": [
       {"description": "FE Bar Fraud Analytics fe_bar_db, production branch", "name": "lakebase-db",
@@ -41,6 +44,9 @@
     "effective_user_api_scopes": ["iam.access-control:read", "iam.current-user:read"]
   },
   "deployments": [
+    {"deployment_id": "01f1d98ebd6c1954bd2d4b7f9d7c6ae5", "create_time": "2026-11-06T03:04:11Z", "update_time": "2026-11-06T03:04:19Z", "status": {"message": "App started successfully", "state": "SUCCEEDED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
+    {"deployment_id": "01f1d98a19961d0eba5e4c21d38f9414", "create_time": "2026-11-06T02:30:58Z", "update_time": "2026-11-06T02:31:07Z", "status": {"message": "App started successfully", "state": "SUCCEEDED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
+    {"deployment_id": "01f1d979bf33194e804da226dd8ee196", "create_time": "2026-11-06T00:33:54Z", "update_time": "2026-11-06T00:34:04Z", "status": {"message": "App started successfully", "state": "SUCCEEDED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
     {"deployment_id": "01f1d95dc1bd164780340e69688aaa80", "create_time": "2026-11-05T21:13:33Z", "update_time": "2026-11-05T21:14:48Z", "status": {"message": "App started successfully", "state": "SUCCEEDED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
     {"deployment_id": "01f1d95d42061f0f908eb7979c465161", "create_time": "2026-11-05T21:09:58Z", "update_time": "2026-11-05T21:10:55Z", "status": {"message": "App compute is no longer in ACTIVE state. Compute state: STOPPING. Deployment canceled.", "state": "CANCELLED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
     {"deployment_id": "01f1d95bd2961317a2b65949a328bcc5", "create_time": "2026-11-05T20:59:42Z", "update_time": "2026-11-05T21:09:48Z", "status": {"message": "App process did not start within 10 minutes.", "state": "FAILED"}, "source_code_path": "/Workspace/Users/alex.owen@databricks.com/FE-BAR-2026-repo/app"},
