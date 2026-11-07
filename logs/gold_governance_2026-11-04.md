@@ -50,7 +50,7 @@ Step 8 found that `scored_transactions` and `txn_features_gold` had no row filte
   * No `account users` privilege on `scored_transactions`, `txn_features_gold`, the 4 bronze tables or the `staging` volume.
   * The owner identity still reads `scored_transactions` (464,632 rows).
 * **Rollback:** grant ALL PRIVILEGES, MANAGE and EXTERNAL USE SCHEMA on the catalog back to `account users`.
-* **Not yet tested as a non-owner identity:** Connor (`non_pii`) should get a permission error on `scored_transactions` and the bronze tables, while the Genie space still works.
+* **Not yet tested as a non-owner identity:** the non_pii test user (`non_pii`, user ID 72697000497660) should get a permission error on `scored_transactions` and the bronze tables, while the Genie space still works.
 * **Behavior change for other teams:** schemas created after this are no longer readable by everyone automatically.
 
 ## Revoke on customer_risk_profile_gold (user-run, verified read-only)
@@ -66,4 +66,4 @@ Step 8 found that `scored_transactions` and `txn_features_gold` had no row filte
 * **`scored_transactions`:** closed to `account users` by the catalog grant narrowing above. There is still no row filter or mask on the table itself, which only matters for principals granted access directly.
 * **`txn_features_gold.amt_to_monthly_spend`:** unmasked, but the table is now closed to `account users`.
 * **Other schemas:** `account users` keeps MANAGE on the 17 other schemas (their owners' decision).
-* **Genie space access:** Connor Hauenstein (the only `non_pii` member) has CAN_RUN on the space directly as a user; the `non_pii` group itself has none. His benchmark re-run (item 5) is pending, and as space owner I can grade his conversations through the Genie API.
+* **Genie space access:** the non_pii test user (user ID 72697000497660, the only `non_pii` member) has CAN_RUN on the space directly as a user; the `non_pii` group itself has none. Their benchmark re-run (item 5) is pending, and as space owner I can grade their conversations through the Genie API.
