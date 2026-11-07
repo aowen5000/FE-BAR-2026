@@ -1,6 +1,6 @@
-# Non-pii benchmark run: Connor Hauenstein (2026-11-05)
+# Non-pii benchmark run: non_pii test user (2026-11-05)
 
-- Identity: Connor Hauenstein, user ID 72697000497660, member of account group `non_pii` only (not `pii`). CAN_RUN on the space granted directly.
+- Identity: non_pii test user, user ID 72697000497660, member of account group `non_pii` only (not `pii`). CAN_RUN on the space granted directly.
 - Conversation: `01f1d8ac352915faaffdcb33c40ce9e4` (one conversation, Agent mode), 11 messages, 2026-11-05 about 00:02–00:08 UTC.
 - Attribution: `user_id` on every message (Genie message API, read as space owner).
 - Grading: same expected values as rounds 0–2. Permission errors: none.
