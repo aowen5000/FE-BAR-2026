@@ -39,7 +39,7 @@
       "name": "ds_triage",
       "displayName": "Triage queue top 50 (fraud_dash.triage_queue)",
       "queryLines": [
-        "SELECT txn_id, customer_id, amount, risk_score, recommended_action, top_shap_signals, case_status, assigned_queue, case_id, risk_rank, filtered_rank FROM (SELECT *, row_number() OVER (ORDER BY risk_score DESC, txn_id) AS filtered_rank FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE (size(:action_f) = 0 OR array_contains(:action_f, recommended_action)) AND (size(:queue_f) = 0 OR array_contains(:queue_f, assigned_queue)) AND (size(:status_f) = 0 OR array_contains(:status_f, case_status)) AND (upper(trim(:txn_id_f)) IN ('', 'ALL') OR txn_id = trim(:txn_id_f))) WHERE filtered_rank <= 50 ORDER BY risk_score DESC, txn_id "
+        "SELECT txn_id, customer_id, amount, is_high_value, amount_band, risk_score, recommended_action, top_shap_signals, case_status, assigned_queue, case_id, risk_rank, filtered_rank FROM (SELECT *, row_number() OVER (ORDER BY risk_score DESC, txn_id) AS filtered_rank FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE (size(:action_f) = 0 OR array_contains(:action_f, recommended_action)) AND (size(:queue_f) = 0 OR array_contains(:queue_f, assigned_queue)) AND (size(:status_f) = 0 OR array_contains(:status_f, case_status)) AND (size(:hv_f) = 0 OR array_contains(:hv_f, CAST(is_high_value AS STRING))) AND (upper(trim(:txn_id_f)) IN ('', 'ALL') OR txn_id = trim(:txn_id_f))) WHERE filtered_rank <= 50 ORDER BY risk_score DESC, txn_id "
       ],
       "parameters": [
         {
@@ -89,6 +89,17 @@
               ]
             }
           }
+        },
+        {
+          "displayName": "hv_f",
+          "keyword": "hv_f",
+          "dataType": "STRING",
+          "complexType": "MULTI",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING"
+            }
+          }
         }
       ]
     },
@@ -96,7 +107,7 @@
       "name": "ds_triage_options",
       "displayName": "Triage filter options (fraud_dash.triage_queue)",
       "queryLines": [
-        "SELECT recommended_action, assigned_queue, case_status, count(*) AS txn_count FROM fe_bar_lakebase.fraud_dash.triage_queue GROUP BY ALL ORDER BY recommended_action, assigned_queue, case_status "
+        "SELECT recommended_action, assigned_queue, case_status, CAST(is_high_value AS STRING) AS is_high_value, count(*) AS txn_count FROM fe_bar_lakebase.fraud_dash.triage_queue GROUP BY ALL ORDER BY recommended_action, assigned_queue, case_status, is_high_value "
       ]
     },
     {
@@ -119,6 +130,13 @@
       "queryLines": [
         "SELECT recommended_action, CASE WHEN is_fraud THEN 'fraud' ELSE 'not fraud' END AS fraud_label, txn_count, total_amount, fraud_amount_caught, fraud_amount_missed FROM fe_bar_lakebase.fraud_dash.exposure ORDER BY recommended_action, fraud_label "
       ]
+    },
+    {
+      "name": "ds_kpi_hv",
+      "displayName": "High-value flagged (fraud_dash.triage_queue)",
+      "queryLines": [
+        "SELECT count_if(is_high_value) AS high_value_flagged FROM fe_bar_lakebase.fraud_dash.triage_queue "
+      ]
     }
   ],
   "pages": [
@@ -133,7 +151,7 @@
               "lines": [
                 "## FE Bar Fraud Ops: Triage & Action\n",
                 "\n",
-                "Live from Lakebase (fe_bar_lakebase.fraud_dash / fraud_gov). Non-pii governed view: transactions with amount > 10,000 are excluded. Dates are UTC."
+                "Live from Lakebase (fe_bar_lakebase.fraud_dash / fraud_gov). Case KPIs, the case list and the triage queue include high-value cases (amount > 10,000) with the amount redacted; dollar totals and score charts still exclude them. Dates are UTC."
               ]
             }
           },
@@ -174,7 +192,7 @@
               "frame": {
                 "showTitle": true,
                 "title": "Cases created today",
-                "description": "created_at date = current_date (UTC)",
+                "description": "Includes high-value cases (amount redacted)",
                 "showDescription": true
               }
             }
@@ -215,7 +233,9 @@
               },
               "frame": {
                 "showTitle": true,
-                "title": "Open cases"
+                "title": "Open cases",
+                "showDescription": true,
+                "description": "Includes high-value cases (amount redacted)"
               }
             }
           },
@@ -256,7 +276,7 @@
               "frame": {
                 "showTitle": true,
                 "title": "analyst_review backlog",
-                "description": "queue analyst_review, status open or in_review",
+                "description": "Includes high-value cases (amount redacted)",
                 "showDescription": true
               }
             }
@@ -890,14 +910,14 @@
               "lines": [
                 "## Triage queue\n",
                 "\n",
-                "Top 50 flagged (block, review) transactions by risk_score after filters. Type a txn_id to look one up; ALL shows the top 50."
+                "Top 50 flagged (block, review) transactions by risk_score after filters. Type a txn_id to look one up; ALL shows the top 50. High-value rows (amount > 10,000) are included with amount and amount-derived SHAP values redacted; use is_high_value to filter them."
               ]
             }
           },
           "position": {
             "x": 0,
             "y": 0,
-            "width": 6,
+            "width": 4,
             "height": 2
           }
         },
@@ -1017,7 +1037,7 @@
           "position": {
             "x": 1,
             "y": 2,
-            "width": 2,
+            "width": 1,
             "height": 2
           }
         },
@@ -1171,6 +1191,14 @@
                     {
                       "name": "case_id",
                       "expression": "`case_id`"
+                    },
+                    {
+                      "name": "is_high_value",
+                      "expression": "`is_high_value`"
+                    },
+                    {
+                      "name": "amount_band",
+                      "expression": "`amount_band`"
                     }
                   ],
                   "disaggregated": true
@@ -1205,6 +1233,14 @@
                         "places": 2
                       }
                     }
+                  },
+                  {
+                    "fieldName": "is_high_value",
+                    "displayName": "is_high_value"
+                  },
+                  {
+                    "fieldName": "amount_band",
+                    "displayName": "amount_band"
                   },
                   {
                     "fieldName": "risk_score",
@@ -1387,6 +1423,106 @@
             "y": 14,
             "width": 6,
             "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_high_value",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_kpi_hv",
+                  "fields": [
+                    {
+                      "name": "high_value_flagged",
+                      "expression": "`high_value_flagged`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "high_value_flagged",
+                  "displayName": "High-value flagged (amount redacted)"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "High-value flagged (amount redacted)"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_high_value",
+            "queries": [
+              {
+                "name": "filter_hv_opts",
+                "query": {
+                  "datasetName": "ds_triage_options",
+                  "fields": [
+                    {
+                      "name": "is_high_value",
+                      "expression": "`is_high_value`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "filter_hv_param",
+                "query": {
+                  "datasetName": "ds_triage",
+                  "parameters": [
+                    {
+                      "name": "hv_f",
+                      "keyword": "hv_f"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "is_high_value",
+                    "displayName": "is_high_value",
+                    "queryName": "filter_hv_opts"
+                  },
+                  {
+                    "parameterName": "hv_f",
+                    "queryName": "filter_hv_param"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "is_high_value"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 2,
+            "width": 1,
+            "height": 2
           }
         }
       ],

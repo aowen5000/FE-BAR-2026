@@ -121,6 +121,17 @@ Source: logs/app_2026-11-04.md, section "Summary"; deployment 01f1d98ebd6c1954bd
 
 Source: logs/app_2026-11-04.md, section "Part D results"; case 5af3575c-cda8-47cb-97be-021b26dca000.
 
+### High-value triage (Step 11)
+
+```
+| triage_queue high-value rows | 0 | 705 (= Postgres as fraud_triage_agent: 705) |
+| Non-null amount on high-value rows (triage_queue, case_summary) | n/a | 0, 0 |
+| baseline_comparison | model $7,010,482.03 vs rule $933,889.13 caught | identical |
+| Reader role_table_grants | 19 rows | 19 rows, 0 added, 0 removed; no memberships |
+```
+
+Source: logs/high_value_triage_2026-11-09.md, section "Before vs after"; validation_notebooks/high_value_triage.ipynb 24 PASS / 0 FAIL; App deployment 01f1dcc1df121891906c3a2c6df85a1a, case d2a1d4a1-7f84-4ed9-b9aa-4146c9f57592.
+
 ### Job run (Step 10, Part C)
 
 ```

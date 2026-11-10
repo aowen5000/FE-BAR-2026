@@ -9,8 +9,15 @@
 -- Governance design
 -- * The UC path is not identity-aware: every dashboard viewer reaches Postgres as
 --   databricks_reader_<dbid>. So fraud_dash only exposes data that is safe for a
---   NON-PII viewer: rows with amount > 10000 are excluded explicitly in every view,
---   and notes / created_by / db_inserted_by are never selected.
+--   NON-PII viewer: rows with amount > 10000 are excluded explicitly in the
+--   aggregate views, and notes / created_by / db_inserted_by are never selected.
+-- * Step 11 (2026-11-09): case_summary and triage_queue are row-level views that
+--   now include high-value rows with the amount (and amount-derived SHAP values)
+--   redacted, flagged by is_high_value / amount_band. They read fraud.* directly
+--   because fraud_gov's row rule tests current_user, which inside a view is the
+--   caller (the UC reader), not the owner, so fraud_gov would hide those rows.
+--   fraud_lead (already a fraud_pii member) gets SELECT on the two fraud.* tables
+--   for this; the reader role gets nothing new.
 -- * Mechanism: views are OWNED BY fraud_lead. Postgres applies the RLS policies of
 --   the view owner (security_invoker is off), so the existing
 --   fraud_lead_select_cases / fraud_lead_select_actions policies (USING true) let
@@ -34,6 +41,8 @@ COMMENT ON SCHEMA fraud_dash IS 'Dashboard read layer for the UC reader role: no
 
 -- fraud_lead owns the views, so it needs USAGE + CREATE on the schema.
 GRANT USAGE, CREATE ON SCHEMA fraud_dash TO fraud_lead;
+-- Step 11: view owner reads the raw synced tables for the two redacting views.
+GRANT SELECT ON fraud.txn_features, fraud.txn_risk_current TO fraud_lead;
 
 -- ---------------------------------------------------------------------------
 -- Model thresholds (loaded from MLflow, never hardcoded)
@@ -51,7 +60,7 @@ GRANT SELECT ON fraud_dash.model_thresholds TO fraud_lead;
 -- ---------------------------------------------------------------------------
 SET ROLE fraud_lead;
 
--- ---- fraud_dash.case_summary: one row per non-high-amount case -------------
+-- ---- fraud_dash.case_summary: one row per case (Step 11: high-value amount redacted)
 CREATE OR REPLACE VIEW fraud_dash.case_summary
   WITH (security_barrier = true)
 AS
@@ -65,21 +74,25 @@ SELECT
     c.created_at,
     c.updated_at,
     r.risk_score,
-    tf.amount,
+    -- Step 11 (2026-11-09): redact, don't filter. High-value cases stay in the view
+    -- with the amount nulled; is_high_value and amount_band say why.
+    CASE WHEN tf.amount > 10000 THEN NULL ELSE tf.amount END AS amount,
     COALESCE(a.action_count, 0) AS action_count,
-    a.last_action_at
+    a.last_action_at,
+    (tf.amount > 10000) AS is_high_value,
+    CASE WHEN tf.amount > 10000 THEN 'over_10k' ELSE 'under_10k' END AS amount_band
 FROM cases.fraud_cases c
 -- LATERAL lookups keep this an index probe per case (a plain join planned a
 -- full scan of the 464K-row governed views).
 JOIN LATERAL (
     SELECT f.customer_id, f.amount
-    FROM fraud_gov.txn_features f
+    FROM fraud.txn_features f
     WHERE f.txn_id = c.txn_id
     LIMIT 1
-) tf ON tf.amount <= 10000                    -- high-amount cases excluded
+) tf ON true                                  -- Step 11: redacted above, not excluded
 LEFT JOIN LATERAL (
     SELECT x.risk_score
-    FROM fraud_gov.txn_risk_current x
+    FROM fraud.txn_risk_current x
     WHERE x.txn_id = c.txn_id
     LIMIT 1
 ) r ON true
@@ -218,7 +231,8 @@ FROM m
 GROUP BY 1, 2;
 
 -- ---- fraud_dash.triage_queue -------------------------------------------------
--- Flagged (block / review), non-high-amount transactions with their latest case.
+-- Flagged (block / review) transactions with their latest case. Step 11: high-value
+-- rows are included with amount and amount-derived SHAP values redacted.
 -- Backs the Triage queue table; ranked in Postgres so the dashboard pulls 50 rows.
 CREATE OR REPLACE VIEW fraud_dash.triage_queue
   WITH (security_barrier = true)
@@ -226,22 +240,31 @@ AS
 SELECT
     r.txn_id,
     r.customer_id,
-    tf.amount,
+    CASE WHEN tf.amount > 10000 THEN NULL ELSE tf.amount END AS amount,
     r.risk_score,
     r.recommended_action,
     -- Step 8 (2026-11-03): blank the SHAP feature value for amt_to_monthly_spend.
     -- amount / that value would reveal the masked dim_customer_silver.avg_monthly_spend.
-    regexp_replace(r.top_shap_signals,
-                   '("feature": "amt_to_monthly_spend", "value": )[^,}]+',
-                   '\1null', 'g')        AS top_shap_signals,
+    -- Step 11: on high-value rows also blank the values of amount and
+    -- amt_to_cust_avg_30d (both reveal the redacted amount). Feature names and
+    -- SHAP contributions stay, so the reason for the flag is still visible.
+    CASE WHEN tf.amount > 10000
+         THEN regexp_replace(r.top_shap_signals,
+                  '("feature": "(amount|amt_to_cust_avg_30d|amt_to_monthly_spend)", "value": )[^,}]+',
+                  '\1null', 'g')
+         ELSE regexp_replace(r.top_shap_signals,
+                  '("feature": "amt_to_monthly_spend", "value": )[^,}]+',
+                  '\1null', 'g')
+    END                                   AS top_shap_signals,
     COALESCE(c.status, 'no case')         AS case_status,
     COALESCE(c.assigned_queue, 'no case') AS assigned_queue,
     c.case_id::text                       AS case_id,
-    row_number() OVER (ORDER BY r.risk_score DESC, r.txn_id) AS risk_rank
-FROM fraud_gov.txn_risk_current r
-JOIN fraud_gov.txn_features tf
+    row_number() OVER (ORDER BY r.risk_score DESC, r.txn_id) AS risk_rank,
+    (tf.amount > 10000) AS is_high_value,
+    CASE WHEN tf.amount > 10000 THEN 'over_10k' ELSE 'under_10k' END AS amount_band
+FROM fraud.txn_risk_current r
+JOIN fraud.txn_features tf
   ON tf.txn_id = r.txn_id
- AND tf.amount <= 10000
 LEFT JOIN LATERAL (
     SELECT fc.case_id, fc.status, fc.assigned_queue
     FROM cases.fraud_cases fc
