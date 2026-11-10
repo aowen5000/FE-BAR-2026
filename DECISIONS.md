@@ -4,7 +4,7 @@ My decisions, condensed. Each one names its evidence file. 100% synthetic data.
 
 ## Data and pipeline
 
-* **Synthetic scale and seeded cohort.** I chose 10K customers, 5K merchants, 500K transactions and 50K prior cases (seed 42) over a larger set. It is big enough for a time split and a rare label, and small enough for fast serverless runs. Seeded cohorts give the model a signal to learn and the agent a signal to explain. The cost: metrics describe this synthetic set only. Evidence: `card_transaction_bronze_generator.ipynb`; `prompts/step1_3458967129203277.md`.
+* **Synthetic scale and seeded cohort.** I chose 10K customers, 5K merchants, 500K transactions and 50K prior cases (seed 42) over a larger set. It is big enough for a time split and a rare label, and small enough for fast serverless runs. Seeded cohorts give the model a signal to learn and the agent a signal to explain. The cost: metrics describe this synthetic set only. Evidence: `card_transaction_bronze_generator.ipynb`.
 * **JSON bronze with 15% DQ errors.** I chose realistic dirty landing data (duplicates, null `txn_id`, null `customer_id`) over clean data, so silver expectations and dedup get tested. 17,932 transaction rows are dropped by expectations. Evidence: `logs/update_60f6d1de_full_refresh_2026-10-15.md`.
 * **Spark Declarative Pipeline, not plain jobs.** Bronze, silver and gold run in pipeline c0db28b8, with Auto Loader and expectations. The job only orchestrates it. Evidence: `FE BAR Bronze Silver AutoLoader Pipeline.sql`, `gold_feature_layer.sql`.
 

@@ -81,7 +81,7 @@ Trace of TXN-0234209 (CUST-08669, $323.96, is_fraud = true). Details in [EVIDENC
 2. [DECISIONS.md](DECISIONS.md)
 3. [BUILD.md](BUILD.md)
 4. [logs/business_value_2026-11-06.md](logs/business_value_2026-11-06.md)
-5. docs/: [ARCHITECTURE](docs/ARCHITECTURE.md), [RESOURCES](docs/RESOURCES.md), [HOW_TO_RUN](docs/HOW_TO_RUN.md), [TRACE](docs/TRACE.md), [EVIDENCE_INDEX](docs/EVIDENCE_INDEX.md), [LIMITATIONS](docs/LIMITATIONS.md), [CONVERSATION_IDS](docs/CONVERSATION_IDS.md), [PROMPTS](docs/PROMPTS.md)
+5. docs/: [ARCHITECTURE](docs/ARCHITECTURE.md), [RESOURCES](docs/RESOURCES.md), [HOW_TO_RUN](docs/HOW_TO_RUN.md), [TRACE](docs/TRACE.md), [EVIDENCE_INDEX](docs/EVIDENCE_INDEX.md), [LIMITATIONS](docs/LIMITATIONS.md), [CONVERSATION_IDS](docs/CONVERSATION_IDS.md)
 
 ## Commit identities
 

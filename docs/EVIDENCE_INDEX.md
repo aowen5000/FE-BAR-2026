@@ -12,7 +12,7 @@ Moved from README.md in Step 10. The old "All five layers functional" row is now
 | Lakebase synced tables match gold | `validation_notebooks/lakebase_sync_validation.ipynb`, `validation_notebooks/lakebase_scores_validation.ipynb`, `logs/lakebase_scores_sync_2026-10-20.md`, `logs/fgac_hardening_2026-10-21.md` Item 3, `logs/job_fe_bar_gold_to_lakebase_run_1059811930012881_2026-11-06.md` | UC 464,632 = Postgres 464,632 (txn_risk_current, txn_features); 9,289 = 9,289 (customer_risk_profile) |
 | Agent case write round trip | `fraud_triage_agent.ipynb` E.2/E.3, `logs/agent_case_roundtrip_2026-10-21.md`, `logs/lakebase_write_path_2026-10-17.md` | Case 2319d4b7 read back as fraud_lead; 1 open case after 2 requests; write p50 33.21 ms / p95 42.40 ms |
 | p95 read latency | `logs/lakebase_scores_sync_2026-10-20.md`, `logs/lakebase_fgac_2026-10-21.md` | PK lookup p95 3.18 ms (fraud.txn_risk_current), 5.81 ms (fraud_gov view as fraud_triage_agent) |
-| 100% synthetic data | `card_transaction_bronze_generator.ipynb` (seed 42, Faker), `prompts/step1_3458967129203277.md` | 10K customers, 5K merchants, 500K transactions, 50K prior cases, all generated |
+| 100% synthetic data | `card_transaction_bronze_generator.ipynb` (seed 42, Faker) | 10K customers, 5K merchants, 500K transactions, 50K prior cases, all generated |
 
 ## Key results
 
