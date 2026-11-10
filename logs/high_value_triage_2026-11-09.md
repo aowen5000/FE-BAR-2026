@@ -9,7 +9,7 @@ Workspace fevm-workshop-guy. Step dated 2026-11-09 (US); work and checks ran 202
 | Goal | Make the 705 flagged transactions with amount > 10000 triageable without loosening governance |
 | App deployment | `01f1dcc1df121891906c3a2c6df85a1a` (SUCCEEDED 2026-11-10 04:47:45 UTC), app RUNNING |
 | Live-test case | `d2a1d4a1-7f84-4ed9-b9aa-4146c9f57592` (TXN-0189627), open, auto_block, created 2026-11-10 05:11:19 UTC, db_inserted_by `8f239f44-078a-4f8f-90f1-4c1b0bcdc26c` (App role), created_by `fraud_triage_copilot:agent` |
-| Validation | `validation_notebooks/high_value_triage.ipynb`: 24 PASS / 0 FAIL, 2 deferred |
+| Validation | `validation_notebooks/high_value_triage.ipynb`: B.9 24 PASS / 0 FAIL; B.10 follow-up 3 PASS / 0 FAIL (E.10c); E.8c observed, no text evidence |
 | Genie | 13/13 PASS as pii (11 existing + 2 new) |
 | Branch commit 1 | c57fad1 (code, views, exports, notebook, docs) |
 
@@ -23,6 +23,7 @@ Workspace fevm-workshop-guy. Step dated 2026-11-09 (US); work and checks ran 202
 | Live-test case created (user click) | 05:11:19 |
 | Validation run, B.0 to B.9 | started 05:20:49 |
 | Re-run of B.7 to B.9 after the benchmark fix | about 05:47; Genie export `exported_at` 05:47:55 |
+| B.10 follow-up, run alone (non_pii checks) | 23:27:24 |
 
 The B.1 timestamp printed in B.9 is 05:20:49 because B.1 was not re-run with B.7 to B.9.
 
