@@ -21,7 +21,7 @@ Copied from `logs/business_value_2026-11-06.md` "B.5 Final KPI table".
 | Fraud $ caught (flagged before approval) | $1,114,720.20 | $10,599,214.95 | Full synthetic set | B.4b-3, measured |
 | Fraud $ missed | $7,052,318.79 | $975,725.89 | Governed view | B.2, measured |
 | Fraud $ missed | $10,556,008.99 | $1,071,514.24 | Full synthetic set | B.4b-3, measured |
-| High-value flagged txns not triageable in Genie / dashboard / App | n/a | 705 txns, 200 fraud, $3,588,732.92 | amount > 10000 | B.4b-1, measured (open gap) |
+| High-value flagged txns triageable (200 fraud, $3,588,732.92) | 0 | 705: App in full; Genie and dashboard with amount redacted | amount > 10000 | Step 11, `validation_notebooks/high_value_triage.ipynb` E.1, measured |
 
 Governed view = 463,881 txns; full synthetic set = 464,632 txns (same log, "B.4b-3").
 
@@ -33,7 +33,7 @@ Governed view = 463,881 txns; full synthetic set = 464,632 txns (same log, "B.4b
 | 2 | Unity Catalog (govern) | Row filter and masks on silver and gold; `account users` narrowed to least privilege; direct grants for the App service principal | UC row filters, column masks, grants | Gold after-checks 25/25 PASS; grant narrowing 29/29 PASS | [EVIDENCE.md](EVIDENCE.md#unity-catalog-govern); `logs/gold_governance_2026-11-04.md`; `validation_notebooks/gold_governance_hardening.ipynb`; `validation_notebooks/catalog_grant_narrowing.ipynb`; `uc_app_grants.sql` |
 | 3 | Lakebase (operational serving) | SNAPSHOT synced tables, OLTP case tables, Postgres FGAC | Lakebase Postgres, synced tables | UC 464,632 = Postgres 464,632; PK lookup p95 3.18 ms | [EVIDENCE.md](EVIDENCE.md#lakebase-operational-serving); `logs/lakebase_scores_sync_2026-10-20.md`; `logs/lakebase_fgac_2026-10-21.md` |
 | 4 | ML and Gen AI (make it intelligent) | LightGBM risk model with top-3 SHAP signals; Fraud Triage Copilot agent that explains and opens cases | MLflow, UC model registry, Foundation Model API | ROC-AUC 0.8448, PR-AUC 0.2808; case 2319d4b7 | [EVIDENCE.md](EVIDENCE.md#ml-and-gen-ai-make-it-intelligent); `logs/ml_training_2026-10-20.md`; `logs/agent_triage_2026-10-21.md` |
-| 5 | Genie Agent (natural language) | Genie space FE Bar Fraud Risk Ops over six `fraud_dash` views and `risk_score_calibration` | Genie Agent | 11/11 as pii; 11/11 as non_pii | [EVIDENCE.md](EVIDENCE.md#genie-agent-natural-language); `logs/genie_agent_2026-11-03.md`; `genie_agent_benchmark_evidence_logs/non_pii_test_user_2026-11-05.md` |
+| 5 | Genie Agent (natural language) | Genie space FE Bar Fraud Risk Ops over six `fraud_dash` views and `risk_score_calibration` | Genie Agent | 13/13 as pii (Step 11); 11/11 as non_pii (Step 8e) | [EVIDENCE.md](EVIDENCE.md#genie-agent-natural-language); `logs/genie_agent_2026-11-03.md`; `genie_agent_benchmark_evidence_logs/non_pii_test_user_2026-11-05.md` |
 | 6 | Databricks App (surface it to the business) | Streamlit app `fe-bar-fraud-triage`: triage queue, Explain / Open case, Ask Genie, dashboard link | Databricks Apps, AI/BI dashboard | app_validation 15/15 PASS; live-test case 5af3575c | [EVIDENCE.md](EVIDENCE.md#databricks-app-surface-it-to-the-business); `logs/app_2026-11-04.md`; `validation_notebooks/app_validation.ipynb` |
 
 Job `fe_bar_gold_to_lakebase` run 1059811930012881 (2026-11-06): SUCCESS in 267 s, all three tasks green ([EVIDENCE.md](EVIDENCE.md#job-run-step-10-part-c)).

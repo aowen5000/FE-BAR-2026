@@ -1,11 +1,16 @@
 """
-app.py – FE Bar Fraud Triage App (Streamlit) — Step 9
+app.py - FE Bar Fraud Triage App (Streamlit) - Step 9, search and high-value filter added in Step 11
 
 Pages:
-  1. Triage Queue   — top 50 block/review from fraud_gov.txn_risk_current (as fraud_triage_agent)
-  2. Transaction Detail — Explain + Open Case via FraudTriageAgent (in-process)
-  3. Ask Genie      — Genie Conversation API → space 01f1d7b464d510b9aa6cde48300787ca
-  4. Dashboard      — link to 01f1ce7f835a1e81b05ebb664bf0994c
+  1. Triage Queue   - top 50 block/review from fraud_gov.txn_risk_current (as fraud_triage_agent).
+                      Step 11: exact txn_id lookup, "High-value only" checkbox, and the action,
+                      queue and case-status filters all run in SQL; amount + High value columns.
+  2. Transaction Detail - Explain + Open Case via FraudTriageAgent (in-process); Step 11 adds a
+                      txn_id box that loads any transaction, besides the top-200 picker.
+  3. Ask Genie      - Genie Conversation API -> space 01f1d7b464d510b9aa6cde48300787ca
+  4. Dashboard      - link to 01f1ce7f835a1e81b05ebb664bf0994c
+
+The App is the PII tier (pii group only): it shows exact amounts, including amount > 10000.
 
 Logging: every Explain, Open-case, and Genie query writes one structured JSON line to
 stdout (timestamp, page, txn_id/case_id/conv_id, latency_ms, ok/error). No PII, no tokens.
@@ -31,7 +36,7 @@ import streamlit as st
 # app/ is the CWD; fraud_triage_agent.py and lakebase_cases.py are co-located.
 # fraud_triage_agent.py has sys.path.insert(0, '/Workspace/.../FE-BAR-2026-repo')
 # at line 35; that path doesn’t exist on the app compute but the insert is silent
-# and harmless — lakebase_cases import resolves from the same directory.
+# and harmless; the lakebase_cases import resolves from the same directory.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # ---- Resource env vars (from app.yaml valueFrom + static thresholds) ------
@@ -167,6 +172,59 @@ def _call_genie(question: str) -> dict:
     }
 
 
+# ---- Queue SQL (Step 11) --------------------------------------------------
+# Runs as fraud_triage_agent (a fraud_pii member), so fraud_gov returns high-value rows
+# and exact amounts. risk_rank is the rank among all block/review transactions.
+# MATERIALIZED keeps one fast plan for every filter combination (about 0.5 s).
+_QUEUE_SQL = """
+WITH ranked AS MATERIALIZED (
+    SELECT r.txn_id, r.risk_score, r.recommended_action, r.top_shap_signals, tf.amount,
+           row_number() OVER (ORDER BY r.risk_score DESC, r.txn_id) AS risk_rank
+    FROM fraud_gov.txn_risk_current r
+    JOIN fraud_gov.txn_features tf ON tf.txn_id = r.txn_id
+    WHERE r.recommended_action IN ('block', 'review')
+),
+q AS MATERIALIZED (
+    SELECT ranked.*,
+           CASE recommended_action WHEN 'block' THEN 'auto_block'
+                ELSE 'analyst_review' END AS assigned_queue
+    FROM ranked
+    WHERE recommended_action = ANY(%s)
+      AND (NOT %s OR amount > 10000)
+)
+SELECT q.txn_id, q.risk_score::float AS risk_score, q.recommended_action, q.assigned_queue,
+       q.top_shap_signals, q.amount::float AS amount, (q.amount > 10000) AS is_high_value,
+       q.risk_rank, fc.case_id::text AS case_id, COALESCE(fc.status, 'no case') AS case_status
+FROM q
+LEFT JOIN cases.fraud_cases fc
+  ON fc.txn_id = q.txn_id AND fc.status <> 'closed'
+WHERE q.assigned_queue = ANY(%s)
+  AND (%s = 'all' OR COALESCE(fc.status, 'no case') = %s)
+ORDER BY q.risk_score DESC, q.txn_id
+LIMIT %s
+"""
+
+# Exact txn_id lookup: same columns and case join as the queue, any recommended_action.
+_LOOKUP_SQL = """
+SELECT r.txn_id, r.risk_score::float AS risk_score, r.recommended_action,
+       CASE r.recommended_action WHEN 'block' THEN 'auto_block'
+            WHEN 'review' THEN 'analyst_review' ELSE 'auto_approve' END AS assigned_queue,
+       r.top_shap_signals, tf.amount::float AS amount, (tf.amount > 10000) AS is_high_value,
+       CASE WHEN r.recommended_action IN ('block', 'review') THEN 1 + (
+           SELECT count(*) FROM fraud_gov.txn_risk_current x
+           WHERE x.recommended_action IN ('block', 'review')
+             AND (x.risk_score > r.risk_score
+                  OR (x.risk_score = r.risk_score AND x.txn_id < r.txn_id)))
+       END AS risk_rank,
+       fc.case_id::text AS case_id, COALESCE(fc.status, 'no case') AS case_status
+FROM fraud_gov.txn_risk_current r
+JOIN fraud_gov.txn_features tf ON tf.txn_id = r.txn_id
+LEFT JOIN cases.fraud_cases fc
+  ON fc.txn_id = r.txn_id AND fc.status <> 'closed'
+WHERE r.txn_id = %s
+"""
+
+
 # ---- Page: Triage Queue ---------------------------------------------------
 def _page_triage_queue() -> None:
     st.subheader("Triage Queue")
@@ -188,33 +246,20 @@ def _page_triage_queue() -> None:
         f_case = st.selectbox(
             "Case status", ["all", "open", "closed", "no case"], index=0, key="f_case",
         )
-        f_txn = st.text_input("txn_id contains", "", key="f_txn")
+        f_high = st.checkbox("High-value only (amount > $10,000)", value=False, key="f_high")
+        f_txn = st.text_input("txn_id (exact lookup)", "", key="f_txn").strip().upper()
 
     lc = _lc()
     try:
-        rows = lc.query(
-            """
-            SELECT
-                r.txn_id,
-                r.risk_score::float                          AS risk_score,
-                r.recommended_action,
-                CASE r.recommended_action
-                    WHEN 'block'  THEN 'auto_block'
-                    WHEN 'review' THEN 'analyst_review'
-                    ELSE 'auto_approve'
-                END                                          AS assigned_queue,
-                r.top_shap_signals,
-                fc.case_id::text                             AS case_id,
-                COALESCE(fc.status, 'no case')               AS case_status
-            FROM fraud_gov.txn_risk_current r
-            LEFT JOIN cases.fraud_cases fc
-              ON fc.txn_id = r.txn_id AND fc.status <> 'closed'
-            WHERE r.recommended_action IN ('block', 'review')
-            ORDER BY r.risk_score DESC
-            LIMIT %s
-            """,
-            (TRIAGE_LIMIT,),
-        )
+        if f_txn:
+            # Exact lookup of any transaction (parameterized). Sidebar filters do not apply,
+            # so a search always finds the transaction if fraud_triage_agent can see it.
+            rows = lc.query(_LOOKUP_SQL, (f_txn,))
+        else:
+            rows = lc.query(
+                _QUEUE_SQL,
+                (list(f_action), bool(f_high), list(f_queue), f_case, f_case, TRIAGE_LIMIT),
+            )
     except Exception as exc:
         st.error(f"Failed to load triage queue: {exc}")
         return
@@ -227,15 +272,7 @@ def _page_triage_queue() -> None:
         queue  = r.get("assigned_queue", "")
         cs     = r.get("case_status") or "no case"
         txnid  = r.get("txn_id", "")
-
-        if f_action and action not in f_action:
-            continue
-        if f_queue and queue not in f_queue:
-            continue
-        if f_case != "all" and cs != f_case:
-            continue
-        if f_txn and f_txn not in txnid:
-            continue
+        amount = r.get("amount")
 
         try:
             sigs = json.loads(r.get("top_shap_signals") or "[]")
@@ -247,7 +284,10 @@ def _page_triage_queue() -> None:
             top3 = ""
 
         display.append({
+            "risk_rank":     r.get("risk_rank"),
             "txn_id":        txnid,
+            "amount":        round(float(amount), 2) if amount is not None else None,
+            "High value":    "HIGH VALUE" if r.get("is_high_value") else "",
             "risk_score":    round(float(r.get("risk_score") or 0), 4),
             "action":        action,
             "queue":         queue,
@@ -257,7 +297,10 @@ def _page_triage_queue() -> None:
         })
 
     if not display:
-        st.info("No transactions match the current filters.")
+        if f_txn:
+            st.info(f"No transaction found with txn_id {f_txn}.")
+        else:
+            st.info("No transactions match the current filters.")
         return
 
     st.dataframe(pd.DataFrame(display), use_container_width=True, hide_index=True)
@@ -284,7 +327,29 @@ def _page_transaction_detail() -> None:
         st.error(f"Could not load transaction list: {exc}")
         return
 
-    txn_id = st.selectbox("Select transaction", txn_ids, key="detail_txn")
+    picked = st.selectbox("Select transaction (top 200 by risk)", txn_ids, key="detail_txn")
+    typed = st.text_input("Or load any transaction by txn_id", "", key="detail_txn_id").strip().upper()
+    if typed:
+        try:
+            found = lc.query(_LOOKUP_SQL, (typed,))
+        except Exception as exc:
+            st.error(f"Lookup failed: {exc}")
+            return
+        if not found:
+            st.warning(f"No transaction found with txn_id {typed}.")
+            return
+        f = found[0]
+        sep = "  \u00b7  "
+        hv_tag = sep + "HIGH VALUE" if f.get("is_high_value") else ""
+        rank_txt = f["risk_rank"] if f.get("risk_rank") is not None else "n/a"
+        st.caption(
+            f"{f['txn_id']}{sep}amount {float(f['amount']):,.2f}{hv_tag}{sep}"
+            f"{f['recommended_action']}{sep}risk {float(f['risk_score']):.4f}{sep}"
+            f"rank {rank_txt}{sep}case {f['case_status']}"
+        )
+        txn_id = f["txn_id"]
+    else:
+        txn_id = picked
     if not txn_id:
         return
 
@@ -368,7 +433,7 @@ def _page_transaction_detail() -> None:
 
 # ---- Page: Ask Genie -------------------------------------------------------
 def _page_ask_genie() -> None:
-    st.subheader("Ask Genie \u2014 FE Bar Fraud Risk Ops")
+    st.subheader("Ask Genie: FE Bar Fraud Risk Ops")
     st.caption(
         f"Space `{GENIE_SPACE_ID}`  \u00b7  warehouse `{WAREHOUSE_ID}`  \u00b7  "
         "Sources: fraud_dash.{triage_queue, case_summary, case_actions_daily, "

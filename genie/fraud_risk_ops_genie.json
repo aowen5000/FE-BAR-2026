@@ -1,10 +1,10 @@
 {
   "space_id": "01f1d7b464d510b9aa6cde48300787ca",
   "title": "FE Bar Fraud Risk Ops",
-  "description": "For the Head of Fraud Risk Ops at a regional card issuer. Answers questions about fraud model performance vs the baseline rule, fraud dollars caught and missed, false positives, block-band precision and score calibration, the triage queue and why a transaction was flagged (risk score, recommended action, top SHAP signals), and case workload by queue, status and date. Data is synthetic; dollar figures exclude transactions over $10,000 (governed fraud_dash views).",
+  "description": "For the Head of Fraud Risk Ops at a regional card issuer. Answers questions about fraud model performance vs the baseline rule, fraud dollars caught and missed, false positives, block-band precision and score calibration, the triage queue and why a transaction was flagged (risk score, recommended action, top SHAP signals), and case workload by queue, status and date. Data is synthetic; the triage queue and case list now include high-value transactions (over $10,000) with the amount redacted (is_high_value, amount_band); dollar totals still exclude them (governed fraud_dash views).",
   "warehouse_id": "9bbc027402111984",
-  "exported_at": "2026-11-04T03:03:27Z",
-  "exported_in_conversation": "2326365276521178",
+  "exported_at": "2026-11-10T05:47:55Z",
+  "exported_in_conversation": "4443667514456316",
   "serialized_space": {
     "version": 2,
     "config": {
@@ -109,6 +109,23 @@
           "identifier": "fe_bar_lakebase.fraud_dash.case_summary",
           "column_configs": [
             {
+              "column_name": "amount",
+              "description": [
+                "Transaction amount. Null (redacted) when is_high_value is true, i.e. amount over $10,000."
+              ]
+            },
+            {
+              "column_name": "amount_band",
+              "description": [
+                "over_10k for high-value transactions (amount redacted), under_10k otherwise."
+              ],
+              "synonyms": [
+                "amount band"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
               "column_name": "assigned_queue",
               "description": [
                 "Case queue: auto_block (block recommendations) or analyst_review (review recommendations)."
@@ -123,6 +140,18 @@
               "column_name": "created_at",
               "description": [
                 "When the case was created (UTC). Use for case-creation time windows."
+              ]
+            },
+            {
+              "column_name": "is_high_value",
+              "description": [
+                "True when the transaction amount is over $10,000. The amount itself is redacted for these rows."
+              ],
+              "synonyms": [
+                "high value",
+                "high-value",
+                "over 10k",
+                "large transaction"
               ]
             },
             {
@@ -228,6 +257,23 @@
           "identifier": "fe_bar_lakebase.fraud_dash.triage_queue",
           "column_configs": [
             {
+              "column_name": "amount",
+              "description": [
+                "Transaction amount. Null (redacted) when is_high_value is true, i.e. amount over $10,000."
+              ]
+            },
+            {
+              "column_name": "amount_band",
+              "description": [
+                "over_10k for high-value transactions (amount redacted), under_10k otherwise."
+              ],
+              "synonyms": [
+                "amount band"
+              ],
+              "enable_format_assistance": true,
+              "enable_entity_matching": true
+            },
+            {
               "column_name": "assigned_queue",
               "description": [
                 "Case queue: auto_block (block recommendations) or analyst_review (review recommendations). 'no case' when no case exists yet."
@@ -250,6 +296,18 @@
               "enable_entity_matching": true
             },
             {
+              "column_name": "is_high_value",
+              "description": [
+                "True when the transaction amount is over $10,000. The amount itself is redacted for these rows."
+              ],
+              "synonyms": [
+                "high value",
+                "high-value",
+                "over 10k",
+                "large transaction"
+              ]
+            },
+            {
               "column_name": "recommended_action",
               "description": [
                 "Model recommendation from MLflow thresholds: block if risk_score >= 0.950267, review if >= 0.871416, else approve. Values: approve, review, block. The triage queue holds only review and block transactions."
@@ -264,7 +322,7 @@
             {
               "column_name": "risk_rank",
               "description": [
-                "Rank by risk_score across the triage queue; 1 = highest risk."
+                "Rank by risk_score across the whole triage queue, including high-value rows; 1 = highest risk."
               ],
               "synonyms": [
                 "rank"
@@ -283,7 +341,7 @@
             {
               "column_name": "top_shap_signals",
               "description": [
-                "JSON array of the top 3 model drivers, each {feature, value, shap}; shap is the log-odds contribution (positive pushes toward fraud). This explains why a transaction was flagged. The value of amt_to_monthly_spend is always null (governed: it would reveal masked customer spend)."
+                "JSON array of the top 3 model drivers, each {feature, value, shap}; shap is the log-odds contribution (positive pushes toward fraud). This explains why a transaction was flagged. The value of amt_to_monthly_spend is always null (governed: it would reveal masked customer spend). On high-value rows (is_high_value) the values of amount, amt_to_cust_avg_30d and amt_to_monthly_spend are also null; feature names and shap stay."
               ],
               "synonyms": [
                 "reasons",
@@ -355,7 +413,8 @@
             "\n",
             "## DATA QUALITY NOTES\n",
             "- is_fraud is a synthetic label, not a confirmed chargeback.\n",
-            "- Every dollar amount and transaction count in the fraud_dash views excludes transactions with amount over 10,000 (governed views).\n",
+            "- The triage queue (triage_queue) and the case list (case_summary) now include high-value transactions (amount over $10,000) with the amount redacted: amount is null, is_high_value is true and amount_band is 'over_10k'. Count them with is_high_value; never report or estimate their amounts.\n",
+            "- Dollar totals (exposure, baseline_comparison) and the other aggregate views still exclude transactions over $10,000 (governed views).\n",
             "\n",
             "## CONSTRAINTS\n",
             "- Merchant category, merchant risk tier, channel, and customer average monthly spend or income are not in this space. Say they are not available; do not estimate them or substitute another column.\n",
@@ -578,6 +637,20 @@
           ]
         },
         {
+          "id": "5d435b23539b45a38d00b76f9400df3d",
+          "question": [
+            "How many high-value transactions are in the triage queue?"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT COUNT(*) AS high_value_txns FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.is_high_value"
+              ]
+            }
+          ]
+        },
+        {
           "id": "5b945e08d671ddc25d07d382c720e387",
           "question": [
             "How many cases were opened between October 20 and October 23, 2026?"
@@ -601,6 +674,20 @@
               "format": "SQL",
               "content": [
                 "SELECT risk_score_calibration.observed_precision FROM workshop_guy_catalog.fe_bar_a0.risk_score_calibration WHERE risk_score_calibration.bucket = 'block_band'"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "31e9bf160adb4688b63541963ea805e5",
+          "question": [
+            "Show the top 5 high-value block transactions in the triage queue with their amount band"
+          ],
+          "answer": [
+            {
+              "format": "SQL",
+              "content": [
+                "SELECT triage_queue.txn_id, triage_queue.risk_score, triage_queue.risk_rank, triage_queue.amount_band FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.is_high_value AND triage_queue.recommended_action = 'block' ORDER BY triage_queue.risk_score DESC, triage_queue.txn_id LIMIT 5"
               ]
             }
           ]

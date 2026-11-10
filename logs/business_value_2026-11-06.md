@@ -50,6 +50,8 @@
 | False positives among flagged | 505 |
 | Visible in Genie / dashboard / App (fraud_dash views) | 0 (views filter amount > 10000 for everyone) |
 
+**Correction 2026-11-09 (Step 11).** The row above is right for Genie and the dashboard, but not for the App. The App reads `fraud_gov` as `fraud_triage_agent`, a `fraud_pii` member, so it could already reach these 705 rows. The gap was the display limit: the Triage Queue showed the top 50 by risk and the Transaction Detail picker the top 200, and the best-ranked high-value transaction is rank 231 (TXN-0189627). The original row is left as written. See `logs/high_value_triage_2026-11-09.md`.
+
 ### B.4b-2 High-value slice by band (scope: amount > 10000)
 
 | band | txns | fraud | fraud_usd | legit |

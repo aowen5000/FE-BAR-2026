@@ -1,6 +1,6 @@
 # Conversation IDs in commit messages
 
-Moved from BUILD.md in Step 10. Steps 8 to 10 are added at the end.
+Moved from BUILD.md in Step 10. Steps 8 to 11 are added at the end.
 
 In Step 7, every merge commit on main was matched to the transcript in `~/.conversations` that contains its `git merge` command. This is the same method `logs/commit_metadata_corrections.md` used. Three groups of commits carry a conversation ID that differs from the transcript holding the merge command:
 
@@ -12,7 +12,7 @@ In Step 7, every merge commit on main was matched to the transcript in `~/.conve
 
 History was not rewritten. Each transcript's opening prompt is in `prompts/`.
 
-## Steps 7 to 10 (from `git log --merges --first-parent main`, read 2026-11-06)
+## Steps 7 to 11 (from `git log --merges --first-parent main`, read 2026-11-06; Step 11 added 2026-11-10)
 
 | Merge | Branch | Conversation ID in message | Note |
 | --- | --- | --- | --- |
@@ -26,3 +26,4 @@ History was not rewritten. Each transcript's opening prompt is in `prompts/`.
 | d54f358 | `step9/2026-11-04_fevm-workshop-guy_conv-1085628541759563` | 1085628541759563 | Merged 2026-11-06 UTC |
 | f6d6fd4 | `docs/2026-11-06_fevm-workshop-guy_conv-1883459888084279` | 1883459888084279 | No prompt file for this conversation in `prompts/` |
 | Step 10 merge | `step10/2026-11-06_fevm-workshop-guy_conv-1883459888084300` | 1883459888084300 | Hash recorded in `logs/final_verification_2026-11-06.md` |
+| Step 11 merge | `step11/2026-11-09_fevm-workshop-guy_conv-4443667514456316` | 4443667514456316 | Hash recorded in `logs/high_value_triage_2026-11-09.md` |

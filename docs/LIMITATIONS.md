@@ -1,10 +1,17 @@
 # Known limitations
 
-Moved from README.md in Step 10. Each item was still true when checked on 2026-11-06. None of them is fixed in Step 10. 100% synthetic data.
+Moved from README.md in Step 10. Each item was still true when checked on the date in its heading. 100% synthetic data. Step 11 removed "high-value flagged transactions cannot be triaged": the 705 are now in the App in full and in Genie and the dashboard with the amount redacted (`logs/high_value_triage_2026-11-09.md`).
+
+## Added in Step 11 (checked 2026-11-10)
+
+* **Aggregates exclude high-value dollars.** `exposure`, `baseline_comparison`, `score_distribution` and `case_actions_daily` still drop amount > 10000, so Genie and dashboard totals leave out the 705 flagged high-value transactions (200 fraud, $3,588,732.92). Reason: a dollar sum over a small group can reveal a single redacted amount. Only the App shows these amounts.
+* **The App acts as one identity.** Every App user works as the app's service principal (role `fraud_triage_agent`, a `fraud_pii` member), so anyone with App access sees exact high-value amounts and the audit trail shows the app, not the analyst. Per-user OBO is the fix (see Step 10 item below).
+* **Admins inherit App access.** Group `admins` has CAN_MANAGE on the App, inherited from the workspace apps permissions, so it can't be removed on the App itself (`logs/app_permissions_2026-11-09.md`).
+* **non_pii test user checks deferred.** The non_pii test user did not re-run the Genie benchmarks or try the App URL in Step 11. Last non_pii run: 11/11 PASS on 2026-11-05, before the two new benchmarks.
+* **The Triage Queue txn_id box does not carry over to Transaction Detail.** The Detail page acts on its own txn_id box or the top-200 picker.
 
 ## Added in Step 10 (checked 2026-11-06)
 
-* **High-value flagged transactions cannot be triaged in Genie, the dashboard or the App.** The `fraud_dash` views drop amount > 10000 for everyone. In the full synthetic set the model flags 705 of the 751 transactions with amount > 10000 (block or review). 200 of them are fraud, worth $3,588,732.92, and 505 are false positives. 0 of them are visible through `fraud_dash`. Source: `validation_notebooks/business_value.ipynb` code cell 6 "B.4b High-value slice and headline KPIs in two scopes"; `logs/business_value_2026-11-06.md` "B.4b-1". Options (redact the amount instead of filtering rows, or a pii-only view schema) are in `logs/gold_governance_2026-11-04.md` "Still open".
 * **`scored_transactions` has no row filter or mask of its own.** It is closed only by grants: `account users` has no privilege on it after the catalog grant narrowing. `information_schema.row_filters` for `fe_bar_a0` lists only `fact_transactions_silver` and `txn_features_gold`. Reason: Lakebase synced tables cannot read a source with a table-level row filter (`ROW_LEVEL_SECURITY_FEATURE_NOT_SUPPORTED.TIME_TRAVEL`, job run 273696236528085, `logs/gold_governance_2026-11-04.md` "Job / sync test").
 * **`txn_features_gold.amt_to_monthly_spend` is unmasked.** It is closed only by grants. `information_schema.column_masks` for `fe_bar_a0` lists only `customer_risk_profile_gold.avg_amount_30d` and `dim_customer_silver.avg_monthly_spend`. Source: `logs/gold_governance_2026-11-04.md` "Still open".
 * **Per-user on-behalf-of (OBO) authorization is not implemented in the App.** The app acts as one identity for every user: all Postgres writes, Genie questions and warehouse queries run as the app's service principal, so the audit trail shows the app, not the analyst who clicked. A search of `app/app.py` and `app/app.yaml` for OBO or user-token handling found none.
