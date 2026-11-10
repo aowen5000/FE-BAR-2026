@@ -7,7 +7,7 @@ Moved from README.md in Step 10. Each item was still true when checked on the da
 * **Aggregates exclude high-value dollars.** `exposure`, `baseline_comparison`, `score_distribution` and `case_actions_daily` still drop amount > 10000, so Genie and dashboard totals leave out the 705 flagged high-value transactions (200 fraud, $3,588,732.92). Reason: a dollar sum over a small group can reveal a single redacted amount. Only the App shows these amounts.
 * **The App acts as one identity.** Every App user works as the app's service principal (role `fraud_triage_agent`, a `fraud_pii` member), so anyone with App access sees exact high-value amounts and the audit trail shows the app, not the analyst. Per-user OBO is the fix (see Step 10 item below).
 * **Admins inherit App access.** Group `admins` has CAN_MANAGE on the App, inherited from the workspace apps permissions, so it can't be removed on the App itself (`logs/app_permissions_2026-11-09.md`).
-* **non_pii test user checks deferred.** The non_pii test user did not re-run the Genie benchmarks or try the App URL in Step 11. Last non_pii run: 11/11 PASS on 2026-11-05, before the two new benchmarks.
+* **App denial for non_pii not observed.** A second non_pii test user ran 11 of the 13 Genie benchmarks after Step 11 (11/11 PASS, `genie_agent_benchmark_evidence_logs/non_pii_test_user_2026-11-10.md`). The App URL check was skipped: the audit log shows that user signing in to the App's OAuth client, but not whether the App denied them.
 * **The Triage Queue txn_id box does not carry over to Transaction Detail.** The Detail page acts on its own txn_id box or the top-200 picker.
 
 ## Added in Step 10 (checked 2026-11-06)

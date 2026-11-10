@@ -3,7 +3,7 @@
   "title": "FE Bar Fraud Risk Ops",
   "description": "For the Head of Fraud Risk Ops at a regional card issuer. Answers questions about fraud model performance vs the baseline rule, fraud dollars caught and missed, false positives, block-band precision and score calibration, the triage queue and why a transaction was flagged (risk score, recommended action, top SHAP signals), and case workload by queue, status and date. Data is synthetic; the triage queue and case list now include high-value transactions (over $10,000) with the amount redacted (is_high_value, amount_band); dollar totals still exclude them (governed fraud_dash views).",
   "warehouse_id": "9bbc027402111984",
-  "exported_at": "2026-11-10T05:47:55Z",
+  "exported_at": "2026-11-10T22:26:31Z",
   "exported_in_conversation": "4443667514456316",
   "serialized_space": {
     "version": 2,
@@ -687,7 +687,7 @@
             {
               "format": "SQL",
               "content": [
-                "SELECT triage_queue.txn_id, triage_queue.risk_score, triage_queue.risk_rank, triage_queue.amount_band FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.is_high_value AND triage_queue.recommended_action = 'block' ORDER BY triage_queue.risk_score DESC, triage_queue.txn_id LIMIT 5"
+                "SELECT triage_queue.txn_id, triage_queue.risk_rank, triage_queue.amount_band FROM fe_bar_lakebase.fraud_dash.triage_queue WHERE triage_queue.is_high_value AND triage_queue.recommended_action = 'block' ORDER BY triage_queue.risk_score DESC, triage_queue.txn_id LIMIT 5"
               ]
             }
           ]
