@@ -1,6 +1,6 @@
 # BUILD: how FE-BAR-2026 was built
 
-I chose the customer problem, the architecture and the governance model, and wrote and reviewed every prompt. Genie Code implemented each step from those prompts in workspace `fevm-workshop-guy`, and I reviewed the outputs and made the calls in [DECISIONS.md](DECISIONS.md). I wrote the prompts with help from Claude. They are in `prompts/` (index: [docs/PROMPTS.md](docs/PROMPTS.md)).
+I chose the customer problem, the architecture and the governance model, and wrote and reviewed every prompt. Genie Code implemented each step from those prompts in workspace `fevm-workshop-guy`, and I reviewed the outputs and made the calls in [DECISIONS.md](DECISIONS.md). I wrote the prompts with help from Claude. Conversation IDs are in the table below.
 
 ## Tools and skills
 

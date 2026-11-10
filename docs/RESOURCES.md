@@ -6,7 +6,7 @@ Moved from README.md in Step 10. Workspace `fevm-workshop-guy`, serverless compu
 
 * Repo root: pipeline, model, agent and Lakebase source (notebooks, `.py` modules, `.sql` DDL).
 * `README.md`, `EVIDENCE.md`, `DECISIONS.md`, `BUILD.md`: the short reading set.
-* `docs/`: overflow detail (this file, `HOW_TO_RUN.md`, `TRACE.md`, `LIMITATIONS.md`, `CONVERSATION_IDS.md`, `PROMPTS.md`).
+* `docs/`: overflow detail (this file, `HOW_TO_RUN.md`, `TRACE.md`, `LIMITATIONS.md`, `CONVERSATION_IDS.md`).
 * `validation_notebooks/`: check and verify notebooks with committed outputs.
   * `gold_feature_validation`: gold feature layer checks.
   * `lakebase_sync_validation`: gold to Lakebase synced tables.
@@ -27,7 +27,6 @@ Moved from README.md in Step 10. Workspace `fevm-workshop-guy`, serverless compu
 * `genie/fraud_risk_ops_genie.json`: exported FE Bar Fraud Risk Ops Genie space (sources, column configs, joins, snippets, examples, benchmarks).
 * `genie_agent_benchmark_evidence_logs/`: per-identity Genie benchmark runs.
 * `logs/`: run logs and evidence.
-* `prompts/`: the opening user prompt of each Genie Code conversation, copied verbatim (see `docs/PROMPTS.md`).
 
 Validation notebooks import repo modules (for example `lakebase_cases`) from the repo root, one level above `validation_notebooks/`.
 
