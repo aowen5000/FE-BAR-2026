@@ -37,5 +37,5 @@ Validation `validation_notebooks/high_value_triage.ipynb` E.8b: PASS (`pii` CAN_
 
 * **Admins CAN_MANAGE is inherited and can't be removed on the App.** It comes from the workspace-level apps permissions, not from the App's own ACL, so workspace admins can always open and manage the App.
 * **No `users` grant.** Members of `non_pii` who are not in `pii` or `admins` have no App permission.
-* **Not tested: non_pii test user at the App URL.** Deferred by the user on 2026-11-10. The expected result is an access-denied page.
+* **non_pii test user at the App URL: denied, no text evidence.** A second non_pii test user (user ID 76510230734315) was denied at the App URL, observed by the tester and reported by the user on 2026-11-10. The audit log has that user's sign-ins to the App's OAuth client but not the allow/deny decision, and screenshots are not accepted as evidence, so this is not counted as PASS (`genie_agent_benchmark_evidence_logs/non_pii_test_user_2026-11-10.md`).
 * **One identity inside the App.** Every user who passes this ACL works as the App's service principal (Postgres role `8f239f44-078a-4f8f-90f1-4c1b0bcdc26c`, member of `fraud_triage_agent`, which is in `fraud_pii`). The ACL is the only per-user control. Per-user OBO is the production fix (`docs/LIMITATIONS.md`).
