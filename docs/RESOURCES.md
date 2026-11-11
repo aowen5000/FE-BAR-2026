@@ -5,7 +5,7 @@ Moved from README.md in Step 10. Workspace `fevm-workshop-guy`, serverless compu
 ## Layout
 
 * Repo root: pipeline, model, agent and Lakebase source (notebooks, `.py` modules, `.sql` DDL).
-* `README.md`, `EVIDENCE.md`, `DECISIONS.md`, `BUILD.md`: the short reading set.
+* `README.md`, `EVIDENCE.md`, `EVIDENCE_APP.md`, `EVIDENCE_INDEX.md`, `DECISIONS.md`, `BUILD.md`: the short reading set.
 * `docs/`: overflow detail (this file, `HOW_TO_RUN.md`, `TRACE.md`, `LIMITATIONS.md`, `CONVERSATION_IDS.md`).
 * `validation_notebooks/`: check and verify notebooks with committed outputs.
   * `gold_feature_validation`: gold feature layer checks.

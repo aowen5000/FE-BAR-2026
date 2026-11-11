@@ -1,6 +1,6 @@
 # Evidence index and key results
 
-Moved from README.md in Step 10. The old "All five layers functional" row is now "All six stages functional" and covers the Genie Agent and the App. Short excerpts per stage are in `EVIDENCE.md`. 100% synthetic data.
+Moved from README.md in Step 10, and from docs/ to the top level in Step 12b. The old "All five layers functional" row is now "All six stages functional" and covers the Genie Agent and the App. Short excerpts per stage are in `EVIDENCE.md` and `EVIDENCE_APP.md`. 100% synthetic data.
 
 ## Evidence index (Submission Checklist hard gates)
 

@@ -10,14 +10,15 @@ A regional card issuer's fraud ops team has more flagged transactions than it ca
 
 1. [README.md](README.md): problem, KPIs, six stages and how they connect.
 2. [EVIDENCE.md](EVIDENCE.md): text proof per stage, each block with its source.
-3. [DECISIONS.md](DECISIONS.md): design choices and the trade-offs behind them.
-4. [docs/TRACE.md](docs/TRACE.md): one transaction followed end to end.
-5. [docs/LIMITATIONS.md](docs/LIMITATIONS.md): known gaps and open items.
-6. [BUILD.md](BUILD.md): how each step was built, with conversation IDs.
-7. [logs/business_value_2026-11-06.md](logs/business_value_2026-11-06.md): KPI calculations, measured versus assumed.
-8. [logs/high_value_triage_2026-11-09.md](logs/high_value_triage_2026-11-09.md): high-value transactions made triageable without loosening governance.
+3. [EVIDENCE_APP.md](EVIDENCE_APP.md): proof for App, high-value triage, job run.
+4. [DECISIONS.md](DECISIONS.md): design choices and the trade-offs behind them.
+5. [docs/TRACE.md](docs/TRACE.md): one transaction followed end to end.
+6. [docs/LIMITATIONS.md](docs/LIMITATIONS.md): known gaps and open items.
+7. [BUILD.md](BUILD.md): how each step was built, with conversation IDs.
+8. [logs/business_value_2026-11-06.md](logs/business_value_2026-11-06.md): KPI math, measured vs assumed.
+9. [logs/high_value_triage_2026-11-09.md](logs/high_value_triage_2026-11-09.md): high-value transactions triageable, governance intact.
 
-EVIDENCE.md quotes the committed notebook outputs as text, so the notebooks themselves are optional reading. Also in docs/: [ARCHITECTURE](docs/ARCHITECTURE.md), [RESOURCES](docs/RESOURCES.md), [HOW_TO_RUN](docs/HOW_TO_RUN.md), [EVIDENCE_INDEX](docs/EVIDENCE_INDEX.md), [CONVERSATION_IDS](docs/CONVERSATION_IDS.md).
+EVIDENCE.md and EVIDENCE_APP.md quote the committed notebook outputs as text, so the notebooks themselves are optional reading. Evidence index: [EVIDENCE_INDEX.md](EVIDENCE_INDEX.md). Also in docs/: [ARCHITECTURE](docs/ARCHITECTURE.md), [RESOURCES](docs/RESOURCES.md), [HOW_TO_RUN](docs/HOW_TO_RUN.md), [CONVERSATION_IDS](docs/CONVERSATION_IDS.md).
 
 ## KPIs
 
@@ -47,9 +48,9 @@ Governed view = 463,881 txns; full synthetic set = 464,632 txns (same log, "B.4b
 | 3 | Lakebase (operational serving) | SNAPSHOT synced tables, OLTP case tables, Postgres FGAC | Lakebase Postgres, synced tables | UC 464,632 = Postgres 464,632; PK lookup p95 3.18 ms | [EVIDENCE.md](EVIDENCE.md#lakebase-operational-serving); `logs/lakebase_scores_sync_2026-10-20.md`; `logs/lakebase_fgac_2026-10-21.md` |
 | 4 | ML and Gen AI (make it intelligent) | LightGBM risk model with top-3 SHAP signals; Fraud Triage Copilot agent that explains and opens cases | MLflow, UC model registry, Foundation Model API | ROC-AUC 0.8448, PR-AUC 0.2808; case 2319d4b7 | [EVIDENCE.md](EVIDENCE.md#ml-and-gen-ai-make-it-intelligent); `logs/ml_training_2026-10-20.md`; `logs/agent_triage_2026-10-21.md` |
 | 5 | Genie Agent (natural language) | Genie space FE Bar Fraud Risk Ops over six `fraud_dash` views and `risk_score_calibration` | Genie Agent | 13/13 as pii (Step 11); 11/11 as non_pii (Step 8e) | [EVIDENCE.md](EVIDENCE.md#genie-agent-natural-language); `logs/genie_agent_2026-11-03.md`; `genie_agent_benchmark_evidence_logs/non_pii_test_user_2026-11-05.md` |
-| 6 | Databricks App (surface it to the business) | Streamlit app `fe-bar-fraud-triage`: triage queue, Explain / Open case, Ask Genie, dashboard link | Databricks Apps, AI/BI dashboard | app_validation 15/15 PASS; live-test case 5af3575c | [EVIDENCE.md](EVIDENCE.md#databricks-app-surface-it-to-the-business); `logs/app_2026-11-04.md`; `validation_notebooks/app_validation.ipynb` |
+| 6 | Databricks App (surface it to the business) | Streamlit app `fe-bar-fraud-triage`: triage queue, Explain / Open case, Ask Genie, dashboard link | Databricks Apps, AI/BI dashboard | app_validation 15/15 PASS; live-test case 5af3575c | [EVIDENCE_APP.md](EVIDENCE_APP.md#databricks-app-surface-it-to-the-business); `logs/app_2026-11-04.md`; `validation_notebooks/app_validation.ipynb` |
 
-Job `fe_bar_gold_to_lakebase` run 1059811930012881 (2026-11-06): SUCCESS in 267 s, all three tasks green ([EVIDENCE.md](EVIDENCE.md#job-run-step-10-part-c)).
+Job `fe_bar_gold_to_lakebase` run 1059811930012881 (2026-11-06): SUCCESS in 267 s, all three tasks green ([EVIDENCE_APP.md](EVIDENCE_APP.md#job-run-step-10-part-c)).
 
 ## How the stages connect
 
