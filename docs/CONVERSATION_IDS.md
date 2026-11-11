@@ -12,7 +12,7 @@ In Step 7, every merge commit on main was matched to the transcript in `~/.conve
 
 History was not rewritten. The conversation IDs here are the build evidence. The verbatim prompt files (`prompts/`, index `docs/PROMPTS.md`) were removed on 2026-11-10 and remain in git history up to commit 8271694.
 
-## Steps 7 to 11 (from `git log --merges --first-parent main`, read 2026-11-06; Step 11 added 2026-11-10)
+## Steps 7 to 11 (from `git log --merges --first-parent main`, read 2026-11-06; Steps 11 and 12 added 2026-11-10)
 
 | Merge | Branch | Conversation ID in message | Note |
 | --- | --- | --- | --- |
@@ -27,3 +27,4 @@ History was not rewritten. The conversation IDs here are the build evidence. The
 | f6d6fd4 | `docs/2026-11-06_fevm-workshop-guy_conv-1883459888084279` | 1883459888084279 | |
 | Step 10 merge | `step10/2026-11-06_fevm-workshop-guy_conv-1883459888084300` | 1883459888084300 | Hash recorded in `logs/final_verification_2026-11-06.md` |
 | Step 11 merge | `step11/2026-11-09_fevm-workshop-guy_conv-4443667514456316` | 4443667514456316 | Merge hash in `git log --merges --first-parent main`; branch commits in `logs/high_value_triage_2026-11-09.md` |
+| Step 12 merge | `step12/2026-11-10_fevm-workshop-guy_conv-513394016637772` | 513394016637772 | Docs only (EVIDENCE.md, README reading order); `logs/evidence_refresh_2026-11-10.md` |
