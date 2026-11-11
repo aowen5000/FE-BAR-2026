@@ -28,3 +28,4 @@ History was not rewritten. The conversation IDs here are the build evidence. The
 | Step 10 merge | `step10/2026-11-06_fevm-workshop-guy_conv-1883459888084300` | 1883459888084300 | Hash recorded in `logs/final_verification_2026-11-06.md` |
 | Step 11 merge | `step11/2026-11-09_fevm-workshop-guy_conv-4443667514456316` | 4443667514456316 | Merge hash in `git log --merges --first-parent main`; branch commits in `logs/high_value_triage_2026-11-09.md` |
 | Step 12 merge | `step12/2026-11-10_fevm-workshop-guy_conv-513394016637772` | 513394016637772 | Docs only (EVIDENCE.md, README reading order); `logs/evidence_refresh_2026-11-10.md` |
+| Step 12b merge | `step12b/2026-11-10_claude-code_conv-e8a841d3` | Claude Code session e8a841d3-121f-4b6f-8b8a-ba79eff53651 | Docs only: EVIDENCE.md split into EVIDENCE.md + EVIDENCE_APP.md (scorer reads 9,000 chars per file); EVIDENCE_INDEX.md moved to top level; `logs/evidence_split_2026-11-10.md` |
