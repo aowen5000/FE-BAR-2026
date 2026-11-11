@@ -6,6 +6,19 @@ A fraud risk build on Databricks for the fraud operations team of a regional car
 
 A regional card issuer's fraud ops team has more flagged transactions than it can review. The static rule (cross-border AND new device) flags with no priority and no explanation. Two personas use this build: the Head of Fraud Risk Ops, who watches exposure, model performance and case volume, and the Fraud Analyst, who works the triage queue and opens cases. On the governed view, which excludes transactions over $10,000, the model's block + review bands catch $7,010,482.03 of fraud vs $933,889.13 for the rule. False positives drop from 30,956 to 17,630 (rate 6.83% to 3.89%). On the full synthetic set the model catches $10,599,214.95 vs $1,114,720.20. The agent explains a flagged transaction in 19.9 s median over 9 traced runs. Analyst minutes per case are assumptions from the original plan. The scaled issuer numbers (log section "B.4") are illustrative, not measured. Source: [validation_notebooks/business_value.ipynb](validation_notebooks/business_value.ipynb), [logs/business_value_2026-11-06.md](logs/business_value_2026-11-06.md).
 
+## For reviewers: read in this order
+
+1. [README.md](README.md): problem, KPIs, six stages and how they connect.
+2. [EVIDENCE.md](EVIDENCE.md): text proof per stage, each block with its source.
+3. [DECISIONS.md](DECISIONS.md): design choices and the trade-offs behind them.
+4. [docs/TRACE.md](docs/TRACE.md): one transaction followed end to end.
+5. [docs/LIMITATIONS.md](docs/LIMITATIONS.md): known gaps and open items.
+6. [BUILD.md](BUILD.md): how each step was built, with conversation IDs.
+7. [logs/business_value_2026-11-06.md](logs/business_value_2026-11-06.md): KPI calculations, measured versus assumed.
+8. [logs/high_value_triage_2026-11-09.md](logs/high_value_triage_2026-11-09.md): high-value transactions made triageable without loosening governance.
+
+EVIDENCE.md quotes the committed notebook outputs as text, so the notebooks themselves are optional reading. Also in docs/: [ARCHITECTURE](docs/ARCHITECTURE.md), [RESOURCES](docs/RESOURCES.md), [HOW_TO_RUN](docs/HOW_TO_RUN.md), [EVIDENCE_INDEX](docs/EVIDENCE_INDEX.md), [CONVERSATION_IDS](docs/CONVERSATION_IDS.md).
+
 ## KPIs
 
 Copied from `logs/business_value_2026-11-06.md` "B.5 Final KPI table".
@@ -74,14 +87,6 @@ Trace of TXN-0234209 (CUST-08669, $323.96, is_fraud = true). Details in [EVIDENC
 7. Genie: "Why was TXN-0234209 flagged?" PASS as pii and as non_pii.
 8. Job run 1059811930012881: risk_score unchanged.
 9. App: gap. The App live test used TXN-0045116 (case 5af3575c).
-
-## Read next
-
-1. [EVIDENCE.md](EVIDENCE.md)
-2. [DECISIONS.md](DECISIONS.md)
-3. [BUILD.md](BUILD.md)
-4. [logs/business_value_2026-11-06.md](logs/business_value_2026-11-06.md)
-5. docs/: [ARCHITECTURE](docs/ARCHITECTURE.md), [RESOURCES](docs/RESOURCES.md), [HOW_TO_RUN](docs/HOW_TO_RUN.md), [TRACE](docs/TRACE.md), [EVIDENCE_INDEX](docs/EVIDENCE_INDEX.md), [LIMITATIONS](docs/LIMITATIONS.md), [CONVERSATION_IDS](docs/CONVERSATION_IDS.md)
 
 ## Commit identities
 
